@@ -38,7 +38,382 @@ function DashboardContent() {
   const [isClient, setIsClient] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Note: Mock data loading is handled by Header component
+  // Load mock data automatically on first visit
+  useEffect(() => {
+    if (isClient && state.transactions.length === 0) {
+      // Import mock data from Header component
+      const mockTransactions = [
+        // Initial balance - July 2025
+        {
+          id: 'new-mock-0',
+          category: 'Initial Balance',
+          description: 'Starting balance',
+          amount: 7000,
+          date: '2025-07-01',
+          type: 'income' as const,
+          createdAt: '2025-07-01T00:00:00Z',
+          updatedAt: '2025-07-01T00:00:00Z'
+        },
+        // July 2025 - Start with salary first
+        {
+          id: 'new-mock-1',
+          category: 'Salary',
+          description: 'July salary',
+          amount: 2500,
+          date: '2025-07-01',
+          type: 'income' as const,
+          createdAt: '2025-07-01T09:00:00Z',
+          updatedAt: '2025-07-01T09:00:00Z'
+        },
+        {
+          id: 'new-mock-2',
+          category: 'Food',
+          description: 'Grocery shopping',
+          amount: 180,
+          date: '2025-07-02',
+          type: 'expense' as const,
+          createdAt: '2025-07-02T10:00:00Z',
+          updatedAt: '2025-07-02T10:00:00Z'
+        },
+        {
+          id: 'new-mock-3',
+          category: 'Transport',
+          description: 'Gas and public transport',
+          amount: 120,
+          date: '2025-07-03',
+          type: 'expense' as const,
+          createdAt: '2025-07-03T08:00:00Z',
+          updatedAt: '2025-07-03T08:00:00Z'
+        },
+        {
+          id: 'new-mock-4',
+          category: 'Health',
+          description: 'Health insurance',
+          amount: 280,
+          date: '2025-07-04',
+          type: 'expense' as const,
+          createdAt: '2025-07-04T12:00:00Z',
+          updatedAt: '2025-07-04T12:00:00Z'
+        },
+        {
+          id: 'new-mock-5',
+          category: 'Entertainment',
+          description: 'Movies and dining out',
+          amount: 95,
+          date: '2025-07-05',
+          type: 'expense' as const,
+          createdAt: '2025-07-05T19:00:00Z',
+          updatedAt: '2025-07-05T19:00:00Z'
+        },
+        {
+          id: 'new-mock-6',
+          category: 'Utilities',
+          description: 'Electricity and internet',
+          amount: 145,
+          date: '2025-07-06',
+          type: 'expense' as const,
+          createdAt: '2025-07-06T14:00:00Z',
+          updatedAt: '2025-07-06T14:00:00Z'
+        },
+        {
+          id: 'new-mock-7',
+          category: 'Shopping',
+          description: 'Summer clothes',
+          amount: 220,
+          date: '2025-07-07',
+          type: 'expense' as const,
+          createdAt: '2025-07-07T16:00:00Z',
+          updatedAt: '2025-07-07T16:00:00Z'
+        },
+        // August 2025
+        {
+          id: 'new-mock-8',
+          category: 'Salary',
+          description: 'August salary',
+          amount: 2500,
+          date: '2025-08-01',
+          type: 'income' as const,
+          createdAt: '2025-08-01T09:00:00Z',
+          updatedAt: '2025-08-01T09:00:00Z'
+        },
+        {
+          id: 'new-mock-9',
+          category: 'Food',
+          description: 'Grocery shopping',
+          amount: 165,
+          date: '2025-08-03',
+          type: 'expense' as const,
+          createdAt: '2025-08-03T10:00:00Z',
+          updatedAt: '2025-08-03T10:00:00Z'
+        },
+        {
+          id: 'new-mock-10',
+          category: 'Transport',
+          description: 'Gas and public transport',
+          amount: 135,
+          date: '2025-08-08',
+          type: 'expense' as const,
+          createdAt: '2025-08-08T08:00:00Z',
+          updatedAt: '2025-08-08T08:00:00Z'
+        },
+        {
+          id: 'new-mock-11',
+          category: 'Health',
+          description: 'Health insurance',
+          amount: 280,
+          date: '2025-08-15',
+          type: 'expense' as const,
+          createdAt: '2025-08-15T12:00:00Z',
+          updatedAt: '2025-08-15T12:00:00Z'
+        },
+        {
+          id: 'new-mock-12',
+          category: 'Entertainment',
+          description: 'Concert tickets',
+          amount: 150,
+          date: '2025-08-22',
+          type: 'expense' as const,
+          createdAt: '2025-08-22T20:00:00Z',
+          updatedAt: '2025-08-22T20:00:00Z'
+        },
+        {
+          id: 'new-mock-13',
+          category: 'Utilities',
+          description: 'Electricity and internet',
+          amount: 155,
+          date: '2025-08-20',
+          type: 'expense' as const,
+          createdAt: '2025-08-20T14:00:00Z',
+          updatedAt: '2025-08-20T14:00:00Z'
+        },
+        {
+          id: 'new-mock-14',
+          category: 'Shopping',
+          description: 'Electronics',
+          amount: 320,
+          date: '2025-08-28',
+          type: 'expense' as const,
+          createdAt: '2025-08-28T15:00:00Z',
+          updatedAt: '2025-08-28T15:00:00Z'
+        },
+        // September 2025
+        {
+          id: 'new-mock-15',
+          category: 'Salary',
+          description: 'September salary',
+          amount: 2500,
+          date: '2025-09-01',
+          type: 'income' as const,
+          createdAt: '2025-09-01T09:00:00Z',
+          updatedAt: '2025-09-01T09:00:00Z'
+        },
+        {
+          id: 'new-mock-16',
+          category: 'Food',
+          description: 'Grocery shopping',
+          amount: 195,
+          date: '2025-09-05',
+          type: 'expense' as const,
+          createdAt: '2025-09-05T10:00:00Z',
+          updatedAt: '2025-09-05T10:00:00Z'
+        },
+        {
+          id: 'new-mock-17',
+          category: 'Transport',
+          description: 'Gas and public transport',
+          amount: 110,
+          date: '2025-09-12',
+          type: 'expense' as const,
+          createdAt: '2025-09-12T08:00:00Z',
+          updatedAt: '2025-09-12T08:00:00Z'
+        },
+        {
+          id: 'new-mock-18',
+          category: 'Health',
+          description: 'Health insurance',
+          amount: 280,
+          date: '2025-09-15',
+          type: 'expense' as const,
+          createdAt: '2025-09-15T12:00:00Z',
+          updatedAt: '2025-09-15T12:00:00Z'
+        },
+        {
+          id: 'new-mock-19',
+          category: 'Entertainment',
+          description: 'Weekend trip',
+          amount: 280,
+          date: '2025-09-20',
+          type: 'expense' as const,
+          createdAt: '2025-09-20T18:00:00Z',
+          updatedAt: '2025-09-20T18:00:00Z'
+        },
+        {
+          id: 'new-mock-20',
+          category: 'Utilities',
+          description: 'Electricity and internet',
+          amount: 140,
+          date: '2025-09-20',
+          type: 'expense' as const,
+          createdAt: '2025-09-20T14:00:00Z',
+          updatedAt: '2025-09-20T14:00:00Z'
+        },
+        {
+          id: 'new-mock-21',
+          category: 'Shopping',
+          description: 'Fall clothing',
+          amount: 180,
+          date: '2025-09-25',
+          type: 'expense' as const,
+          createdAt: '2025-09-25T16:00:00Z',
+          updatedAt: '2025-09-25T16:00:00Z'
+        },
+        // October 2025
+        {
+          id: 'new-mock-22',
+          category: 'Salary',
+          description: 'October salary',
+          amount: 2500,
+          date: '2025-10-01',
+          type: 'income' as const,
+          createdAt: '2025-10-01T09:00:00Z',
+          updatedAt: '2025-10-01T09:00:00Z'
+        },
+        {
+          id: 'new-mock-23',
+          category: 'Food',
+          description: 'Grocery shopping',
+          amount: 170,
+          date: '2025-10-03',
+          type: 'expense' as const,
+          createdAt: '2025-10-03T10:00:00Z',
+          updatedAt: '2025-10-03T10:00:00Z'
+        },
+        {
+          id: 'new-mock-24',
+          category: 'Transport',
+          description: 'Gas and public transport',
+          amount: 125,
+          date: '2025-10-08',
+          type: 'expense' as const,
+          createdAt: '2025-10-08T08:00:00Z',
+          updatedAt: '2025-10-08T08:00:00Z'
+        },
+        {
+          id: 'new-mock-25',
+          category: 'Health',
+          description: 'Health insurance',
+          amount: 280,
+          date: '2025-10-15',
+          type: 'expense' as const,
+          createdAt: '2025-10-15T12:00:00Z',
+          updatedAt: '2025-10-15T12:00:00Z'
+        },
+        {
+          id: 'new-mock-26',
+          category: 'Entertainment',
+          description: 'Halloween party',
+          amount: 85,
+          date: '2025-10-31',
+          type: 'expense' as const,
+          createdAt: '2025-10-31T20:00:00Z',
+          updatedAt: '2025-10-31T20:00:00Z'
+        },
+        {
+          id: 'new-mock-27',
+          category: 'Utilities',
+          description: 'Electricity and internet',
+          amount: 160,
+          date: '2025-10-20',
+          type: 'expense' as const,
+          createdAt: '2025-10-20T14:00:00Z',
+          updatedAt: '2025-10-20T14:00:00Z'
+        },
+        {
+          id: 'new-mock-28',
+          category: 'Shopping',
+          description: 'Home supplies',
+          amount: 120,
+          date: '2025-10-25',
+          type: 'expense' as const,
+          createdAt: '2025-10-25T15:00:00Z',
+          updatedAt: '2025-10-25T15:00:00Z'
+        },
+        // November 2025
+        {
+          id: 'new-mock-29',
+          category: 'Salary',
+          description: 'November salary',
+          amount: 2500,
+          date: '2025-11-01',
+          type: 'income' as const,
+          createdAt: '2025-11-01T09:00:00Z',
+          updatedAt: '2025-11-01T09:00:00Z'
+        },
+        {
+          id: 'new-mock-30',
+          category: 'Food',
+          description: 'Grocery shopping',
+          amount: 200,
+          date: '2025-11-05',
+          type: 'expense' as const,
+          createdAt: '2025-11-05T10:00:00Z',
+          updatedAt: '2025-11-05T10:00:00Z'
+        },
+        {
+          id: 'new-mock-31',
+          category: 'Transport',
+          description: 'Gas and public transport',
+          amount: 140,
+          date: '2025-11-12',
+          type: 'expense' as const,
+          createdAt: '2025-11-12T08:00:00Z',
+          updatedAt: '2025-11-12T08:00:00Z'
+        },
+        {
+          id: 'new-mock-32',
+          category: 'Health',
+          description: 'Health insurance',
+          amount: 280,
+          date: '2025-11-15',
+          type: 'expense' as const,
+          createdAt: '2025-11-15T12:00:00Z',
+          updatedAt: '2025-11-15T12:00:00Z'
+        },
+        {
+          id: 'new-mock-33',
+          category: 'Entertainment',
+          description: 'Thanksgiving dinner',
+          amount: 120,
+          date: '2025-11-28',
+          type: 'expense' as const,
+          createdAt: '2025-11-28T18:00:00Z',
+          updatedAt: '2025-11-28T18:00:00Z'
+        },
+        {
+          id: 'new-mock-34',
+          category: 'Utilities',
+          description: 'Electricity and internet',
+          amount: 150,
+          date: '2025-11-20',
+          type: 'expense' as const,
+          createdAt: '2025-11-20T14:00:00Z',
+          updatedAt: '2025-11-20T14:00:00Z'
+        },
+        {
+          id: 'new-mock-35',
+          category: 'Shopping',
+          description: 'Black Friday shopping',
+          amount: 350,
+          date: '2025-11-29',
+          type: 'expense' as const,
+          createdAt: '2025-11-29T10:00:00Z',
+          updatedAt: '2025-11-29T10:00:00Z'
+        }
+      ];
+      
+      loadTransactions(mockTransactions);
+    }
+  }, [isClient, state.transactions.length, loadTransactions]);
 
   // Memoize summary stats calculation
   const summaryStats = useMemo(() => {
