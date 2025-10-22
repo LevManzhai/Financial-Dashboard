@@ -91,9 +91,10 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
                   onClick={() => handleItemClick(item)}
                   className={`w-full flex items-center space-x-3 px-2 xs:px-3 py-2 rounded-lg transition-colors text-sm xs:text-base ${
                     activeItem === item.id
-                      ? 'text-white bg-blue-500 hover:bg-blue-600'
+                      ? 'text-white'
                       : 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700'
                   }`}
+                  style={activeItem === item.id ? { backgroundColor: 'var(--primary-color)' } : {}}
                 >
                   <Icon className="w-4 h-4 xs:w-5 xs:h-5" />
                   <span className="font-medium">{item.label}</span>
@@ -116,9 +117,10 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
                   onClick={() => handleItemClick(item)}
                   className={`w-full flex items-center space-x-3 px-2 xs:px-3 py-2 rounded-lg transition-colors text-sm xs:text-base ${
                     activeItem === item.id
-                      ? 'text-white bg-blue-500 hover:bg-blue-600'
+                      ? 'text-white'
                       : 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700'
                   }`}
+                  style={activeItem === item.id ? { backgroundColor: 'var(--primary-color)' } : {}}
                 >
                   <Icon className="w-4 h-4 xs:w-5 xs:h-5" />
                   <span className="font-medium">{item.label}</span>
