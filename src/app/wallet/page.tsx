@@ -164,7 +164,7 @@ function WalletContent() {
   const periodBalance = periodStats.totalIncome - periodStats.totalExpenses;
 
   return (
-    <div className="flex h-screen bg-gray-50" style={{ contain: 'layout style' }}>
+    <div className={`flex h-screen ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`} style={{ contain: 'layout style' }}>
       {/* Sidebar */}
       <Sidebar isMobileMenuOpen={isMobileMenuOpen} onCloseMobileMenu={handleCloseMobileMenu} />
 
@@ -178,9 +178,9 @@ function WalletContent() {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="min-h-screen bg-gray-50">
+        <div className={`min-h-screen ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
       {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
+      <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} shadow-sm border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
         <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
           <div className="flex items-center justify-between h-12 xs:h-14 sm:h-16">
             <div className="flex items-center space-x-4">
@@ -188,7 +188,11 @@ function WalletContent() {
               <div className="flex items-center space-x-1 lg:hidden">
                 <button
                   onClick={() => window.location.href = '/Financial-Dashboard/'}
-                  className="flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                  className={`flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium rounded-lg transition-colors ${
+                    isDark 
+                      ? 'text-gray-300 bg-gray-700 border-gray-600 hover:bg-gray-600' 
+                      : 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50'
+                  } border`}
                 >
                   <ArrowLeft className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
                   <span className="hidden xs:inline">Back</span>
@@ -196,7 +200,11 @@ function WalletContent() {
                 <div className="h-4 w-px bg-gray-300"></div>
                 <button
                   onClick={() => window.location.href = '/Financial-Dashboard/'}
-                  className="flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                  className={`flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium rounded-lg transition-colors ${
+                    isDark 
+                      ? 'text-gray-300 bg-gray-700 border-gray-600 hover:bg-gray-600' 
+                      : 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50'
+                  } border`}
                 >
                   <LayoutDashboard className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
                   <span className="hidden xs:inline">Dashboard</span>
@@ -224,7 +232,7 @@ function WalletContent() {
                   </button>
                   
                   {isTimeframeDropdownOpen && (
-                    <div className="absolute top-full right-0 mt-1 w-28 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                    <div className={`absolute top-full right-0 mt-1 w-28 ${isDark ? 'bg-gray-800' : 'bg-white'} border ${isDark ? 'border-gray-700' : 'border-gray-200'} rounded-lg shadow-lg z-50`}>
                       <div className="py-1">
                         {[
                           { value: 'day', label: 'Day' },
@@ -376,7 +384,7 @@ function WalletContent() {
           <div className="space-y-6">
             {/* Stats Cards */}
             <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-3 xs:gap-4 sm:gap-6">
-              <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200">
+              <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-4 xs:p-6 shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs xs:text-sm font-medium text-gray-600">
@@ -396,7 +404,7 @@ function WalletContent() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200">
+              <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-4 xs:p-6 shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs xs:text-sm font-medium text-gray-600">
@@ -416,7 +424,7 @@ function WalletContent() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200">
+              <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-4 xs:p-6 shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs xs:text-sm font-medium text-gray-600">
@@ -438,7 +446,7 @@ function WalletContent() {
             </div>
 
             {/* Category Breakdown */}
-            <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200">
+            <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-4 xs:p-6 shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
               <h3 className="text-base xs:text-lg font-semibold text-gray-900 mb-3 xs:mb-4">Spending by Category</h3>
               <div className="space-y-3">
                 {Object.entries(categoryStats)
@@ -463,7 +471,7 @@ function WalletContent() {
         )}
 
         {activeTab === 'transactions' && (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+          <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
             <div className="px-6 py-4 border-b border-gray-200">
               <h3 className="text-lg font-semibold text-gray-900">
                 Recent Transactions - {timeframe === 'day' ? 'Day' : 
@@ -515,7 +523,7 @@ function WalletContent() {
         {activeTab === 'analytics' && (
           <Suspense fallback={
             <div className="space-y-6">
-              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+              <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-6 shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
                 <div className="animate-pulse">
                   <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
                   <div className="space-y-3">
@@ -529,7 +537,7 @@ function WalletContent() {
             <div className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Income vs Expenses Chart */}
-              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+              <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-6 shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Income vs Expenses</h3>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
@@ -558,7 +566,7 @@ function WalletContent() {
               </div>
 
               {/* Category Distribution */}
-              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+              <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-6 shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
                   Top Categories - {timeframe === 'day' ? 'Day' :
                                    timeframe === 'week' ? 'Week' :
