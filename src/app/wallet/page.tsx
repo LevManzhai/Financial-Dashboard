@@ -164,7 +164,7 @@ function WalletContent() {
   const periodBalance = periodStats.totalIncome - periodStats.totalExpenses;
 
   return (
-    <div className={`flex h-screen ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`} style={{ contain: 'layout style' }}>
+    <div className="flex h-screen bg-gray-50 dark:bg-gray-900" style={{ contain: 'layout style' }}>
       {/* Sidebar */}
       <Sidebar isMobileMenuOpen={isMobileMenuOpen} onCloseMobileMenu={handleCloseMobileMenu} />
 
@@ -232,7 +232,7 @@ function WalletContent() {
                   </button>
                   
                   {isTimeframeDropdownOpen && (
-                    <div className={`absolute top-full right-0 mt-1 w-28 ${isDark ? 'bg-gray-800' : 'bg-white'} border ${isDark ? 'border-gray-700' : 'border-gray-200'} rounded-lg shadow-lg z-50`}>
+                    <div className="absolute top-full right-0 mt-1 w-28 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
                       <div className="py-1">
                         {[
                           { value: 'day', label: 'Day' },
@@ -244,12 +244,13 @@ function WalletContent() {
                           <button
                             key={option.value}
                             onClick={() => handleTimeframeChange(option.value as any)}
-                            className={`w-full text-left px-2 py-1.5 text-xs font-medium hover:bg-gray-50 transition-colors ${
-                              timeframe === option.value ? 'text-white' : 'text-gray-700'
+                            className={`w-full text-left px-2 py-1.5 text-xs font-medium transition-colors ${
+                              timeframe === option.value 
+                                ? 'text-white' 
+                                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                             }`}
                             style={timeframe === option.value ? { 
-                              backgroundColor: isClient ? themeSettings.primaryColor : '#3B82F6',
-                              color: '#ffffff'
+                              backgroundColor: themeSettings.primaryColor
                             } : {}}
                           >
                             {option.label}

@@ -377,8 +377,10 @@ function RevenueContent() {
                               setTimeframe(option.value as any);
                               setIsTimeframeDropdownOpen(false);
                             }}
-                            className={`w-full text-left px-3 py-1.5 text-xs font-medium hover:bg-gray-50 transition-colors ${
-                              timeframe === option.value ? 'text-white' : 'text-gray-700'
+                            className={`w-full text-left px-3 py-1.5 text-xs font-medium transition-colors ${
+                              timeframe === option.value 
+                                ? 'text-white' 
+                                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                             }`}
                             style={timeframe === option.value ? { 
                               backgroundColor: themeSettings.primaryColor
