@@ -25,17 +25,20 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
   const { themeSettings, isClient } = useTheme();
   // Determine active item based on current pathname
   const getActiveItem = () => {
-    if (pathname === '/' || pathname === '/Financial-Dashboard/' || pathname === '/Financial-Dashboard') {
+    // Debug: log the current pathname
+    console.log('Current pathname:', pathname);
+    
+    if (pathname === '/' || pathname === '/Financial-Dashboard/' || pathname === '/Financial-Dashboard' || pathname.includes('index')) {
       return 'Dashboard';
-    } else if (pathname === '/wallet' || pathname === '/Financial-Dashboard/wallet') {
+    } else if (pathname.includes('/wallet')) {
       return 'Wallet';
-    } else if (pathname === '/transactions' || pathname === '/Financial-Dashboard/transactions') {
+    } else if (pathname.includes('/transactions')) {
       return 'Transactions';
-    } else if (pathname === '/revenue' || pathname === '/Financial-Dashboard/revenue') {
+    } else if (pathname.includes('/revenue')) {
       return 'Revenue';
-    } else if (pathname === '/search' || pathname === '/Financial-Dashboard/search') {
+    } else if (pathname.includes('/search')) {
       return 'Search';
-    } else if (pathname === '/settings' || pathname === '/Financial-Dashboard/settings') {
+    } else if (pathname.includes('/settings')) {
       return 'Settings';
     }
     return 'Dashboard';
