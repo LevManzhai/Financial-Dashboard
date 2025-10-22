@@ -372,12 +372,8 @@ function RevenueContent() {
                               setIsTimeframeDropdownOpen(false);
                             }}
                             className={`w-full text-left px-3 py-1.5 text-xs font-medium hover:bg-gray-50 transition-colors ${
-                              timeframe === option.value ? 'text-white' : 'text-gray-700'
+                              timeframe === option.value ? 'text-white bg-primary' : 'text-gray-700'
                             }`}
-                            style={timeframe === option.value ? { 
-                              backgroundColor: 'var(--primary-color)',
-                              color: '#ffffff'
-                            } : {}}
                           >
                             {option.label}
                           </button>
@@ -399,12 +395,8 @@ function RevenueContent() {
                               setIsTimeframeDropdownOpen(false);
                             }}
                             className={`w-full text-left px-3 py-1.5 text-xs font-medium hover:bg-gray-50 transition-colors ${
-                              chartType === option.value ? 'text-white' : 'text-gray-700'
+                              chartType === option.value ? 'text-white bg-primary' : 'text-gray-700'
                             }`}
-                            style={chartType === option.value ? { 
-                              backgroundColor: 'var(--primary-color)',
-                              color: '#ffffff'
-                            } : {}}
                           >
                             {option.label}
                           </button>
@@ -436,13 +428,9 @@ function RevenueContent() {
                     onClick={() => setTimeframe('day')}
                     className={`px-2 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
                       timeframe === 'day'
-                        ? 'text-white shadow-sm'
+                        ? 'text-white bg-primary shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
                     }`}
-                    style={timeframe === 'day' ? { 
-                      backgroundColor: 'var(--primary-color)',
-                      color: '#ffffff'
-                    } : {}}
                   >
                     Day
                   </button>
@@ -450,13 +438,9 @@ function RevenueContent() {
                     onClick={() => setTimeframe('week')}
                     className={`px-2 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
                       timeframe === 'week'
-                        ? 'text-white shadow-sm'
+                        ? 'text-white bg-primary shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
                     }`}
-                    style={timeframe === 'week' ? { 
-                      backgroundColor: 'var(--primary-color)',
-                      color: '#ffffff'
-                    } : {}}
                   >
                     Week
                   </button>
@@ -464,13 +448,9 @@ function RevenueContent() {
                     onClick={() => setTimeframe('month')}
                     className={`px-2 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
                       timeframe === 'month'
-                        ? 'text-white shadow-sm'
+                        ? 'text-white bg-primary shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
                     }`}
-                    style={timeframe === 'month' ? { 
-                      backgroundColor: 'var(--primary-color)',
-                      color: '#ffffff'
-                    } : {}}
                   >
                     Month
                   </button>
@@ -478,13 +458,9 @@ function RevenueContent() {
                     onClick={() => setTimeframe('year')}
                     className={`px-2 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
                       timeframe === 'year'
-                        ? 'text-white shadow-sm'
+                        ? 'text-white bg-primary shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
                     }`}
-                    style={timeframe === 'year' ? { 
-                      backgroundColor: 'var(--primary-color)',
-                      color: '#ffffff'
-                    } : {}}
                   >
                     Year
                   </button>
@@ -492,13 +468,9 @@ function RevenueContent() {
                     onClick={() => setTimeframe('all')}
                     className={`px-2 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
                       timeframe === 'all'
-                        ? 'text-white shadow-sm'
+                        ? 'text-white bg-primary shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
                     }`}
-                    style={timeframe === 'all' ? { 
-                      backgroundColor: 'var(--primary-color)',
-                      color: '#ffffff'
-                    } : {}}
                   >
                     All
                   </button>
@@ -587,13 +559,9 @@ function RevenueContent() {
                     onClick={() => setChartType('line')}
                     className={`px-2 py-1 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
                       chartType === 'line'
-                        ? 'text-white shadow-sm'
+                        ? 'text-white bg-primary shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
                     }`}
-                    style={chartType === 'line' ? { 
-                      backgroundColor: 'var(--primary-color)',
-                      color: '#ffffff'
-                    } : {}}
                   >
                     Line
                   </button>
@@ -601,13 +569,9 @@ function RevenueContent() {
                     onClick={() => setChartType('bar')}
                     className={`px-2 py-1 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
                       chartType === 'bar'
-                        ? 'text-white shadow-sm'
+                        ? 'text-white bg-primary shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
                     }`}
-                    style={chartType === 'bar' ? { 
-                      backgroundColor: 'var(--primary-color)',
-                      color: '#ffffff'
-                    } : {}}
                   >
                     Bar
                   </button>
@@ -615,13 +579,9 @@ function RevenueContent() {
                     onClick={() => setChartType('area')}
                     className={`px-2 py-1 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
                       chartType === 'area'
-                        ? 'text-white shadow-sm'
+                        ? 'text-white bg-primary shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
                     }`}
-                    style={chartType === 'area' ? { 
-                      backgroundColor: 'var(--primary-color)',
-                      color: '#ffffff'
-                    } : {}}
                   >
                     Area
                 </button>
@@ -727,10 +687,6 @@ function RevenueContent() {
                         ? 'text-white shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
                     }`}
-                    style={chartType === 'line' ? { 
-                      backgroundColor: 'var(--primary-color)',
-                      color: '#ffffff'
-                    } : {}}
                   >
                     Line
                   </button>
@@ -1088,7 +1044,7 @@ function RevenueContent() {
                   <div key={item.name} className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <div 
-                        className="w-3 h-3 rounded-full" 
+                        className="w-3 h-3 rounded-full"
                         style={{ backgroundColor: COLORS[index % COLORS.length] }}
                       ></div>
                       <span className="text-sm font-medium text-gray-900">{item.name}</span>

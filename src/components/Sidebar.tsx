@@ -35,7 +35,7 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
       'search': 'Search',
       'settings': 'Settings'
     };
-    return pathMap[pageName] || pageName;
+    return pathMap[pageName] || 'Dashboard';
   };
 
   const activeItem = getCurrentPage();
