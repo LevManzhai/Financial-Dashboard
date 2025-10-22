@@ -65,6 +65,17 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Force styles to apply to all pages */
+* {
+  box-sizing: border-box;
+}
+
+/* Ensure all pages have proper styling */
+main, div, section, article, aside, nav, header, footer {
+  background: inherit;
+  color: inherit;
+}
+
 /* Prevent white background flicker */
 html {
   background: #FFFFFF;
@@ -89,9 +100,19 @@ html:not(.dark) {
   background-color: #ffffff !important;
 }
 
-/* Sidebar specific - smooth transitions */
+/* Sidebar specific - prevent blue flash */
 .sidebar-item {
   transition: background-color 0.2s ease, color 0.2s ease !important;
+}
+
+/* Prevent primary color flash on page load */
+.sidebar-item:not([style*="background-color"]) {
+  background-color: transparent !important;
+}
+
+/* Only apply primary color when explicitly set */
+.sidebar-item[style*="background-color"] {
+  transition: background-color 0.1s ease, color 0.1s ease !important;
 }
 
 /* Special styles for charts - always with transitions */
