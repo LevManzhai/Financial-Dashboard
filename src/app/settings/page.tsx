@@ -12,6 +12,10 @@ function SettingsContent() {
   const [saved, setSaved] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const handleToggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
@@ -186,8 +190,8 @@ function SettingsContent() {
               </div>
               
               <div className="flex items-center space-x-2 xs:space-x-3 min-w-0">
-                <div className="p-2 xs:p-3 rounded-lg flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: 'var(--primary-color-10)' }}>
-                  <Settings className="w-5 h-5 xs:w-6 xs:h-6" style={{ color: 'var(--primary-color)' }} />
+                <div className="p-2 xs:p-3 rounded-lg flex-shrink-0 flex items-center justify-center bg-blue-100">
+                  <Settings className="w-5 h-5 xs:w-6 xs:h-6 text-blue-600" />
                 </div>
                 <h1 className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-900 truncate">Settings</h1>
               </div>
@@ -463,8 +467,7 @@ function SettingsContent() {
                     <span className="text-sm font-medium text-gray-900">Primary Button</span>
                   </div>
                   <button 
-                    className="px-4 py-2 rounded text-white text-sm font-medium"
-                    style={{ backgroundColor: 'var(--primary-color)' }}
+                    className="px-4 py-2 rounded text-white text-sm font-medium bg-blue-600"
                   >
                     Click Me
                   </button>

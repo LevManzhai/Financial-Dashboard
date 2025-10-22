@@ -335,13 +335,10 @@ function RevenueContent() {
               </div>
               
               <div className="flex items-center space-x-1 xs:space-x-2 min-w-0">
-                <div 
-                  className="p-2 xs:p-3 rounded-lg flex-shrink-0"
-                  style={{ backgroundColor: iconBgColor }}
-                >
+                <div className="p-2 xs:p-3 rounded-lg flex-shrink-0 bg-blue-100">
                   <TrendingUp 
                     className="w-5 h-5 xs:w-6 xs:h-6" 
-                    style={{ color: 'var(--primary-color)' }}
+                    className="text-blue-600"
                   />
                 </div>
                 <h1 className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-900 truncate">Revenue Analytics</h1>
@@ -788,7 +785,7 @@ function RevenueContent() {
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Total Revenue</p>
                 <p className="text-lg xs:text-xl sm:text-2xl font-bold text-green-600">
-                  {isClient ? formatCurrency(totalIncome) : '$0'}
+                  {formatCurrency(totalIncome)}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
                   {timeframe === 'day' ? (selectedDate === new Date().toISOString().split('T')[0] ? 'Today' : selectedDate) : 
@@ -808,7 +805,7 @@ function RevenueContent() {
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Total Expenses</p>
                 <p className="text-lg xs:text-xl sm:text-2xl font-bold text-red-600">
-                  {isClient ? formatCurrency(totalExpenses) : '$0'}
+                  {formatCurrency(totalExpenses)}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
                   {timeframe === 'day' ? (selectedDate === new Date().toISOString().split('T')[0] ? 'Today' : selectedDate) : 
@@ -830,7 +827,7 @@ function RevenueContent() {
                 <p className={`text-lg xs:text-xl sm:text-2xl font-bold ${
                   balance > 0 ? 'text-green-600' : balance < 0 ? 'text-red-600' : 'text-gray-900'
                 }`}>
-                  {isClient ? formatCurrency(balance) : '$0'}
+                  {formatCurrency(balance)}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
                   {balance > 0 ? 'Positive' : balance < 0 ? 'Negative' : 'Neutral'}
@@ -1102,7 +1099,7 @@ function RevenueContent() {
                       <span className="text-sm font-medium text-gray-900">{item.name}</span>
                     </div>
                     <span className="text-sm font-semibold text-gray-900">
-                      {isClient ? formatCurrency(item.value) : '$0'}
+                      {formatCurrency(item.value)}
                     </span>
                   </div>
                 ))}
@@ -1135,14 +1132,14 @@ function RevenueContent() {
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-semibold text-gray-900">
-                          {isClient ? formatCurrency(Math.abs(data.income - data.expenses)) : '$0'}
+                          {formatCurrency(Math.abs(data.income - data.expenses))}
                         </p>
                         <div className="flex items-center space-x-2 text-xs">
                           {data.income > 0 && (
-                            <span className="text-green-600">+{isClient ? formatCurrency(data.income) : '$0'}</span>
+                            <span className="text-green-600">+{formatCurrency(data.income)}</span>
                           )}
                           {data.expenses > 0 && (
-                            <span className="text-red-600">-{isClient ? formatCurrency(data.expenses) : '$0'}</span>
+                            <span className="text-red-600">-{formatCurrency(data.expenses)}</span>
                           )}
                         </div>
                       </div>
@@ -1157,7 +1154,6 @@ function RevenueContent() {
     </div>
     </div>
     </div>
-
   );
 }
 
