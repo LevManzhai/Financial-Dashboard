@@ -11,7 +11,7 @@ const mockCard: CreditCard = {
 
 export default function CreditCardWidget() {
   return (
-    <div className="bg-gradient-to-br from-gray-900 to-black text-white border-gray-800 rounded-2xl p-4 relative shadow-2xl border h-46 w-full max-w-sm mx-auto sm:h-45 sm:max-w-sm md:h-45 md:max-w-md lg:h-48 lg:max-w-md">
+    <div className="bg-gradient-to-br from-gray-900 to-black text-white border-gray-800 rounded-2xl p-4 relative shadow-2xl border h-46 w-full max-w-sm mx-auto sm:h-45 sm:max-w-sm md:h-45 md:max-w-md lg:h-48 lg:max-w-md" style={{ backgroundColor: '#1F2937', background: 'linear-gradient(135deg, #1F2937 0%, #000000 100%)' }}>
       {/* Chip */}
       <div className="absolute top-4 left-4 w-8 h-6 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-sm shadow-inner">
         <div className="w-full h-full bg-gradient-to-br from-yellow-200 to-yellow-400 rounded-sm flex items-center justify-center">
