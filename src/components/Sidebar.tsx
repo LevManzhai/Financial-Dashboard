@@ -57,7 +57,7 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
   const handleItemClick = (item: any) => {
     setActiveItem(item.id);
     if (item.path) {
-      router.push(item.path);
+      window.location.href = item.path;
     }
     // Close mobile menu after navigation
     if (onCloseMobileMenu) {
