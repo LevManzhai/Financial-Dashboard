@@ -229,10 +229,14 @@ function calculateSummaryStats(transactions: Transaction[]): SummaryStats {
     .filter(t => t.type === 'expense')
     .reduce((sum, t) => sum + t.amount, 0);
 
+  // Calculate balance including initial balance
+  const initialBalance = 7000; // Starting balance
+  const balance = initialBalance + totalIncome - totalExpenses;
+
   return {
     totalIncome,
     totalExpenses,
-    balance: totalIncome - totalExpenses,
+    balance,
     transactionCount: transactions.length
   };
 }
