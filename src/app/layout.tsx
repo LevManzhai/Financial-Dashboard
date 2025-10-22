@@ -76,7 +76,16 @@ export default function RootLayout({
                   // Add loaded class after theme is set
                   setTimeout(() => {
                     document.documentElement.classList.add('loaded');
-                  }, 50);
+                  }, 100);
+                  
+                  // Also add loaded class when page is fully loaded
+                  if (document.readyState === 'complete') {
+                    document.documentElement.classList.add('loaded');
+                  } else {
+                    window.addEventListener('load', () => {
+                      document.documentElement.classList.add('loaded');
+                    });
+                  }
                 } catch (e) {
                   // Ignore errors
                 }
