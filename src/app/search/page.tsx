@@ -315,8 +315,8 @@ function SearchContent() {
               </div>
               
               <div className="flex items-center space-x-2 xs:space-x-3 min-w-0">
-                <div className="p-2 xs:p-3 rounded-lg flex-shrink-0" style={{ backgroundColor: 'var(--primary-color-10)' }}>
-                  <Search className="w-5 h-5 xs:w-6 xs:h-6" style={{ color: 'var(--primary-color)' }} />
+                <div className="p-2 xs:p-3 rounded-lg flex-shrink-0 bg-blue-50 dark:bg-blue-900/20">
+                  <Search className="w-5 h-5 xs:w-6 xs:h-6 text-blue-600 dark:text-blue-400" />
                 </div>
                 <h1 className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-900 truncate">Search & Filter</h1>
               </div>
