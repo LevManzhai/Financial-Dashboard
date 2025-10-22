@@ -120,8 +120,8 @@ function TransactionsContent() {
         <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
           <div className="flex items-center justify-between h-12 xs:h-14 sm:h-16">
             <div className="flex items-center space-x-2 xs:space-x-3 sm:space-x-4">
-              {/* Navigation Menu */}
-              <div className="flex items-center space-x-1 xs:space-x-2">
+              {/* Navigation Menu - Hidden on large screens (lg+) */}
+              <div className="flex items-center space-x-1 xs:space-x-2 lg:hidden">
                 <button
                   onClick={() => window.location.href = '/Financial-Dashboard/'}
                   className="flex items-center space-x-1 xs:space-x-2 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs xs:text-sm lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
