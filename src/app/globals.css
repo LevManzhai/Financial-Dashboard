@@ -187,3 +187,20 @@ html:not(.dark) {
 .gap-3 {
   gap: calc(var(--spacing) * 3) !important;
 }
+
+/* Primary color classes */
+.bg-primary {
+  background-color: var(--primary-color) !important;
+}
+
+.text-primary {
+  color: var(--primary-color) !important;
+}
+
+.bg-primary-light {
+  background-color: color-mix(in srgb, var(--primary-color) 10%, transparent) !important;
+}
+
+.hover\:bg-primary:hover {
+  background-color: color-mix(in srgb, var(--primary-color) 80%, black) !important;
+}
