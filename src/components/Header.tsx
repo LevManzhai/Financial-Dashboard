@@ -136,17 +136,6 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
 
   // Mock data - July to November 2025
   const mockTransactions = [
-    // Initial balance - July 2025
-    {
-      id: 'new-mock-0',
-      category: 'Initial Balance',
-      description: 'Starting balance',
-      amount: 7000,
-      date: '2025-07-01',
-      type: 'income' as const,
-      createdAt: '2025-07-01T00:00:00Z',
-      updatedAt: '2025-07-01T00:00:00Z'
-    },
     // July 2025 - Start with salary first
     {
       id: 'new-mock-1',
