@@ -238,7 +238,9 @@ function SettingsContent() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Main Content Area */}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden">
+          <div className="px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Chart Colors */}
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
@@ -498,6 +500,7 @@ function SettingsContent() {
                 </div>
               </div>
             </div>
+          </div>
           </div>
         </div>
         </div>

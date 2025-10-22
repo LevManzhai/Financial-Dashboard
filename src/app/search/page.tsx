@@ -352,7 +352,9 @@ function SearchContent() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6 py-4 xs:py-6 sm:py-8 min-w-0 overflow-x-hidden">
+        {/* Main Content Area */}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden">
+          <div className="px-2 xs:px-3 sm:px-4 lg:px-6 py-4 xs:py-6 sm:py-8 min-w-0">
         {/* Search Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
@@ -699,6 +701,7 @@ function SearchContent() {
                 </div>
               ))
             )}
+          </div>
           </div>
         </div>
         </div>

@@ -197,7 +197,8 @@ function TransactionsContent() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6 py-4 xs:py-6 sm:py-8 min-w-0 overflow-x-hidden">
+        {/* Main Content */}
+        <main className="flex-1 overflow-y-auto overflow-x-hidden p-3 xs:p-4 sm:p-6 min-w-0">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-3 xs:gap-4 sm:gap-6 xl:gap-8 mb-4 xs:mb-6 sm:mb-8 min-w-0">
           <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200">
@@ -487,7 +488,6 @@ function TransactionsContent() {
             </div>
           </div>
         </div>
-      </div>
 
       {/* Transaction Form Modal */}
       <TransactionForm
@@ -497,8 +497,9 @@ function TransactionsContent() {
         editingTransaction={editingTransaction}
         title={editingTransaction ? 'Edit Transaction' : 'Add Transaction'}
       />
-        </div>
+        </main>
       </div>
+    </div>
   );
 }
 

@@ -342,7 +342,9 @@ function WalletContent() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 py-4 xs:py-6 sm:py-8">
+        {/* Main Content Area */}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden">
+          <div className="px-3 xs:px-4 sm:px-6 lg:px-8 py-4 xs:py-6 sm:py-8">
         {/* Tabs */}
         <div className="mb-4 xs:mb-6 sm:mb-8">
           <div className="border-b border-gray-200">
@@ -591,6 +593,7 @@ function WalletContent() {
           </div>
           </Suspense>
         )}
+          </div>
         </div>
       </div>
     </div>

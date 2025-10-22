@@ -25,6 +25,12 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
   const { themeSettings, isClient } = useTheme();
   const [activeItem, setActiveItem] = useState(pathname === '/' ? 'Dashboard' : pathname.slice(1));
 
+  // Update active item when pathname changes
+  useEffect(() => {
+    const currentPage = pathname === '/' ? 'Dashboard' : pathname.slice(1);
+    setActiveItem(currentPage);
+  }, [pathname]);
+
   const menuItems = [
     { id: 'Dashboard', icon: LayoutDashboard, label: 'Dashboard', path: '/' },
     { id: 'Wallet', icon: Wallet, label: 'Wallet', path: '/wallet' },
