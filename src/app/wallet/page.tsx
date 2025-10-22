@@ -436,8 +436,8 @@ function WalletContent() {
                       {periodStats.transactionCount}
                     </p>
                   </div>
-                  <div className="p-2 xs:p-3 rounded-full" style={{ backgroundColor: 'var(--primary-color-10)' }}>
-                    <DollarSign className="w-5 h-5 xs:w-6 xs:h-6" style={{ color: 'var(--primary-color)' }} />
+                  <div className="p-2 xs:p-3 rounded-full bg-primary-light">
+                    <DollarSign className="w-5 h-5 xs:w-6 xs:h-6 text-primary" />
                   </div>
                 </div>
               </div>
@@ -510,7 +510,7 @@ function WalletContent() {
                 ))
               ) : (
                 <div className="px-6 py-12 text-center">
-                  <Wallet className="w-16 h-16 mx-auto mb-4" style={{ color: 'var(--primary-color)' }} />
+                  <Wallet className="w-16 h-16 mx-auto mb-4 text-primary" />
                   <p className="text-gray-500">No transactions found</p>
                 </div>
               )}

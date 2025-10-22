@@ -367,8 +367,8 @@ function SearchContent() {
                   {searchStats.count}
                 </p>
               </div>
-              <div className="p-3 rounded-full w-11 h-11 flex items-center justify-center" style={{ backgroundColor: 'var(--primary-color-10)' }}>
-                <Search className="w-5 h-5" style={{ color: 'var(--primary-color)' }} />
+              <div className="p-3 rounded-full w-11 h-11 flex items-center justify-center bg-primary-light">
+                <Search className="w-5 h-5 text-primary" />
               </div>
             </div>
           </div>
@@ -411,8 +411,8 @@ function SearchContent() {
                   {isClient ? formatCurrency(searchStats.balance) : '$0'}
                 </p>
               </div>
-              <div className="p-3 rounded-full w-11 h-11 flex items-center justify-center" style={{ backgroundColor: 'var(--primary-color-10)' }}>
-                <BarChart3 className="w-5 h-5" style={{ color: 'var(--primary-color)' }} />
+              <div className="p-3 rounded-full w-11 h-11 flex items-center justify-center bg-primary-light">
+                <BarChart3 className="w-5 h-5 text-primary" />
               </div>
             </div>
           </div>
@@ -631,7 +631,7 @@ function SearchContent() {
               </div>
             ) : isClient && filteredTransactions.length === 0 ? (
               <div className="px-6 py-8 text-center text-gray-500">
-                <Search className="w-16 h-16 mx-auto mb-4" style={{ color: 'var(--primary-color)' }} />
+                <Search className="w-16 h-16 mx-auto mb-4 text-primary" />
                 <p className="text-lg font-medium text-gray-900 mb-2">No transactions found</p>
                 <p className="text-sm text-gray-500">Try adjusting your search terms or filters</p>
               </div>

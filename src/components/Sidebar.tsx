@@ -70,7 +70,7 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
       {/* User Profile */}
       <div className="p-4 xs:p-6 border-b border-gray-200">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 xs:w-12 xs:h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--primary-color)' }}>
+          <div className="w-10 h-10 xs:w-12 xs:h-12 rounded-full flex items-center justify-center bg-primary">
             <User className="w-5 h-5 xs:w-6 xs:h-6 text-white" />
           </div>
           <div>

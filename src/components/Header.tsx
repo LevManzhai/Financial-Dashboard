@@ -567,21 +567,7 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
           {isClient && (
             <button
               onClick={handleLoadMockData}
-              className="hidden sm:flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors text-xs font-medium"
-              style={{
-                color: isClient ? themeSettings.primaryColor : '#3B82F6',
-                borderColor: isClient ? themeSettings.primaryColor : '#3B82F6',
-                borderWidth: '1px',
-                borderStyle: 'solid'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--primary-color)';
-                e.currentTarget.style.opacity = '0.1';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.opacity = '1';
-              }}
+              className="hidden sm:flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors text-xs font-medium text-primary border border-primary"
             >
               <Database className="h-3 w-3" />
               <span className="hidden lg:inline">Load Mock Data</span>
@@ -743,22 +729,7 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
                 <button
                   type="submit"
                   disabled={!searchTerm.trim()}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-3 text-white rounded-lg disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium"
-          style={{
-            backgroundColor: 'var(--primary-color)'
-          }}
-          onMouseEnter={(e) => {
-            if (!e.currentTarget.disabled) {
-              e.currentTarget.style.backgroundColor = 'var(--primary-color)';
-              e.currentTarget.style.opacity = '0.8';
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (!e.currentTarget.disabled) {
-              e.currentTarget.style.backgroundColor = 'var(--primary-color)';
-              e.currentTarget.style.opacity = '1';
-            }
-          }}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 text-white rounded-lg disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium bg-primary"
                 >
                   <Search className="h-3 w-3" />
                   <span>Search</span>
