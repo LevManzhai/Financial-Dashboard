@@ -23,7 +23,7 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
   const router = useRouter();
   const pathname = usePathname();
   const { themeSettings, isClient } = useTheme();
-  // Get current active item based on pathname
+  // Get current active item based on pathname (without state)
   const getCurrentPage = () => {
     if (pathname === '/') return 'Dashboard';
     const pageName = pathname.slice(1);
@@ -38,13 +38,7 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
     return pathMap[pageName] || pageName;
   };
 
-  const [activeItem, setActiveItem] = useState(getCurrentPage());
-
-  // Update active item when pathname changes
-  useEffect(() => {
-    const currentPage = getCurrentPage();
-    setActiveItem(currentPage);
-  }, [pathname]);
+  const activeItem = getCurrentPage();
 
   const menuItems = [
     { id: 'Dashboard', icon: LayoutDashboard, label: 'Dashboard', path: '/' },
@@ -59,7 +53,6 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
   ];
 
   const handleItemClick = (item: { id: string; path?: string }) => {
-    setActiveItem(item.id);
     if (item.path) {
       router.push(item.path);
     }
