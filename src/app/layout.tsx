@@ -40,17 +40,33 @@ export default function RootLayout({
                   
                   if (shouldBeDark) {
                     document.documentElement.classList.add('dark');
+                    document.documentElement.style.setProperty('--bg-primary', '#1F2937');
+                    document.documentElement.style.setProperty('--bg-secondary', '#374151');
+                    document.documentElement.style.setProperty('--bg-tertiary', '#4B5563');
+                    document.documentElement.style.setProperty('--text-primary', '#F9FAFB');
+                    document.documentElement.style.setProperty('--text-secondary', '#D1D5DB');
+                    document.documentElement.style.setProperty('--text-tertiary', '#9CA3AF');
+                    document.documentElement.style.setProperty('--border-color', '#374151');
+                    document.documentElement.style.setProperty('--shadow-color', 'rgba(0, 0, 0, 0.3)');
                   } else {
                     document.documentElement.classList.remove('dark');
+                    document.documentElement.style.setProperty('--bg-primary', '#FFFFFF');
+                    document.documentElement.style.setProperty('--bg-secondary', '#F9FAFB');
+                    document.documentElement.style.setProperty('--bg-tertiary', '#F3F4F6');
+                    document.documentElement.style.setProperty('--text-primary', '#1F2937');
+                    document.documentElement.style.setProperty('--text-secondary', '#6B7280');
+                    document.documentElement.style.setProperty('--text-tertiary', '#9CA3AF');
+                    document.documentElement.style.setProperty('--border-color', '#E5E7EB');
+                    document.documentElement.style.setProperty('--shadow-color', 'rgba(0, 0, 0, 0.1)');
                   }
                   
                   // Set default values
                   document.documentElement.style.setProperty('--chart-income', '#8B5CF6');
                   document.documentElement.style.setProperty('--chart-expenses', '#EC4899');
                   document.documentElement.style.setProperty('--chart-balance', '#7C3AED');
-                  document.documentElement.style.setProperty('--chart-background', '#1F2937');
-                  document.documentElement.style.setProperty('--chart-grid', '#374151');
-                  document.documentElement.style.setProperty('--chart-text', '#F9FAFB');
+                  document.documentElement.style.setProperty('--chart-background', shouldBeDark ? '#1F2937' : '#FFFFFF');
+                  document.documentElement.style.setProperty('--chart-grid', shouldBeDark ? '#374151' : '#F3F4F6');
+                  document.documentElement.style.setProperty('--chart-text', shouldBeDark ? '#F9FAFB' : '#1F2937');
                   document.documentElement.style.setProperty('--primary-color', '#3B82F6');
                   document.documentElement.style.setProperty('--accent-color', '#8B5CF6');
                   

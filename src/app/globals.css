@@ -100,6 +100,15 @@ html:not(.dark) {
   background-color: #ffffff !important;
 }
 
+/* Prevent flickering by setting initial theme before JS loads */
+html:not(.loaded) {
+  background-color: #1F2937 !important;
+}
+
+html:not(.loaded):not(.dark) {
+  background-color: #ffffff !important;
+}
+
 /* Sidebar specific - prevent blue flash */
 .sidebar-item {
   transition: background-color 0.2s ease, color 0.2s ease !important;
