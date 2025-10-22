@@ -3,7 +3,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { TransactionProvider, useTransactions } from '@/contexts/TransactionContext';
 import { useTheme } from '@/contexts/ThemeContext';
-import Sidebar from '@/components/Sidebar';
 import { Search, Filter, Calendar, DollarSign, Tag, ArrowUpRight, ArrowDownLeft, Edit, Trash2, Download, Upload, X, Check, Clock, TrendingUp, TrendingDown, BarChart3 } from 'lucide-react';
 import { Transaction } from '@/types/financial';
 
@@ -11,15 +10,6 @@ function SearchContent() {
   const { state, deleteTransaction, updateTransaction } = useTransactions();
   const { themeSettings } = useTheme();
   const [isClient, setIsClient] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const handleToggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const handleCloseMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-  };
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilters, setSelectedFilters] = useState({
     type: 'all',
@@ -271,30 +261,16 @@ function SearchContent() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50" style={{ contain: 'layout style' }}>
-      {/* Sidebar */}
-      <Sidebar isMobileMenuOpen={isMobileMenuOpen} onCloseMobileMenu={handleCloseMobileMenu} />
-
-      {/* Mobile Overlay */}
-      {isMobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-          onClick={handleCloseMobileMenu}
-        />
-      )}
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
           <div className="flex items-center justify-between h-12 xs:h-14 sm:h-16 min-w-0">
             <div className="flex items-center space-x-1 xs:space-x-2 min-w-0 flex-1">
-              {/* Navigation Menu - Hidden on large screens (lg+) */}
-              <div className="flex items-center space-x-1 xs:space-x-2 lg:hidden">
+              {/* Navigation Menu */}
+              <div className="flex items-center space-x-1 xs:space-x-2">
                 <button
-                  onClick={() => window.location.href = '/Financial-Dashboard/'}
+                  onClick={() => window.location.href = '/'}
                   className="flex items-center space-x-1 xs:space-x-2 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <ArrowDownLeft className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
@@ -302,7 +278,7 @@ function SearchContent() {
                 </button>
                 <div className="h-4 w-px bg-gray-300 hidden xs:block"></div>
                 <button
-                  onClick={() => window.location.href = '/Financial-Dashboard/'}
+                  onClick={() => window.location.href = '/'}
                   className="flex items-center space-x-1 xs:space-x-2 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <DollarSign className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
@@ -701,9 +677,6 @@ function SearchContent() {
         </div>
       </div>
     </div>
-    </div>
-    </div>
-
   );
 }
 

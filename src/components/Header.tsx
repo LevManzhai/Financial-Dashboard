@@ -92,7 +92,7 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
     if (searchTerm.trim()) {
       setShowSuggestions(false);
       // Navigate to search page with query
-      window.location.href = `/Financial-Dashboard/search?q=${encodeURIComponent(searchTerm.trim())}`;
+      window.location.href = `/search?q=${encodeURIComponent(searchTerm.trim())}`;
       setIsMobileSearchOpen(false);
     }
   };
@@ -537,7 +537,7 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
                       setSearchTerm(suggestion);
                       setShowSuggestions(false);
                       // Navigate immediately
-                      window.location.href = `/Financial-Dashboard/search?q=${encodeURIComponent(suggestion.trim())}`;
+                      window.location.href = `/search?q=${encodeURIComponent(suggestion.trim())}`;
                     }}
                     className="suggestion-item w-full text-left px-4 py-2 hover:bg-gray-50 text-sm text-gray-700 border-b border-gray-100 last:border-b-0"
                   >
@@ -724,7 +724,7 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
                             setSearchTerm(suggestion);
                             setShowSuggestions(false);
                             // Navigate immediately
-                            window.location.href = `/Financial-Dashboard/search?q=${encodeURIComponent(suggestion.trim())}`;
+                            window.location.href = `/search?q=${encodeURIComponent(suggestion.trim())}`;
                             setIsMobileSearchOpen(false);
                           }}
                           className="suggestion-item w-full text-left px-4 py-2 hover:bg-gray-50 text-sm text-gray-700 border-b border-gray-100 last:border-b-0"
@@ -801,7 +801,7 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
                           setSearchTerm(suggestion);
                           setShowSuggestions(false);
                           // Navigate immediately
-                          window.location.href = `/Financial-Dashboard/search?q=${encodeURIComponent(suggestion.trim())}`;
+                          window.location.href = `/search?q=${encodeURIComponent(suggestion.trim())}`;
                         }}
                       className="suggestion-item w-full text-left px-4 py-2 hover:bg-gray-50 text-sm text-gray-700 border-b border-gray-100 last:border-b-0"
                     >

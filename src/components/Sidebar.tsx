@@ -23,44 +23,24 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
   const router = useRouter();
   const pathname = usePathname();
   const { themeSettings, isClient } = useTheme();
-  // Determine active item based on current pathname
-  const getActiveItem = () => {
-    // Debug: log the current pathname
-    console.log('Current pathname:', pathname);
-    
-    if (pathname === '/' || pathname === '/Financial-Dashboard/' || pathname === '/Financial-Dashboard' || pathname.includes('index')) {
-      return 'Dashboard';
-    } else if (pathname.includes('/wallet')) {
-      return 'Wallet';
-    } else if (pathname.includes('/transactions')) {
-      return 'Transactions';
-    } else if (pathname.includes('/revenue') || pathname.includes('revenue')) {
-      return 'Revenue';
-    } else if (pathname.includes('/search')) {
-      return 'Search';
-    } else if (pathname.includes('/settings')) {
-      return 'Settings';
-    }
-    return 'Dashboard';
-  };
-
-  const activeItem = getActiveItem();
+  const [activeItem, setActiveItem] = useState(pathname === '/' ? 'Dashboard' : pathname.slice(1));
 
   const menuItems = [
-    { id: 'Dashboard', icon: LayoutDashboard, label: 'Dashboard', path: '/Financial-Dashboard/' },
-    { id: 'Wallet', icon: Wallet, label: 'Wallet', path: '/Financial-Dashboard/wallet' },
-    { id: 'Transactions', icon: CreditCard, label: 'Transactions', path: '/Financial-Dashboard/transactions' },
-    { id: 'Revenue', icon: TrendingUp, label: 'Revenue analytics', path: '/Financial-Dashboard/revenue' },
-    { id: 'Search', icon: Search, label: 'Search', path: '/Financial-Dashboard/search' },
+    { id: 'Dashboard', icon: LayoutDashboard, label: 'Dashboard', path: '/' },
+    { id: 'Wallet', icon: Wallet, label: 'Wallet', path: '/wallet' },
+    { id: 'Transactions', icon: CreditCard, label: 'Transactions', path: '/transactions' },
+    { id: 'Revenue', icon: TrendingUp, label: 'Revenue analytics', path: '/revenue' },
+    { id: 'Search', icon: Search, label: 'Search', path: '/search' },
   ];
 
   const bottomItems = [
-    { id: 'Settings', icon: Settings, label: 'Setting', path: '/Financial-Dashboard/settings' },
+    { id: 'Settings', icon: Settings, label: 'Setting', path: '/settings' },
   ];
 
-  const handleItemClick = (item: any) => {
+  const handleItemClick = (item: { id: string; path?: string }) => {
+    setActiveItem(item.id);
     if (item.path) {
-      window.location.href = item.path;
+      router.push(item.path);
     }
     // Close mobile menu after navigation
     if (onCloseMobileMenu) {
@@ -95,7 +75,7 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
               <li key={item.id}>
                 <button
                   onClick={() => handleItemClick(item)}
-                  className={`sidebar-item w-full flex items-center space-x-3 px-2 xs:px-3 py-2 rounded-lg transition-colors text-sm xs:text-base ${
+                  className={`w-full flex items-center space-x-3 px-2 xs:px-3 py-2 rounded-lg transition-colors text-sm xs:text-base ${
                     activeItem === item.id
                       ? 'text-white'
                       : 'text-gray-700 hover:bg-gray-50'

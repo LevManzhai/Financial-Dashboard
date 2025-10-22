@@ -3,32 +3,19 @@
 import { useState, useEffect, useMemo } from 'react';
 import { TransactionProvider, useTransactions } from '@/contexts/TransactionContext';
 import { useTheme } from '@/contexts/ThemeContext';
-import Sidebar from '@/components/Sidebar';
 import { ArrowUpRight, ArrowDownLeft, TrendingUp, TrendingDown, DollarSign, Calendar, BarChart3, PieChart, LineChart, Activity, Target, Zap, ChevronDown, Briefcase, Heart, Utensils, Car, ShoppingBag, Gamepad2, Home, CreditCard, Wifi, Coffee, BookOpen, Music, Camera, Plane } from 'lucide-react';
 import { Transaction } from '@/types/financial';
 import { LineChart as RechartsLineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell, AreaChart, Area, CartesianGrid, Legend } from 'recharts';
-// Note: Mock data is handled by Header component
 
 function RevenueContent() {
-  const { state, loadTransactions } = useTransactions();
+  const { state } = useTransactions();
   const { isDark, themeSettings } = useTheme();
   const { chartColors } = useTheme();
   const [isClient, setIsClient] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  // Note: Mock data loading is handled by Header component
-  
-  const handleToggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const handleCloseMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-  };
-
   const [timeframe, setTimeframe] = useState<'day' | 'week' | 'month' | 'year' | 'all'>('month');
   const [chartType, setChartType] = useState<'line' | 'bar' | 'area'>('line');
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isTimeframeDropdownOpen, setIsTimeframeDropdownOpen] = useState(false);
   const [isChartTypeDropdownOpen, setIsChartTypeDropdownOpen] = useState(false);
   const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false);
@@ -108,10 +95,6 @@ function RevenueContent() {
 
   // Group by periods for charts
   const getChartData = () => {
-    // If no transactions, return empty data
-    if (filteredTransactions.length === 0) {
-      return [];
-    }
 
     const periodMap = new Map<string, { income: number; expenses: number; balance: number }>();
 
@@ -252,7 +235,7 @@ function RevenueContent() {
 
   // Get icon for category
   const getCategoryIcon = (category: string) => {
-    const categoryIcons: { [key: string]: any } = {
+    const categoryIcons: { [key: string]: React.ComponentType<{ className?: string }> } = {
       'Salary': Briefcase,
       'Health': Heart,
       'Food': Utensils,
@@ -295,39 +278,25 @@ function RevenueContent() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-gray-900" style={{ contain: 'layout style' }}>
-      {/* Sidebar */}
-      <Sidebar isMobileMenuOpen={isMobileMenuOpen} onCloseMobileMenu={handleCloseMobileMenu} />
-
-      {/* Mobile Overlay */}
-      {isMobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-          onClick={handleCloseMobileMenu}
-        />
-      )}
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+      <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
           <div className="flex items-center justify-between h-12 xs:h-14 sm:h-16 min-w-0">
             <div className="flex items-center space-x-1 xs:space-x-2 min-w-0 flex-1">
-              {/* Navigation Menu - Hidden on large screens (lg+) */}
-              <div className="flex items-center space-x-1 lg:hidden">
+              {/* Navigation Menu */}
+              <div className="flex items-center space-x-1">
                 <button
-                  onClick={() => window.location.href = '/Financial-Dashboard/'}
-                  className="flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                  onClick={() => window.location.href = '/'}
+                  className="flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <ArrowDownLeft className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
                   <span className="hidden xs:inline">Back</span>
                 </button>
                 <div className="h-4 w-px bg-gray-300 hidden xs:block"></div>
                 <button
-                  onClick={() => window.location.href = '/Financial-Dashboard/'}
-                  className="flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                  onClick={() => window.location.href = '/'}
+                  className="flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <DollarSign className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
                   <span className="hidden xs:inline">Dashboard</span>
@@ -335,9 +304,13 @@ function RevenueContent() {
               </div>
               
               <div className="flex items-center space-x-1 xs:space-x-2 min-w-0">
-                <div className="p-2 xs:p-3 rounded-lg flex-shrink-0 bg-blue-100 dark:bg-blue-900/20">
+                <div 
+                  className="p-2 xs:p-3 rounded-lg flex-shrink-0"
+                  style={{ backgroundColor: iconBgColor }}
+                >
                   <TrendingUp 
-                    className="w-5 h-5 xs:w-6 xs:h-6 text-blue-600 dark:text-blue-400" 
+                    className="w-5 h-5 xs:w-6 xs:h-6" 
+                    style={{ color: 'var(--primary-color)' }}
                   />
                 </div>
                 <h1 className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-900 truncate">Revenue Analytics</h1>
@@ -358,7 +331,7 @@ function RevenueContent() {
                   </button>
                   
                   {isTimeframeDropdownOpen && (
-                    <div className="absolute top-full right-0 mt-1 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+                    <div className="absolute top-full right-0 mt-1 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
                       <div className="py-1">
                         {/* Timeframe Section */}
                         <div className="px-3 py-1 border-b border-gray-100">
@@ -374,16 +347,15 @@ function RevenueContent() {
                           <button
                             key={option.value}
                             onClick={() => {
-                              setTimeframe(option.value as any);
+                              setTimeframe(option.value as 'day' | 'week' | 'month' | 'year' | 'all');
                               setIsTimeframeDropdownOpen(false);
                             }}
-                            className={`w-full text-left px-3 py-1.5 text-xs font-medium transition-colors ${
-                              timeframe === option.value 
-                                ? 'text-white' 
-                                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                            className={`w-full text-left px-3 py-1.5 text-xs font-medium hover:bg-gray-50 transition-colors ${
+                              timeframe === option.value ? 'text-white' : 'text-gray-700'
                             }`}
                             style={timeframe === option.value ? { 
-                              backgroundColor: themeSettings.primaryColor
+                              backgroundColor: 'var(--primary-color)',
+                              color: '#ffffff'
                             } : {}}
                           >
                             {option.label}
@@ -402,7 +374,7 @@ function RevenueContent() {
                           <button
                             key={option.value}
                             onClick={() => {
-                              setChartType(option.value as any);
+                              setChartType(option.value as 'line' | 'bar' | 'area');
                               setIsTimeframeDropdownOpen(false);
                             }}
                             className={`w-full text-left px-3 py-1.5 text-xs font-medium hover:bg-gray-50 transition-colors ${
@@ -428,7 +400,7 @@ function RevenueContent() {
                           type="date"
                           value={selectedDate}
                           onChange={(e) => setSelectedDate(e.target.value)}
-                          className="w-full px-2 py-1.5 text-xs border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-md mt-1 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded-md bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mt-1"
                         />
                       </div>
                     )}
@@ -666,7 +638,7 @@ function RevenueContent() {
                     </button>
                     
                     {isDateDropdownOpen && (
-                      <div className="absolute top-full right-0 mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+                      <div className="absolute top-full right-0 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
                         <div className="p-3">
                           <label className="block text-xs font-medium text-gray-700 mb-2">
                             Select Date:
@@ -678,7 +650,7 @@ function RevenueContent() {
                               setSelectedDate(e.target.value);
                               setIsDateDropdownOpen(false);
                             }}
-                            className="w-full px-2 py-1.5 text-xs border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full px-2 py-1.5 text-xs border border-gray-300 rounded-md bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                           />
                         </div>
                       </div>
@@ -700,7 +672,7 @@ function RevenueContent() {
                   </button>
                   
                   {isChartTypeDropdownOpen && (
-                    <div className="absolute top-full right-0 mt-1 w-18 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-50">
+                    <div className="absolute top-full right-0 mt-1 w-18 bg-white border border-gray-200 rounded-md shadow-lg z-50">
                       <div className="py-1">
                         {[
                           { value: 'line', label: 'Line' },
@@ -710,17 +682,12 @@ function RevenueContent() {
                           <button
                             key={option.value}
                             onClick={() => {
-                              setChartType(option.value as any);
+                              setChartType(option.value as 'line' | 'bar' | 'area');
                               setIsChartTypeDropdownOpen(false);
                             }}
-                            className={`w-full text-left px-2 py-1 text-xs font-medium transition-colors ${
-                              chartType === option.value 
-                                ? 'text-white' 
-                                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                            className={`w-full text-left px-2 py-1 text-xs font-medium hover:bg-gray-50 transition-colors ${
+                              chartType === option.value ? 'bg-blue-50 text-blue-600' : 'text-gray-700'
                             }`}
-                            style={{
-                              backgroundColor: chartType === option.value ? themeSettings.primaryColor : 'transparent'
-                            }}
                           >
                             {option.label}
                           </button>
@@ -785,12 +752,12 @@ function RevenueContent() {
       <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6 xl:px-8 py-4 xs:py-6 sm:py-8 min-w-0 overflow-x-hidden">
         {/* Key Metrics */}
         <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-3 xs:gap-4 sm:gap-6 xl:gap-8 mb-4 xs:mb-6 sm:mb-8 min-w-0">
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 dark:border-gray-700">
+          <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Total Revenue</p>
                 <p className="text-lg xs:text-xl sm:text-2xl font-bold text-green-600">
-                  {formatCurrency(totalIncome)}
+                  {isClient ? formatCurrency(totalIncome) : '$0'}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
                   {timeframe === 'day' ? (selectedDate === new Date().toISOString().split('T')[0] ? 'Today' : selectedDate) : 
@@ -805,12 +772,12 @@ function RevenueContent() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 dark:border-gray-700">
+          <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Total Expenses</p>
                 <p className="text-lg xs:text-xl sm:text-2xl font-bold text-red-600">
-                  {formatCurrency(totalExpenses)}
+                  {isClient ? formatCurrency(totalExpenses) : '$0'}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
                   {timeframe === 'day' ? (selectedDate === new Date().toISOString().split('T')[0] ? 'Today' : selectedDate) : 
@@ -825,26 +792,26 @@ function RevenueContent() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 dark:border-gray-700">
+          <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Net Profit</p>
                 <p className={`text-lg xs:text-xl sm:text-2xl font-bold ${
                   balance > 0 ? 'text-green-600' : balance < 0 ? 'text-red-600' : 'text-gray-900'
                 }`}>
-                  {formatCurrency(balance)}
+                  {isClient ? formatCurrency(balance) : '$0'}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
                   {balance > 0 ? 'Positive' : balance < 0 ? 'Negative' : 'Neutral'}
                 </p>
               </div>
-              <div className="p-3 rounded-full w-11 h-11 flex items-center justify-center bg-blue-100 dark:bg-blue-900/20">
-                <Target className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <div className="p-3 bg-blue-100 rounded-full w-11 h-11 flex items-center justify-center">
+                <Target className="w-5 h-5 text-blue-600" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 dark:border-gray-700">
+          <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Transactions</p>
@@ -868,7 +835,7 @@ function RevenueContent() {
         <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-6 lg:gap-8 xl:gap-12">
           {/* Main Chart */}
           <div className="lg:col-span-2">
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 xl:p-8 shadow-sm border border-gray-200 dark:border-gray-700">
+            <div className="bg-white rounded-xl p-6 xl:p-8 shadow-sm border border-gray-200">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-semibold text-gray-900">Revenue & Expenses Trend</h3>
                 <div className="flex items-center space-x-2">
@@ -1059,7 +1026,7 @@ function RevenueContent() {
           {/* Sidebar */}
           <div className="lg:col-span-1">
             {/* Category Breakdown */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 mb-6">
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 mb-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Category Breakdown</h3>
               <div className="h-64 flex justify-center">
                 <div className="h-64 w-56">
@@ -1104,7 +1071,7 @@ function RevenueContent() {
                       <span className="text-sm font-medium text-gray-900">{item.name}</span>
                     </div>
                     <span className="text-sm font-semibold text-gray-900">
-                      {formatCurrency(item.value)}
+                      {isClient ? formatCurrency(item.value) : '$0'}
                     </span>
                   </div>
                 ))}
@@ -1112,7 +1079,7 @@ function RevenueContent() {
             </div>
 
             {/* Top Categories */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 xl:p-8 shadow-sm border border-gray-200 dark:border-gray-700">
+            <div className="bg-white rounded-xl p-6 xl:p-8 shadow-sm border border-gray-200">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Categories</h3>
               <div className="space-y-3">
                 {Object.entries(categoryStats)
@@ -1137,14 +1104,14 @@ function RevenueContent() {
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-semibold text-gray-900">
-                          {formatCurrency(Math.abs(data.income - data.expenses))}
+                          {isClient ? formatCurrency(Math.abs(data.income - data.expenses)) : '$0'}
                         </p>
                         <div className="flex items-center space-x-2 text-xs">
                           {data.income > 0 && (
-                            <span className="text-green-600">+{formatCurrency(data.income)}</span>
+                            <span className="text-green-600">+{isClient ? formatCurrency(data.income) : '$0'}</span>
                           )}
                           {data.expenses > 0 && (
-                            <span className="text-red-600">-{formatCurrency(data.expenses)}</span>
+                            <span className="text-red-600">-{isClient ? formatCurrency(data.expenses) : '$0'}</span>
                           )}
                         </div>
                       </div>
@@ -1156,8 +1123,6 @@ function RevenueContent() {
           </div>
         </div>
       </div>
-    </div>
-    </div>
     </div>
   );
 }

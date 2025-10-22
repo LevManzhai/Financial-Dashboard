@@ -3,7 +3,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { TransactionProvider, useTransactions } from '@/contexts/TransactionContext';
 import { useTheme } from '@/contexts/ThemeContext';
-import Sidebar from '@/components/Sidebar';
 import { ArrowUpRight, ArrowDownLeft, Plus, Edit, Trash2, Search, Filter, Download, Upload, Calendar, TrendingUp, TrendingDown, DollarSign, PieChart, BarChart3 } from 'lucide-react';
 import { Transaction } from '@/types/financial';
 import TransactionForm from '@/components/TransactionForm';
@@ -14,15 +13,6 @@ function TransactionsContent() {
   const { themeSettings } = useTheme();
   const [isClient, setIsClient] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const handleToggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const handleCloseMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-  };
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   useEffect(() => {
@@ -60,9 +50,9 @@ function TransactionsContent() {
     });
   };
 
-  const handleFormSubmit = (formData: any) => {
+  const handleFormSubmit = (formData: Partial<Transaction>) => {
     if (editingTransaction) {
-      updateTransaction(editingTransaction.id, {
+      updateTransaction({
         ...editingTransaction,
         ...formData,
         updatedAt: new Date().toISOString()
@@ -123,42 +113,26 @@ function TransactionsContent() {
     }, {} as Record<string, { income: number; expenses: number; count: number }>);
   }, [filteredBySearch]);
 
-  const { isDark } = useTheme();
-  
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-gray-900" style={{ contain: 'layout style' }}>
-      {/* Sidebar */}
-      <Sidebar isMobileMenuOpen={isMobileMenuOpen} onCloseMobileMenu={handleCloseMobileMenu} />
-
-      {/* Mobile Overlay */}
-      {isMobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-          onClick={handleCloseMobileMenu}
-        />
-      )}
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+      <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
           <div className="flex items-center justify-between h-12 xs:h-14 sm:h-16">
             <div className="flex items-center space-x-2 xs:space-x-3 sm:space-x-4">
-              {/* Navigation Menu - Hidden on large screens (lg+) */}
-              <div className="flex items-center space-x-1 xs:space-x-2 lg:hidden">
+              {/* Navigation Menu */}
+              <div className="flex items-center space-x-1 xs:space-x-2">
                 <button
-                  onClick={() => window.location.href = '/Financial-Dashboard/'}
-                  className="flex items-center space-x-1 xs:space-x-2 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs xs:text-sm lg:text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                  onClick={() => window.location.href = '/'}
+                  className="flex items-center space-x-1 xs:space-x-2 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs xs:text-sm lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <ArrowDownLeft className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
                   <span className="hidden xs:inline">Back</span>
                 </button>
                 <div className="h-4 xs:h-6 w-px bg-gray-300"></div>
                 <button
-                  onClick={() => window.location.href = '/Financial-Dashboard/'}
-                  className="flex items-center space-x-1 xs:space-x-2 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs xs:text-sm lg:text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                  onClick={() => window.location.href = '/'}
+                  className="flex items-center space-x-1 xs:space-x-2 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs xs:text-sm lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <DollarSign className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
                   <span className="hidden xs:inline">Dashboard</span>
@@ -200,7 +174,7 @@ function TransactionsContent() {
       <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6 py-4 xs:py-6 sm:py-8 min-w-0 overflow-x-hidden">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-3 xs:gap-4 sm:gap-6 xl:gap-8 mb-4 xs:mb-6 sm:mb-8 min-w-0">
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 dark:border-gray-700">
+          <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Total Income</p>
@@ -217,7 +191,7 @@ function TransactionsContent() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 dark:border-gray-700">
+          <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Total Expenses</p>
@@ -234,7 +208,7 @@ function TransactionsContent() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 dark:border-gray-700">
+          <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Balance</p>
@@ -253,7 +227,7 @@ function TransactionsContent() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 dark:border-gray-700">
+          <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Transactions</p>
@@ -275,7 +249,7 @@ function TransactionsContent() {
           {/* Main Content */}
           <div className="lg:col-span-3">
             {/* Search and Filters */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 mb-6">
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 mb-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-gray-900">Search & Filters</h3>
                 <div className="flex items-center space-x-2">
@@ -307,7 +281,7 @@ function TransactionsContent() {
             </div>
 
             {/* Transactions List */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 min-w-0">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 min-w-0">
               <div className="px-3 xs:px-4 sm:px-6 py-3 xs:py-4 border-b border-gray-200">
                 <h3 className="text-base xs:text-lg font-semibold text-gray-900">
                   Transactions ({filteredBySearch.length})
@@ -378,7 +352,7 @@ function TransactionsContent() {
           {/* Sidebar */}
           <div className="lg:col-span-1">
             {/* Category Breakdown */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 mb-6">
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 mb-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Categories</h3>
               <div className="space-y-3">
                 {Object.entries(categoryStats)
@@ -402,7 +376,7 @@ function TransactionsContent() {
             </div>
 
             {/* Quick Actions */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
               <div className="space-y-3">
                 <button
@@ -498,9 +472,6 @@ function TransactionsContent() {
         title={editingTransaction ? 'Edit Transaction' : 'Add Transaction'}
       />
     </div>
-    </div>
-    </div>
-
   );
 }
 

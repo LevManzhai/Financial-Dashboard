@@ -66,7 +66,7 @@ export default function MonthlyEarningsWidget() {
     setIsTimeframeDropdownOpen(false);
   };
 
-  const getKeyPoints = (data: any[]) => {
+  const getKeyPoints = (data: { date: string; amount: number }[]) => {
     if (data.length <= 10) return data;
     
     const step = Math.ceil(data.length / 10);
@@ -331,7 +331,7 @@ export default function MonthlyEarningsWidget() {
                     ].map((option) => (
                       <button
                         key={option.value}
-                        onClick={() => handleTimeframeChange(option.value as any)}
+                        onClick={() => handleTimeframeChange(option.value as 'day' | 'week' | 'month' | 'year' | 'all')}
                         className={`w-full text-left px-2 py-1.5 text-xs font-medium hover:bg-gray-50 transition-colors ${
                           timeframe === option.value ? 'bg-blue-50 text-blue-600' : 'text-gray-700'
                         }`}

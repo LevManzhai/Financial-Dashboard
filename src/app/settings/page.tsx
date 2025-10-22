@@ -3,26 +3,12 @@
 import { useState, useEffect } from 'react';
 import { TransactionProvider } from '@/contexts/TransactionContext';
 import { useTheme } from '@/contexts/ThemeContext';
-import Sidebar from '@/components/Sidebar';
 import { Settings, Palette, Moon, Sun, Monitor, Save, RotateCcw, Eye, BarChart3, PieChart, TrendingUp, TrendingDown, DollarSign, Calendar, Tag, ArrowDownLeft, Check } from 'lucide-react';
 
 function SettingsContent() {
-  const { chartColors, themeSettings, updateChartColors, updateThemeSettings, resetSettings, isDark } = useTheme();
+  const { chartColors, themeSettings, updateChartColors, updateThemeSettings, resetSettings } = useTheme();
   const [isClient, setIsClient] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  const handleToggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const handleCloseMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-  };
   const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
 
   const colorPresets = [
@@ -150,47 +136,25 @@ function SettingsContent() {
   };
 
   return (
-    <div className={`flex h-screen ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`} style={{ contain: 'layout style' }}>
-      {/* Sidebar */}
-      <Sidebar isMobileMenuOpen={isMobileMenuOpen} onCloseMobileMenu={handleCloseMobileMenu} />
-
-      {/* Mobile Overlay */}
-      {isMobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-          onClick={handleCloseMobileMenu}
-        />
-      )}
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <div className={`min-h-screen ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} shadow-sm border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+      <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
           <div className="flex items-center justify-between h-12 xs:h-14 sm:h-16 min-w-0">
             <div className="flex items-center space-x-1 xs:space-x-2 min-w-0 flex-1">
-              {/* Navigation Menu - Hidden on large screens (lg+) */}
-              <div className="flex items-center space-x-1 xs:space-x-2 lg:hidden">
+              {/* Navigation Menu */}
+              <div className="flex items-center space-x-1 xs:space-x-2">
                 <button
-                  onClick={() => window.location.href = '/Financial-Dashboard/'}
-                  className={`flex items-center space-x-1 xs:space-x-2 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium rounded-lg transition-colors ${
-                    isDark 
-                      ? 'text-gray-300 bg-gray-700 border-gray-600 hover:bg-gray-600' 
-                      : 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50'
-                  } border`}
+                  onClick={() => window.location.href = '/'}
+                  className="flex items-center space-x-1 xs:space-x-2 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <ArrowDownLeft className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
                   <span className="hidden xs:inline">Back</span>
                 </button>
                 <div className="h-4 w-px bg-gray-300 hidden xs:block"></div>
                 <button
-                  onClick={() => window.location.href = '/Financial-Dashboard/'}
-                  className={`flex items-center space-x-1 xs:space-x-2 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium rounded-lg transition-colors ${
-                    isDark 
-                      ? 'text-gray-300 bg-gray-700 border-gray-600 hover:bg-gray-600' 
-                      : 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50'
-                  } border`}
+                  onClick={() => window.location.href = '/'}
+                  className="flex items-center space-x-1 xs:space-x-2 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <DollarSign className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
                   <span className="hidden xs:inline">Dashboard</span>
@@ -198,8 +162,8 @@ function SettingsContent() {
               </div>
               
               <div className="flex items-center space-x-2 xs:space-x-3 min-w-0">
-                <div className="p-2 xs:p-3 rounded-lg flex-shrink-0 flex items-center justify-center bg-blue-100">
-                  <Settings className="w-5 h-5 xs:w-6 xs:h-6 text-blue-600" />
+                <div className="p-2 xs:p-3 rounded-lg flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: 'var(--primary-color-10)' }}>
+                  <Settings className="w-5 h-5 xs:w-6 xs:h-6" style={{ color: 'var(--primary-color)' }} />
                 </div>
                 <h1 className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-900 truncate">Settings</h1>
               </div>
@@ -251,7 +215,7 @@ function SettingsContent() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Chart Colors */}
-          <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-6 shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
             <div className="flex items-center mb-6">
               <Palette className="w-5 h-5 text-gray-600" />
               <h3 
@@ -368,7 +332,7 @@ function SettingsContent() {
           </div>
 
           {/* Theme Settings */}
-          <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-6 shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
             <div className="flex items-center mb-6">
               <Eye className="w-5 h-5 text-gray-600" />
               <h3 className="text-lg font-semibold text-gray-900">Theme Settings</h3>
@@ -475,7 +439,8 @@ function SettingsContent() {
                     <span className="text-sm font-medium text-gray-900">Primary Button</span>
                   </div>
                   <button 
-                    className="px-4 py-2 rounded text-white text-sm font-medium bg-blue-600"
+                    className="px-4 py-2 rounded text-white text-sm font-medium"
+                    style={{ backgroundColor: 'var(--primary-color)' }}
                   >
                     Click Me
                   </button>
@@ -510,8 +475,6 @@ function SettingsContent() {
           </div>
         </div>
       </div>
-    </div>
-    </div>
     </div>
   );
 }

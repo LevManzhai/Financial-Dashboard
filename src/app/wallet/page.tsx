@@ -3,23 +3,14 @@
 import { useState, useEffect, useMemo, lazy, Suspense } from 'react';
 import { TransactionProvider, useTransactions } from '@/contexts/TransactionContext';
 import { useTheme } from '@/contexts/ThemeContext';
-import Sidebar from '@/components/Sidebar';
 import { ArrowUpRight, ArrowDownLeft, Plus, Wallet, CreditCard, TrendingUp, TrendingDown, DollarSign, Calendar, PieChart, LayoutDashboard, ArrowLeft, ChevronDown } from 'lucide-react';
 
 function WalletContent() {
   const { state, getSummaryStats } = useTransactions();
   const { isDark, themeSettings } = useTheme();
   const [activeTab, setActiveTab] = useState<'overview' | 'transactions' | 'analytics'>('overview');
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const handleToggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const handleCloseMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-  };
   const [timeframe, setTimeframe] = useState<'day' | 'week' | 'month' | 'year' | 'all'>('month');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isTimeframeDropdownOpen, setIsTimeframeDropdownOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
   
@@ -164,47 +155,25 @@ function WalletContent() {
   const periodBalance = periodStats.totalIncome - periodStats.totalExpenses;
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-gray-900" style={{ contain: 'layout style' }}>
-      {/* Sidebar */}
-      <Sidebar isMobileMenuOpen={isMobileMenuOpen} onCloseMobileMenu={handleCloseMobileMenu} />
-
-      {/* Mobile Overlay */}
-      {isMobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-          onClick={handleCloseMobileMenu}
-        />
-      )}
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <div className={`min-h-screen ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} shadow-sm border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+      <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
           <div className="flex items-center justify-between h-12 xs:h-14 sm:h-16">
             <div className="flex items-center space-x-4">
-              {/* Navigation Menu - Hidden on large screens (lg+) */}
-              <div className="flex items-center space-x-1 lg:hidden">
+              {/* Navigation Menu */}
+              <div className="flex items-center space-x-1">
                 <button
-                  onClick={() => window.location.href = '/Financial-Dashboard/'}
-                  className={`flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium rounded-lg transition-colors ${
-                    isDark 
-                      ? 'text-gray-300 bg-gray-700 border-gray-600 hover:bg-gray-600' 
-                      : 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50'
-                  } border`}
+                  onClick={() => window.location.href = '/'}
+                  className="flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <ArrowLeft className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
                   <span className="hidden xs:inline">Back</span>
                 </button>
                 <div className="h-4 w-px bg-gray-300"></div>
                 <button
-                  onClick={() => window.location.href = '/Financial-Dashboard/'}
-                  className={`flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium rounded-lg transition-colors ${
-                    isDark 
-                      ? 'text-gray-300 bg-gray-700 border-gray-600 hover:bg-gray-600' 
-                      : 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50'
-                  } border`}
+                  onClick={() => window.location.href = '/'}
+                  className="flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <LayoutDashboard className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
                   <span className="hidden xs:inline">Dashboard</span>
@@ -232,7 +201,7 @@ function WalletContent() {
                   </button>
                   
                   {isTimeframeDropdownOpen && (
-                    <div className="absolute top-full right-0 mt-1 w-28 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+                    <div className="absolute top-full right-0 mt-1 w-28 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
                       <div className="py-1">
                         {[
                           { value: 'day', label: 'Day' },
@@ -243,14 +212,13 @@ function WalletContent() {
                         ].map((option) => (
                           <button
                             key={option.value}
-                            onClick={() => handleTimeframeChange(option.value as any)}
-                            className={`w-full text-left px-2 py-1.5 text-xs font-medium transition-colors ${
-                              timeframe === option.value 
-                                ? 'text-white' 
-                                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                            onClick={() => handleTimeframeChange(option.value as 'day' | 'week' | 'month' | 'year' | 'all')}
+                            className={`w-full text-left px-2 py-1.5 text-xs font-medium hover:bg-gray-50 transition-colors ${
+                              timeframe === option.value ? 'text-white' : 'text-gray-700'
                             }`}
                             style={timeframe === option.value ? { 
-                              backgroundColor: themeSettings.primaryColor
+                              backgroundColor: isClient ? themeSettings.primaryColor : '#3B82F6',
+                              color: '#ffffff'
                             } : {}}
                           >
                             {option.label}
@@ -361,7 +329,7 @@ function WalletContent() {
               ].map((tab) => (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
+                  onClick={() => setActiveTab(tab.id as 'overview' | 'transactions' | 'analytics')}
                   className={`flex items-center space-x-1 xs:space-x-2 py-2 px-1 border-b-2 font-medium text-xs xs:text-sm whitespace-nowrap ${
                     activeTab === tab.id
                       ? 'text-blue-600'
@@ -385,7 +353,7 @@ function WalletContent() {
           <div className="space-y-6">
             {/* Stats Cards */}
             <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-3 xs:gap-4 sm:gap-6">
-              <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-4 xs:p-6 shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+              <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs xs:text-sm font-medium text-gray-600">
@@ -405,7 +373,7 @@ function WalletContent() {
                 </div>
               </div>
 
-              <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-4 xs:p-6 shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+              <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs xs:text-sm font-medium text-gray-600">
@@ -425,7 +393,7 @@ function WalletContent() {
                 </div>
               </div>
 
-              <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-4 xs:p-6 shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+              <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs xs:text-sm font-medium text-gray-600">
@@ -447,7 +415,7 @@ function WalletContent() {
             </div>
 
             {/* Category Breakdown */}
-            <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-4 xs:p-6 shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+            <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200">
               <h3 className="text-base xs:text-lg font-semibold text-gray-900 mb-3 xs:mb-4">Spending by Category</h3>
               <div className="space-y-3">
                 {Object.entries(categoryStats)
@@ -472,7 +440,7 @@ function WalletContent() {
         )}
 
         {activeTab === 'transactions' && (
-          <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200">
             <div className="px-6 py-4 border-b border-gray-200">
               <h3 className="text-lg font-semibold text-gray-900">
                 Recent Transactions - {timeframe === 'day' ? 'Day' : 
@@ -524,7 +492,7 @@ function WalletContent() {
         {activeTab === 'analytics' && (
           <Suspense fallback={
             <div className="space-y-6">
-              <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-6 shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
                 <div className="animate-pulse">
                   <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
                   <div className="space-y-3">
@@ -538,7 +506,7 @@ function WalletContent() {
             <div className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Income vs Expenses Chart */}
-              <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-6 shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Income vs Expenses</h3>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
@@ -567,7 +535,7 @@ function WalletContent() {
               </div>
 
               {/* Category Distribution */}
-              <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-6 shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
                   Top Categories - {timeframe === 'day' ? 'Day' :
                                    timeframe === 'week' ? 'Week' :
@@ -600,9 +568,6 @@ function WalletContent() {
         )}
       </div>
     </div>
-    </div>
-    </div>
-
   );
 }
 

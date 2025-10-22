@@ -34,11 +34,9 @@ function SkeletonCard() {
 }
 
 function DashboardContent() {
-  const { getSummaryStats, loadTransactions, state } = useTransactions();
+  const { getSummaryStats } = useTransactions();
   const [isClient, setIsClient] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  // Note: Mock data loading is handled by Header component
 
   // Memoize summary stats calculation
   const summaryStats = useMemo(() => {

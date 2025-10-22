@@ -4,9 +4,9 @@ import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 import { Transaction, TransactionFormData, FilterOptions, SummaryStats } from '@/types/financial';
 
 // Global notification function
-let globalNotificationFunction: ((notification: any) => void) | null = null;
+let globalNotificationFunction: ((notification: { type: string; message: string }) => void) | null = null;
 
-export const setGlobalNotificationFunction = (fn: (notification: any) => void) => {
+export const setGlobalNotificationFunction = (fn: (notification: { type: string; message: string }) => void) => {
   globalNotificationFunction = fn;
 };
 

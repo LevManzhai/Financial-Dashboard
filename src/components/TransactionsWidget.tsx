@@ -56,7 +56,7 @@ export default function TransactionsWidget() {
     }
   };
 
-  const handleFormSubmit = (transactionData: any) => {
+  const handleFormSubmit = (transactionData: Partial<Transaction>) => {
     if (editingTransaction) {
       updateTransaction(editingTransaction.id, transactionData);
     } else {
@@ -71,7 +71,7 @@ export default function TransactionsWidget() {
     setEditingTransaction(null);
   };
 
-  const handleFiltersChange = (filters: any) => {
+  const handleFiltersChange = (filters: { category?: string; type?: string; dateFrom?: string; dateTo?: string }) => {
     setFilters(filters);
   };
 

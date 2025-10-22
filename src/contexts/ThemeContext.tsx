@@ -82,16 +82,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
             (settings.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
         } catch (error) {
           console.error('Error parsing theme settings:', error);
-          return window.matchMedia('(prefers-color-scheme: dark)').matches;
+          return false;
         }
       }
-      // Default to system preference if no saved theme
-      return window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
     return false;
   });
   
-  const [isClient, setIsClient] = useState(() => typeof window !== 'undefined');
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -106,7 +104,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       (themeSettings.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
     
     setIsDark(shouldBeDark);
-    
+
     // Apply dark class and CSS variables
     const root = document.documentElement;
     
