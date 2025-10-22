@@ -702,6 +702,8 @@ function SearchContent() {
       </div>
     </div>
     </div>
+    </div>
+
   );
 }
 

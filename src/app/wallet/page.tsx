@@ -592,6 +592,8 @@ function WalletContent() {
       </div>
     </div>
     </div>
+    </div>
+
   );
 }
 
