@@ -248,20 +248,14 @@ function SettingsContent() {
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
             <div className="flex items-center mb-6">
               <Palette className="w-5 h-5 text-gray-600" />
-              <h3 
-                className="text-lg font-semibold"
-                style={{ color: isClient ? (document.documentElement.classList.contains('dark') ? '#ffffff' : '#000000') : '#000000' }}
-              >
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                 Chart Colors
               </h3>
             </div>
 
             {/* Color Presets */}
             <div className="mb-6">
-              <h4 
-                className="text-sm font-medium mb-3"
-                style={{ color: isClient ? (document.documentElement.classList.contains('dark') ? '#ffffff' : '#000000') : '#000000' }}
-              >
+              <h4 className="text-sm font-medium mb-3 text-gray-900 dark:text-white">
                 Color Presets
               </h4>
               <div className="grid grid-cols-1 xs:grid-cols-2 gap-2 xs:gap-3">
@@ -285,10 +279,7 @@ function SettingsContent() {
                         <Check className="w-3 h-3 xs:w-4 xs:h-4 text-blue-600 dark:text-blue-400" />
                       )}
                     </div>
-                    <p 
-                      className="text-xs xs:text-sm font-medium"
-                      style={{ color: isClient ? (document.documentElement.classList.contains('dark') ? '#ffffff' : '#000000') : '#000000' }}
-                    >
+                    <p className="text-xs xs:text-sm font-medium text-gray-900 dark:text-white">
                       {preset.name}
                     </p>
                   </button>
@@ -298,10 +289,7 @@ function SettingsContent() {
 
             {/* Custom Colors */}
             <div className="space-y-4">
-              <h4 
-                className="text-sm font-medium"
-                style={{ color: isClient ? (document.documentElement.classList.contains('dark') ? '#ffffff' : '#000000') : '#000000' }}
-              >
+              <h4 className="text-sm font-medium text-gray-900 dark:text-white">
                 Custom Colors
               </h4>
               
@@ -435,26 +423,26 @@ function SettingsContent() {
             <div className="space-y-4">
               <h4 className="text-sm font-medium text-gray-900">Chart Colors Preview</h4>
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 rounded-lg" style={{ backgroundColor: isClient ? chartColors.background : '#FFFFFF' }}>
+                <div className="flex items-center justify-between p-3 rounded-lg bg-white dark:bg-gray-800">
                   <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: isClient ? chartColors.income : '#10B981' }}></div>
-                    <span className="text-sm font-medium" style={{ color: isClient ? chartColors.text : '#1F2937' }}>Income</span>
+                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                    <span className="text-sm font-medium text-gray-900 dark:text-white">Income</span>
                   </div>
-                  <span className="text-sm font-semibold" style={{ color: isClient ? chartColors.income : '#10B981' }}>+$2,500</span>
+                  <span className="text-sm font-semibold text-green-600">+$2,500</span>
                 </div>
-                <div className="flex items-center justify-between p-3 rounded-lg" style={{ backgroundColor: isClient ? chartColors.background : '#FFFFFF' }}>
+                <div className="flex items-center justify-between p-3 rounded-lg bg-white dark:bg-gray-800">
                   <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: isClient ? chartColors.expenses : '#EF4444' }}></div>
-                    <span className="text-sm font-medium" style={{ color: isClient ? chartColors.text : '#1F2937' }}>Expenses</span>
+                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                    <span className="text-sm font-medium text-gray-900 dark:text-white">Expenses</span>
                   </div>
-                  <span className="text-sm font-semibold" style={{ color: isClient ? chartColors.expenses : '#EF4444' }}>-$1,200</span>
+                  <span className="text-sm font-semibold text-red-600">-$1,200</span>
                 </div>
-                <div className="flex items-center justify-between p-3 rounded-lg" style={{ backgroundColor: isClient ? chartColors.background : '#FFFFFF' }}>
+                <div className="flex items-center justify-between p-3 rounded-lg bg-white dark:bg-gray-800">
                   <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: isClient ? chartColors.balance : '#3B82F6' }}></div>
-                    <span className="text-sm font-medium" style={{ color: isClient ? chartColors.text : '#1F2937' }}>Balance</span>
+                    <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                    <span className="text-sm font-medium text-gray-900 dark:text-white">Balance</span>
                   </div>
-                  <span className="text-sm font-semibold" style={{ color: isClient ? chartColors.balance : '#3B82F6' }}>+$1,300</span>
+                  <span className="text-sm font-semibold text-blue-600">+$1,300</span>
                 </div>
               </div>
             </div>
@@ -463,15 +451,12 @@ function SettingsContent() {
             <div className="space-y-4">
               <h4 className="text-sm font-medium text-gray-900">Theme Colors Preview</h4>
               <div className="space-y-3">
-                <div className="p-3 rounded-lg border" style={{ borderColor: isClient ? themeSettings.primaryColor : '#3B82F6' }}>
+                <div className="p-3 rounded-lg border border-blue-500">
                   <div className="flex items-center space-x-2 mb-2">
-                    <div className="w-4 h-4 rounded" style={{ backgroundColor: isClient ? themeSettings.primaryColor : '#3B82F6' }}></div>
-                    <span className="text-sm font-medium text-gray-900">Primary Button</span>
+                    <div className="w-4 h-4 rounded bg-blue-500"></div>
+                    <span className="text-sm font-medium text-gray-900 dark:text-white">Primary Button</span>
                   </div>
-                  <button 
-                    className="px-4 py-2 rounded text-white text-sm font-medium"
-                    style={{ backgroundColor: 'var(--primary-color)' }}
-                  >
+                  <button className="px-4 py-2 rounded text-white text-sm font-medium bg-blue-500 hover:bg-blue-600">
                     Click Me
                   </button>
                 </div>
