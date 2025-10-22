@@ -295,7 +295,7 @@ function RevenueContent() {
   };
 
   return (
-    <div className={`flex h-screen ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`} style={{ contain: 'layout style' }}>
+    <div className="flex h-screen bg-gray-50 dark:bg-gray-900" style={{ contain: 'layout style' }}>
       {/* Sidebar */}
       <Sidebar isMobileMenuOpen={isMobileMenuOpen} onCloseMobileMenu={handleCloseMobileMenu} />
 
@@ -309,9 +309,9 @@ function RevenueContent() {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        <div className={`min-h-screen ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} shadow-sm border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+      <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
           <div className="flex items-center justify-between h-12 xs:h-14 sm:h-16 min-w-0">
             <div className="flex items-center space-x-1 xs:space-x-2 min-w-0 flex-1">
@@ -319,11 +319,7 @@ function RevenueContent() {
               <div className="flex items-center space-x-1 lg:hidden">
                 <button
                   onClick={() => window.location.href = '/Financial-Dashboard/'}
-                  className={`flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium rounded-lg transition-colors ${
-                    isDark 
-                      ? 'text-gray-300 bg-gray-700 border-gray-600 hover:bg-gray-600' 
-                      : 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50'
-                  } border`}
+                  className="flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
                 >
                   <ArrowDownLeft className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
                   <span className="hidden xs:inline">Back</span>
@@ -331,11 +327,7 @@ function RevenueContent() {
                 <div className="h-4 w-px bg-gray-300 hidden xs:block"></div>
                 <button
                   onClick={() => window.location.href = '/Financial-Dashboard/'}
-                  className={`flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium rounded-lg transition-colors ${
-                    isDark 
-                      ? 'text-gray-300 bg-gray-700 border-gray-600 hover:bg-gray-600' 
-                      : 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50'
-                  } border`}
+                  className="flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
                 >
                   <DollarSign className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
                   <span className="hidden xs:inline">Dashboard</span>
@@ -367,7 +359,7 @@ function RevenueContent() {
                   </button>
                   
                   {isTimeframeDropdownOpen && (
-                    <div className={`absolute top-full right-0 mt-1 w-40 ${isDark ? 'bg-gray-800' : 'bg-white'} border ${isDark ? 'border-gray-700' : 'border-gray-200'} rounded-lg shadow-lg z-50`}>
+                    <div className="absolute top-full right-0 mt-1 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
                       <div className="py-1">
                         {/* Timeframe Section */}
                         <div className="px-3 py-1 border-b border-gray-100">
@@ -436,11 +428,7 @@ function RevenueContent() {
                           type="date"
                           value={selectedDate}
                           onChange={(e) => setSelectedDate(e.target.value)}
-                          className={`w-full px-2 py-1.5 text-xs border rounded-md mt-1 ${
-                            isDark 
-                              ? 'border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500' 
-                              : 'border-gray-300 bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
-                          }`}
+                          className="w-full px-2 py-1.5 text-xs border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-md mt-1 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         />
                       </div>
                     )}
@@ -678,7 +666,7 @@ function RevenueContent() {
                     </button>
                     
                     {isDateDropdownOpen && (
-                      <div className={`absolute top-full right-0 mt-1 w-48 ${isDark ? 'bg-gray-800' : 'bg-white'} border ${isDark ? 'border-gray-700' : 'border-gray-200'} rounded-lg shadow-lg z-50`}>
+                      <div className="absolute top-full right-0 mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
                         <div className="p-3">
                           <label className="block text-xs font-medium text-gray-700 mb-2">
                             Select Date:
@@ -690,11 +678,7 @@ function RevenueContent() {
                               setSelectedDate(e.target.value);
                               setIsDateDropdownOpen(false);
                             }}
-                            className={`w-full px-2 py-1.5 text-xs border rounded-md ${
-                              isDark 
-                                ? 'border-gray-600 bg-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500' 
-                                : 'border-gray-300 bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
-                            }`}
+                            className="w-full px-2 py-1.5 text-xs border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                           />
                         </div>
                       </div>
@@ -716,7 +700,7 @@ function RevenueContent() {
                   </button>
                   
                   {isChartTypeDropdownOpen && (
-                    <div className={`absolute top-full right-0 mt-1 w-18 ${isDark ? 'bg-gray-800' : 'bg-white'} border ${isDark ? 'border-gray-700' : 'border-gray-200'} rounded-md shadow-lg z-50`}>
+                    <div className="absolute top-full right-0 mt-1 w-18 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-50">
                       <div className="py-1">
                         {[
                           { value: 'line', label: 'Line' },
@@ -731,8 +715,8 @@ function RevenueContent() {
                             }}
                             className={`w-full text-left px-2 py-1 text-xs font-medium transition-colors ${
                               chartType === option.value 
-                                ? `text-white` 
-                                : isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-50'
+                                ? 'text-white' 
+                                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                             }`}
                             style={{
                               backgroundColor: chartType === option.value ? themeSettings.primaryColor : 'transparent'
@@ -801,7 +785,7 @@ function RevenueContent() {
       <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6 xl:px-8 py-4 xs:py-6 sm:py-8 min-w-0 overflow-x-hidden">
         {/* Key Metrics */}
         <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-3 xs:gap-4 sm:gap-6 xl:gap-8 mb-4 xs:mb-6 sm:mb-8 min-w-0">
-          <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Total Revenue</p>
@@ -821,7 +805,7 @@ function RevenueContent() {
             </div>
           </div>
 
-          <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Total Expenses</p>
@@ -841,7 +825,7 @@ function RevenueContent() {
             </div>
           </div>
 
-          <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Net Profit</p>
@@ -860,7 +844,7 @@ function RevenueContent() {
             </div>
           </div>
 
-          <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Transactions</p>
@@ -884,7 +868,7 @@ function RevenueContent() {
         <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-6 lg:gap-8 xl:gap-12">
           {/* Main Chart */}
           <div className="lg:col-span-2">
-            <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-6 xl:p-8 shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 xl:p-8 shadow-sm border border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-semibold text-gray-900">Revenue & Expenses Trend</h3>
                 <div className="flex items-center space-x-2">
@@ -1075,7 +1059,7 @@ function RevenueContent() {
           {/* Sidebar */}
           <div className="lg:col-span-1">
             {/* Category Breakdown */}
-            <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-6 shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'} mb-6`}>
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 mb-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Category Breakdown</h3>
               <div className="h-64 flex justify-center">
                 <div className="h-64 w-56">
@@ -1128,7 +1112,7 @@ function RevenueContent() {
             </div>
 
             {/* Top Categories */}
-            <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl p-6 xl:p-8 shadow-sm border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 xl:p-8 shadow-sm border border-gray-200 dark:border-gray-700">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Categories</h3>
               <div className="space-y-3">
                 {Object.entries(categoryStats)
