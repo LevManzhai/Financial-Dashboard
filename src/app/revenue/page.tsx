@@ -335,10 +335,9 @@ function RevenueContent() {
               </div>
               
               <div className="flex items-center space-x-1 xs:space-x-2 min-w-0">
-                <div className="p-2 xs:p-3 rounded-lg flex-shrink-0" style={{ backgroundColor: iconBgColor }}>
+                <div className="p-2 xs:p-3 rounded-lg flex-shrink-0 bg-blue-100 dark:bg-blue-900/20">
                   <TrendingUp 
-                    className="w-5 h-5 xs:w-6 xs:h-6" 
-                    style={{ color: themeSettings.primaryColor }}
+                    className="w-5 h-5 xs:w-6 xs:h-6 text-blue-600 dark:text-blue-400" 
                   />
                 </div>
                 <h1 className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-900 truncate">Revenue Analytics</h1>
@@ -382,8 +381,7 @@ function RevenueContent() {
                               timeframe === option.value ? 'text-white' : 'text-gray-700'
                             }`}
                             style={timeframe === option.value ? { 
-                              backgroundColor: 'var(--primary-color)',
-                              color: '#ffffff'
+                              backgroundColor: themeSettings.primaryColor
                             } : {}}
                           >
                             {option.label}
@@ -838,8 +836,8 @@ function RevenueContent() {
                   {balance > 0 ? 'Positive' : balance < 0 ? 'Negative' : 'Neutral'}
                 </p>
               </div>
-              <div className="p-3 rounded-full w-11 h-11 flex items-center justify-center" style={{ backgroundColor: iconBgColor }}>
-                <Target className="w-5 h-5" style={{ color: themeSettings.primaryColor }} />
+              <div className="p-3 rounded-full w-11 h-11 flex items-center justify-center bg-blue-100 dark:bg-blue-900/20">
+                <Target className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               </div>
             </div>
           </div>
