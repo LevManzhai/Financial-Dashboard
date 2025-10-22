@@ -3,6 +3,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import { TransactionProvider, useTransactions } from '@/contexts/TransactionContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import Sidebar from '@/components/Sidebar';
+import Header from '@/components/Header';
 import { Search, Filter, Calendar, DollarSign, Tag, ArrowUpRight, ArrowDownLeft, Edit, Trash2, Download, Upload, X, Check, Clock, TrendingUp, TrendingDown, BarChart3 } from 'lucide-react';
 import { Transaction } from '@/types/financial';
 
@@ -10,6 +12,7 @@ function SearchContent() {
   const { state, deleteTransaction, updateTransaction } = useTransactions();
   const { themeSettings } = useTheme();
   const [isClient, setIsClient] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilters, setSelectedFilters] = useState({
     type: 'all',
@@ -261,12 +264,35 @@ function SearchContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
+    <div className="flex h-screen bg-gray-50">
+      {/* Sidebar */}
+      <Sidebar isMobileMenuOpen={isMobileMenuOpen} onCloseMobileMenu={() => setIsMobileMenuOpen(false)} />
+      
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+      
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Header */}
+        <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
           <div className="flex items-center justify-between h-12 xs:h-14 sm:h-16 min-w-0">
             <div className="flex items-center space-x-1 xs:space-x-2 min-w-0 flex-1">
+              {/* Mobile Menu Button */}
+              <button
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="lg:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+              
               {/* Navigation Menu */}
               <div className="flex items-center space-x-1 xs:space-x-2">
                 <button
@@ -674,6 +700,7 @@ function SearchContent() {
               ))
             )}
           </div>
+        </div>
         </div>
       </div>
     </div>

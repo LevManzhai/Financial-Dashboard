@@ -1147,6 +1147,7 @@ function RevenueContent() {
             </div>
           </div>
         </div>
+        </div>
       </div>
     </div>
   );

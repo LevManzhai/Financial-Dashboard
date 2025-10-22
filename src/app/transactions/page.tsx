@@ -3,6 +3,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import { TransactionProvider, useTransactions } from '@/contexts/TransactionContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import Sidebar from '@/components/Sidebar';
+import Header from '@/components/Header';
 import { ArrowUpRight, ArrowDownLeft, Plus, Edit, Trash2, Search, Filter, Download, Upload, Calendar, TrendingUp, TrendingDown, DollarSign, PieChart, BarChart3 } from 'lucide-react';
 import { Transaction } from '@/types/financial';
 import TransactionForm from '@/components/TransactionForm';
@@ -12,6 +14,7 @@ function TransactionsContent() {
   const { state, addTransaction, updateTransaction, deleteTransaction, setFilters, clearFilters, loadTransactions } = useTransactions();
   const { themeSettings } = useTheme();
   const [isClient, setIsClient] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -114,12 +117,35 @@ function TransactionsContent() {
   }, [filteredBySearch]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
+    <div className="flex h-screen bg-gray-50">
+      {/* Sidebar */}
+      <Sidebar isMobileMenuOpen={isMobileMenuOpen} onCloseMobileMenu={() => setIsMobileMenuOpen(false)} />
+      
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+      
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Header */}
+        <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
           <div className="flex items-center justify-between h-12 xs:h-14 sm:h-16">
             <div className="flex items-center space-x-2 xs:space-x-3 sm:space-x-4">
+              {/* Mobile Menu Button */}
+              <button
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="lg:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+              
               {/* Navigation Menu */}
               <div className="flex items-center space-x-1 xs:space-x-2">
                 <button
@@ -471,7 +497,8 @@ function TransactionsContent() {
         editingTransaction={editingTransaction}
         title={editingTransaction ? 'Edit Transaction' : 'Add Transaction'}
       />
-    </div>
+        </div>
+      </div>
   );
 }
 
