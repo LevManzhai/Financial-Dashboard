@@ -23,11 +23,26 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
   const router = useRouter();
   const pathname = usePathname();
   const { themeSettings, isClient } = useTheme();
-  const [activeItem, setActiveItem] = useState(pathname === '/' ? 'Dashboard' : pathname.slice(1));
+  // Get current active item based on pathname
+  const getCurrentPage = () => {
+    if (pathname === '/') return 'Dashboard';
+    const pageName = pathname.slice(1);
+    // Map path to menu item id
+    const pathMap: { [key: string]: string } = {
+      'wallet': 'Wallet',
+      'transactions': 'Transactions', 
+      'revenue': 'Revenue',
+      'search': 'Search',
+      'settings': 'Settings'
+    };
+    return pathMap[pageName] || pageName;
+  };
+
+  const [activeItem, setActiveItem] = useState(getCurrentPage());
 
   // Update active item when pathname changes
   useEffect(() => {
-    const currentPage = pathname === '/' ? 'Dashboard' : pathname.slice(1);
+    const currentPage = getCurrentPage();
     setActiveItem(currentPage);
   }, [pathname]);
 

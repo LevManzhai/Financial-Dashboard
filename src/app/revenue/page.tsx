@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import { TransactionProvider, useTransactions } from '@/contexts/TransactionContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import Sidebar from '@/components/Sidebar';
@@ -10,6 +11,7 @@ import { Transaction } from '@/types/financial';
 import { LineChart as RechartsLineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell, AreaChart, Area, CartesianGrid, Legend } from 'recharts';
 
 function RevenueContent() {
+  const router = useRouter();
   const { state } = useTransactions();
   const { isDark, themeSettings } = useTheme();
   const { chartColors } = useTheme();
@@ -312,7 +314,7 @@ function RevenueContent() {
               {/* Navigation Menu */}
               <div className="flex items-center space-x-1">
                 <button
-                  onClick={() => window.location.href = '/'}
+                  onClick={() => router.back()}
                   className="flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <ArrowDownLeft className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
@@ -320,7 +322,7 @@ function RevenueContent() {
                 </button>
                 <div className="h-4 w-px bg-gray-300 hidden xs:block"></div>
                 <button
-                  onClick={() => window.location.href = '/'}
+                  onClick={() => router.push('/')}
                   className="flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <DollarSign className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
