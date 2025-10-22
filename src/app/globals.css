@@ -115,46 +115,14 @@ html:not(.dark) {
   transition: background-color 0.1s ease, color 0.1s ease !important;
 }
 
-/* Prevent all primary color flashes */
-button, .btn, [class*="primary"], [style*="primary"] {
-  transition: background-color 0.1s ease, color 0.1s ease, border-color 0.1s ease !important;
+/* Simple fix for flashes - only prevent initial flash */
+* {
+  transition: none !important;
 }
 
-/* Prevent theme variable flashes */
-:root {
-  --primary-color: #3B82F6;
-  --bg-primary: #FFFFFF;
-  --text-primary: #1F2937;
-}
-
-.dark {
-  --primary-color: #3B82F6;
-  --bg-primary: #1F2937;
-  --text-primary: #F9FAFB;
-}
-
-/* Force immediate theme application */
-html {
-  color-scheme: light;
-}
-
-html.dark {
-  color-scheme: dark;
-}
-
-/* Prevent button flashes */
-button[class*="bg-"], button[class*="text-"], button[class*="border-"] {
-  transition: background-color 0.1s ease, color 0.1s ease, border-color 0.1s ease !important;
-}
-
-/* Prevent dropdown flashes */
-[class*="dropdown"], [class*="select"], [class*="menu"] {
-  transition: background-color 0.1s ease, color 0.1s ease, border-color 0.1s ease !important;
-}
-
-/* Prevent avatar flashes */
-[class*="avatar"], [class*="profile"], [class*="user"] {
-  transition: background-color 0.1s ease, color 0.1s ease !important;
+/* Restore transitions after load */
+.loaded * {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease !important;
 }
 
 /* Special styles for charts - always with transitions */

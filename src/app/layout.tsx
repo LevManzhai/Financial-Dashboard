@@ -72,6 +72,11 @@ export default function RootLayout({
                     document.documentElement.style.setProperty('--primary-color', settings.primaryColor);
                     document.documentElement.style.setProperty('--accent-color', settings.accentColor);
                   }
+                  
+                  // Add loaded class after theme is set
+                  setTimeout(() => {
+                    document.documentElement.classList.add('loaded');
+                  }, 50);
                 } catch (e) {
                   // Ignore errors
                 }
