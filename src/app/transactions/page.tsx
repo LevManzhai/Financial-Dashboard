@@ -159,8 +159,8 @@ function TransactionsContent() {
               </div>
               
               <div className="flex items-center space-x-2 xs:space-x-3">
-                <div className="p-2 xs:p-3 rounded-lg bg-orange-50 dark:bg-orange-900/20">
-                  <BarChart3 className="w-5 h-5 xs:w-6 xs:h-6 text-orange-600 dark:text-orange-400" />
+                <div className="p-2 xs:p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20">
+                  <BarChart3 className="w-5 h-5 xs:w-6 xs:h-6 text-blue-600 dark:text-blue-400" />
                 </div>
                 <h1 className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-900">Transactions</h1>
               </div>
@@ -241,8 +241,8 @@ function TransactionsContent() {
                   {isClient && balance > 0 ? 'Positive' : isClient && balance < 0 ? 'Negative' : 'Neutral'}
                 </p>
               </div>
-              <div className="p-2 rounded-full w-10 h-10 flex items-center justify-center bg-orange-50 dark:bg-orange-900/20">
-                <DollarSign className="w-4 h-4 text-orange-600 dark:text-orange-400" />
+              <div className="p-2 rounded-full w-10 h-10 flex items-center justify-center bg-blue-50 dark:bg-blue-900/20">
+                <DollarSign className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               </div>
             </div>
           </div>
@@ -258,8 +258,8 @@ function TransactionsContent() {
                   All time
                 </p>
               </div>
-              <div className="p-2 rounded-full w-10 h-10 flex items-center justify-center bg-orange-50 dark:bg-orange-900/20">
-                <BarChart3 className="w-4 h-4 text-orange-600 dark:text-orange-400" />
+              <div className="p-2 rounded-full w-10 h-10 flex items-center justify-center bg-blue-50 dark:bg-blue-900/20">
+                <BarChart3 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               </div>
             </div>
           </div>
@@ -273,7 +273,7 @@ function TransactionsContent() {
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-gray-900">Search & Filters</h3>
                 <div className="flex items-center space-x-2">
-                  <Filter className="w-5 h-5 xs:w-6 xs:h-6 text-orange-600 dark:text-orange-400" />
+                  <Filter className="w-5 h-5 xs:w-6 xs:h-6 text-blue-600 dark:text-blue-400" />
                   <span className="text-sm text-gray-600">Filters</span>
                 </div>
               </div>

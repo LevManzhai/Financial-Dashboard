@@ -208,8 +208,8 @@ function WalletContent() {
               </div>
               
               <div className="flex items-center space-x-2 xs:space-x-3">
-                <div className="p-2 xs:p-3 rounded-lg bg-orange-50 dark:bg-orange-900/20">
-                  <Wallet className="w-5 h-5 xs:w-6 xs:h-6 text-orange-600 dark:text-orange-400" />
+                <div className="p-2 xs:p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20">
+                  <Wallet className="w-5 h-5 xs:w-6 xs:h-6 text-blue-600 dark:text-blue-400" />
                 </div>
                 <h1 className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-900">Wallet</h1>
               </div>
