@@ -11,7 +11,9 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   images: {
     unoptimized: true
-  }
+  },
+  assetPrefix: '/Financial-Dashboard/',
+  basePath: '/Financial-Dashboard'
 };
 
 export default nextConfig;
