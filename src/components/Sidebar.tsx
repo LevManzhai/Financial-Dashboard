@@ -34,7 +34,7 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
       return 'Wallet';
     } else if (pathname.includes('/transactions')) {
       return 'Transactions';
-    } else if (pathname.includes('/revenue')) {
+    } else if (pathname.includes('/revenue') || pathname.includes('revenue')) {
       return 'Revenue';
     } else if (pathname.includes('/search')) {
       return 'Search';
@@ -95,7 +95,7 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
               <li key={item.id}>
                 <button
                   onClick={() => handleItemClick(item)}
-                  className={`w-full flex items-center space-x-3 px-2 xs:px-3 py-2 rounded-lg transition-colors text-sm xs:text-base ${
+                  className={`sidebar-item w-full flex items-center space-x-3 px-2 xs:px-3 py-2 rounded-lg transition-colors text-sm xs:text-base ${
                     activeItem === item.id
                       ? 'text-white'
                       : 'text-gray-700 hover:bg-gray-50'
