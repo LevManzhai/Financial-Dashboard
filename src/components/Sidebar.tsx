@@ -23,24 +23,25 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
   const router = useRouter();
   const pathname = usePathname();
   const { themeSettings, isClient } = useTheme();
-  const [activeItem, setActiveItem] = useState('Dashboard');
-
-  // Update active item based on current pathname
-  useEffect(() => {
+  // Determine active item based on current pathname
+  const getActiveItem = () => {
     if (pathname === '/' || pathname === '/Financial-Dashboard/' || pathname === '/Financial-Dashboard') {
-      setActiveItem('Dashboard');
+      return 'Dashboard';
     } else if (pathname === '/wallet' || pathname === '/Financial-Dashboard/wallet') {
-      setActiveItem('Wallet');
+      return 'Wallet';
     } else if (pathname === '/transactions' || pathname === '/Financial-Dashboard/transactions') {
-      setActiveItem('Transactions');
+      return 'Transactions';
     } else if (pathname === '/revenue' || pathname === '/Financial-Dashboard/revenue') {
-      setActiveItem('Revenue');
+      return 'Revenue';
     } else if (pathname === '/search' || pathname === '/Financial-Dashboard/search') {
-      setActiveItem('Search');
+      return 'Search';
     } else if (pathname === '/settings' || pathname === '/Financial-Dashboard/settings') {
-      setActiveItem('Settings');
+      return 'Settings';
     }
-  }, [pathname]);
+    return 'Dashboard';
+  };
+
+  const activeItem = getActiveItem();
 
   const menuItems = [
     { id: 'Dashboard', icon: LayoutDashboard, label: 'Dashboard', path: '/Financial-Dashboard/' },
@@ -55,7 +56,6 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
   ];
 
   const handleItemClick = (item: any) => {
-    setActiveItem(item.id);
     if (item.path) {
       window.location.href = item.path;
     }
