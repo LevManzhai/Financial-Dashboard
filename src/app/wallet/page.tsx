@@ -164,7 +164,7 @@ function WalletContent() {
               {/* Navigation Menu */}
               <div className="flex items-center space-x-1">
                 <button
-                  onClick={() => window.location.href = '/'}
+                  onClick={() => window.location.href = '/Financial-Dashboard/'}
                   className="flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <ArrowLeft className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
@@ -172,7 +172,7 @@ function WalletContent() {
                 </button>
                 <div className="h-4 w-px bg-gray-300"></div>
                 <button
-                  onClick={() => window.location.href = '/'}
+                  onClick={() => window.location.href = '/Financial-Dashboard/'}
                   className="flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <LayoutDashboard className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
