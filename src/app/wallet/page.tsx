@@ -241,12 +241,8 @@ function WalletContent() {
                             key={option.value}
                             onClick={() => handleTimeframeChange(option.value as 'day' | 'week' | 'month' | 'year' | 'all')}
                             className={`w-full text-left px-2 py-1.5 text-xs font-medium hover:bg-gray-50 transition-colors ${
-                              timeframe === option.value ? 'text-white' : 'text-gray-700'
+                              timeframe === option.value ? 'text-white bg-primary' : 'text-gray-700'
                             }`}
-                            style={timeframe === option.value ? { 
-                              backgroundColor: isClient ? themeSettings.primaryColor : '#3B82F6',
-                              color: '#ffffff'
-                            } : {}}
                           >
                             {option.label}
                           </button>
@@ -262,13 +258,9 @@ function WalletContent() {
                     onClick={() => handleTimeframeChange('day')}
                     className={`px-2 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
                       timeframe === 'day'
-                        ? 'text-white shadow-sm'
+                        ? 'text-white bg-primary shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
                     }`}
-                    style={timeframe === 'day' ? { 
-                      backgroundColor: 'var(--primary-color)',
-                      color: '#ffffff'
-                    } : {}}
                   >
                     Day
                   </button>
@@ -276,13 +268,9 @@ function WalletContent() {
                     onClick={() => handleTimeframeChange('week')}
                     className={`px-2 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
                       timeframe === 'week'
-                        ? 'text-white shadow-sm'
+                        ? 'text-white bg-primary shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
                     }`}
-                    style={timeframe === 'week' ? { 
-                      backgroundColor: 'var(--primary-color)',
-                      color: '#ffffff'
-                    } : {}}
                   >
                     Week
                   </button>
@@ -290,13 +278,9 @@ function WalletContent() {
                     onClick={() => handleTimeframeChange('month')}
                     className={`px-2 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
                       timeframe === 'month'
-                        ? 'text-white shadow-sm'
+                        ? 'text-white bg-primary shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
                     }`}
-                    style={timeframe === 'month' ? { 
-                      backgroundColor: 'var(--primary-color)',
-                      color: '#ffffff'
-                    } : {}}
                   >
                     Month
                   </button>
@@ -304,13 +288,9 @@ function WalletContent() {
                     onClick={() => handleTimeframeChange('year')}
                     className={`px-2 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
                       timeframe === 'year'
-                        ? 'text-white shadow-sm'
+                        ? 'text-white bg-primary shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
                     }`}
-                    style={timeframe === 'year' ? { 
-                      backgroundColor: 'var(--primary-color)',
-                      color: '#ffffff'
-                    } : {}}
                   >
                     Year
                   </button>
@@ -318,13 +298,9 @@ function WalletContent() {
                     onClick={() => handleTimeframeChange('all')}
                     className={`px-2 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
                       timeframe === 'all'
-                        ? 'text-white shadow-sm'
+                        ? 'text-white bg-primary shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
                     }`}
-                    style={timeframe === 'all' ? { 
-                      backgroundColor: 'var(--primary-color)',
-                      color: '#ffffff'
-                    } : {}}
                   >
                     All
                   </button>
@@ -361,13 +337,9 @@ function WalletContent() {
                   onClick={() => setActiveTab(tab.id as 'overview' | 'transactions' | 'analytics')}
                   className={`flex items-center space-x-1 xs:space-x-2 py-2 px-1 border-b-2 font-medium text-xs xs:text-sm whitespace-nowrap ${
                     activeTab === tab.id
-                      ? 'text-blue-600'
+                      ? 'text-primary border-primary'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }`}
-                  style={activeTab === tab.id ? { 
-                    borderBottomColor: 'var(--primary-color)',
-                    color: 'var(--primary-color)'
-                  } : {}}
                 >
                   <tab.icon className="w-3 h-3 xs:w-4 xs:h-4" />
                   <span className="hidden sm:inline">{tab.name}</span>

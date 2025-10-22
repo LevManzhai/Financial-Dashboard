@@ -26,7 +26,7 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
   // Get current active item based on pathname
   const getCurrentPage = () => {
     if (pathname === '/') return 'Dashboard';
-    const pageName = pathname.slice(1);
+    const pageName = pathname.slice(1).replace('/', ''); // Remove trailing slash
     // Map path to menu item id
     const pathMap: { [key: string]: string } = {
       'wallet': 'Wallet',
@@ -39,6 +39,10 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
   };
 
   const activeItem = getCurrentPage();
+  
+  // Debug logging
+  console.log('Current pathname:', pathname);
+  console.log('Active item:', activeItem);
 
   const menuItems = [
     { id: 'Dashboard', icon: LayoutDashboard, label: 'Dashboard', path: '/' },
