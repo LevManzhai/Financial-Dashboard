@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { TransactionProvider, useTransactions } from '@/contexts/TransactionContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import Sidebar from '@/components/Sidebar';
 import { ArrowUpRight, ArrowDownLeft, Plus, Edit, Trash2, Search, Filter, Download, Upload, Calendar, TrendingUp, TrendingDown, DollarSign, PieChart, BarChart3 } from 'lucide-react';
 import { Transaction } from '@/types/financial';
 import TransactionForm from '@/components/TransactionForm';
@@ -13,6 +14,15 @@ function TransactionsContent() {
   const { themeSettings } = useTheme();
   const [isClient, setIsClient] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const handleToggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleCloseMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   useEffect(() => {
@@ -114,7 +124,21 @@ function TransactionsContent() {
   }, [filteredBySearch]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-50" style={{ contain: 'layout style' }}>
+      {/* Sidebar */}
+      <Sidebar isMobileMenuOpen={isMobileMenuOpen} onCloseMobileMenu={handleCloseMobileMenu} />
+
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={handleCloseMobileMenu}
+        />
+      )}
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
@@ -471,6 +495,7 @@ function TransactionsContent() {
         editingTransaction={editingTransaction}
         title={editingTransaction ? 'Edit Transaction' : 'Add Transaction'}
       />
+    </div>
     </div>
   );
 }

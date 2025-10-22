@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { TransactionProvider, useTransactions } from '@/contexts/TransactionContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import Sidebar from '@/components/Sidebar';
 import { Search, Filter, Calendar, DollarSign, Tag, ArrowUpRight, ArrowDownLeft, Edit, Trash2, Download, Upload, X, Check, Clock, TrendingUp, TrendingDown, BarChart3 } from 'lucide-react';
 import { Transaction } from '@/types/financial';
 
@@ -10,6 +11,15 @@ function SearchContent() {
   const { state, deleteTransaction, updateTransaction } = useTransactions();
   const { themeSettings } = useTheme();
   const [isClient, setIsClient] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const handleToggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleCloseMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilters, setSelectedFilters] = useState({
     type: 'all',
@@ -261,7 +271,21 @@ function SearchContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-50" style={{ contain: 'layout style' }}>
+      {/* Sidebar */}
+      <Sidebar isMobileMenuOpen={isMobileMenuOpen} onCloseMobileMenu={handleCloseMobileMenu} />
+
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={handleCloseMobileMenu}
+        />
+      )}
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
@@ -676,6 +700,7 @@ function SearchContent() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

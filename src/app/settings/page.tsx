@@ -3,12 +3,22 @@
 import { useState, useEffect } from 'react';
 import { TransactionProvider } from '@/contexts/TransactionContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import Sidebar from '@/components/Sidebar';
 import { Settings, Palette, Moon, Sun, Monitor, Save, RotateCcw, Eye, BarChart3, PieChart, TrendingUp, TrendingDown, DollarSign, Calendar, Tag, ArrowDownLeft, Check } from 'lucide-react';
 
 function SettingsContent() {
   const { chartColors, themeSettings, updateChartColors, updateThemeSettings, resetSettings } = useTheme();
   const [isClient, setIsClient] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const handleToggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleCloseMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
   const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
 
   const colorPresets = [
@@ -136,7 +146,21 @@ function SettingsContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-50" style={{ contain: 'layout style' }}>
+      {/* Sidebar */}
+      <Sidebar isMobileMenuOpen={isMobileMenuOpen} onCloseMobileMenu={handleCloseMobileMenu} />
+
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={handleCloseMobileMenu}
+        />
+      )}
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
@@ -475,6 +499,7 @@ function SettingsContent() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

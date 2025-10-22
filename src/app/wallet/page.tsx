@@ -3,14 +3,23 @@
 import { useState, useEffect, useMemo, lazy, Suspense } from 'react';
 import { TransactionProvider, useTransactions } from '@/contexts/TransactionContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import Sidebar from '@/components/Sidebar';
 import { ArrowUpRight, ArrowDownLeft, Plus, Wallet, CreditCard, TrendingUp, TrendingDown, DollarSign, Calendar, PieChart, LayoutDashboard, ArrowLeft, ChevronDown } from 'lucide-react';
 
 function WalletContent() {
   const { state, getSummaryStats } = useTransactions();
   const { isDark, themeSettings } = useTheme();
   const [activeTab, setActiveTab] = useState<'overview' | 'transactions' | 'analytics'>('overview');
-  const [timeframe, setTimeframe] = useState<'day' | 'week' | 'month' | 'year' | 'all'>('month');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const handleToggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleCloseMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+  const [timeframe, setTimeframe] = useState<'day' | 'week' | 'month' | 'year' | 'all'>('month');
   const [isTimeframeDropdownOpen, setIsTimeframeDropdownOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
   
@@ -155,7 +164,21 @@ function WalletContent() {
   const periodBalance = periodStats.totalIncome - periodStats.totalExpenses;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-50" style={{ contain: 'layout style' }}>
+      {/* Sidebar */}
+      <Sidebar isMobileMenuOpen={isMobileMenuOpen} onCloseMobileMenu={handleCloseMobileMenu} />
+
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={handleCloseMobileMenu}
+        />
+      )}
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
@@ -567,6 +590,7 @@ function WalletContent() {
           </Suspense>
         )}
       </div>
+    </div>
     </div>
   );
 }
