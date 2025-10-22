@@ -23,18 +23,35 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
   const router = useRouter();
   const pathname = usePathname();
   const { themeSettings, isClient } = useTheme();
-  const [activeItem, setActiveItem] = useState(pathname === '/' ? 'Dashboard' : pathname.slice(1));
+  const [activeItem, setActiveItem] = useState('Dashboard');
+
+  // Update active item based on current pathname
+  useEffect(() => {
+    if (pathname === '/' || pathname === '/Financial-Dashboard/' || pathname === '/Financial-Dashboard') {
+      setActiveItem('Dashboard');
+    } else if (pathname === '/wallet' || pathname === '/Financial-Dashboard/wallet') {
+      setActiveItem('Wallet');
+    } else if (pathname === '/transactions' || pathname === '/Financial-Dashboard/transactions') {
+      setActiveItem('Transactions');
+    } else if (pathname === '/revenue' || pathname === '/Financial-Dashboard/revenue') {
+      setActiveItem('Revenue');
+    } else if (pathname === '/search' || pathname === '/Financial-Dashboard/search') {
+      setActiveItem('Search');
+    } else if (pathname === '/settings' || pathname === '/Financial-Dashboard/settings') {
+      setActiveItem('Settings');
+    }
+  }, [pathname]);
 
   const menuItems = [
-    { id: 'Dashboard', icon: LayoutDashboard, label: 'Dashboard', path: '/' },
-    { id: 'Wallet', icon: Wallet, label: 'Wallet', path: '/wallet' },
-    { id: 'Transactions', icon: CreditCard, label: 'Transactions', path: '/transactions' },
-    { id: 'Revenue', icon: TrendingUp, label: 'Revenue analytics', path: '/revenue' },
-    { id: 'Search', icon: Search, label: 'Search', path: '/search' },
+    { id: 'Dashboard', icon: LayoutDashboard, label: 'Dashboard', path: '/Financial-Dashboard/' },
+    { id: 'Wallet', icon: Wallet, label: 'Wallet', path: '/Financial-Dashboard/wallet' },
+    { id: 'Transactions', icon: CreditCard, label: 'Transactions', path: '/Financial-Dashboard/transactions' },
+    { id: 'Revenue', icon: TrendingUp, label: 'Revenue analytics', path: '/Financial-Dashboard/revenue' },
+    { id: 'Search', icon: Search, label: 'Search', path: '/Financial-Dashboard/search' },
   ];
 
   const bottomItems = [
-    { id: 'Settings', icon: Settings, label: 'Setting', path: '/settings' },
+    { id: 'Settings', icon: Settings, label: 'Setting', path: '/Financial-Dashboard/settings' },
   ];
 
   const handleItemClick = (item: any) => {
