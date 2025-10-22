@@ -4,6 +4,7 @@ import { useState, useEffect, lazy, Suspense, useMemo, useCallback } from 'react
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
 import { TransactionProvider, useTransactions } from '@/contexts/TransactionContext';
+import { sampleTransactions } from '@/data/sampleData';
 
 // Lazy load all heavy components for faster initial load
 const CreditCardWidget = lazy(() => import('@/components/CreditCardWidget'));
@@ -34,9 +35,16 @@ function SkeletonCard() {
 }
 
 function DashboardContent() {
-  const { getSummaryStats } = useTransactions();
+  const { getSummaryStats, loadTransactions, state } = useTransactions();
   const [isClient, setIsClient] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Load sample data on first visit
+  useEffect(() => {
+    if (isClient && state.transactions.length === 0) {
+      loadTransactions(sampleTransactions);
+    }
+  }, [isClient, state.transactions.length, loadTransactions]);
 
   // Memoize summary stats calculation
   const summaryStats = useMemo(() => {

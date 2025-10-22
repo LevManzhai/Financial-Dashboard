@@ -6,12 +6,20 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { ArrowUpRight, ArrowDownLeft, TrendingUp, TrendingDown, DollarSign, Calendar, BarChart3, PieChart, LineChart, Activity, Target, Zap, ChevronDown, Briefcase, Heart, Utensils, Car, ShoppingBag, Gamepad2, Home, CreditCard, Wifi, Coffee, BookOpen, Music, Camera, Plane } from 'lucide-react';
 import { Transaction } from '@/types/financial';
 import { LineChart as RechartsLineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell, AreaChart, Area, CartesianGrid, Legend } from 'recharts';
+import { sampleTransactions, sampleChartData } from '@/data/sampleData';
 
 function RevenueContent() {
-  const { state } = useTransactions();
+  const { state, loadTransactions } = useTransactions();
   const { isDark, themeSettings } = useTheme();
   const { chartColors } = useTheme();
   const [isClient, setIsClient] = useState(false);
+
+  // Load sample data if no transactions exist
+  useEffect(() => {
+    if (isClient && state.transactions.length === 0) {
+      loadTransactions(sampleTransactions);
+    }
+  }, [isClient, state.transactions.length, loadTransactions]);
   const [timeframe, setTimeframe] = useState<'day' | 'week' | 'month' | 'year' | 'all'>('month');
   const [chartType, setChartType] = useState<'line' | 'bar' | 'area'>('line');
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
@@ -95,6 +103,10 @@ function RevenueContent() {
 
   // Group by periods for charts
   const getChartData = () => {
+    // If no transactions, return sample data
+    if (filteredTransactions.length === 0) {
+      return sampleChartData;
+    }
 
     const periodMap = new Map<string, { income: number; expenses: number; balance: number }>();
 
