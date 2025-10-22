@@ -36,6 +36,13 @@ jobs:
     - name: Build project
       run: npm run build
       
+    - name: Check build output
+      run: |
+        echo "Build output:"
+        ls -la out/
+        echo "HTML files:"
+        find out/ -name "*.html" | head -5
+      
     - name: Setup Pages
       uses: actions/configure-pages@v4
       
