@@ -5,6 +5,7 @@ import { useTransactions, setGlobalNotificationFunction } from '@/contexts/Trans
 import { useNotifications } from '@/contexts/NotificationContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface HeaderProps {
   isMobileMenuOpen?: boolean;
@@ -12,6 +13,7 @@ interface HeaderProps {
 }
 
 export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }: HeaderProps) {
+  const router = useRouter();
   const { state, loadTransactions, deleteTransaction } = useTransactions();
   const { notifications, unreadCount, markAsRead, removeNotification, clearAllNotifications, addNotification } = useNotifications();
   const { themeSettings } = useTheme();
@@ -94,8 +96,8 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
     e.preventDefault();
     if (searchTerm.trim()) {
       setShowSuggestions(false);
-      // Navigate to search page with query
-      window.location.href = `/search?q=${encodeURIComponent(searchTerm.trim())}`;
+      // Navigate to search page with query using Next.js router
+      router.push(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
       setIsMobileSearchOpen(false);
     }
   };
@@ -539,8 +541,8 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
                     onClick={() => {
                       setSearchTerm(suggestion);
                       setShowSuggestions(false);
-                      // Navigate immediately
-                      window.location.href = `/search?q=${encodeURIComponent(suggestion.trim())}`;
+                      // Navigate immediately using Next.js router
+                      router.push(`/search?q=${encodeURIComponent(suggestion.trim())}`);
                     }}
                     className="suggestion-item w-full text-left px-4 py-2 hover:bg-gray-50 text-sm text-gray-700 border-b border-gray-100 last:border-b-0"
                   >
@@ -711,8 +713,8 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
                           onClick={() => {
                             setSearchTerm(suggestion);
                             setShowSuggestions(false);
-                            // Navigate immediately
-                            window.location.href = `/search?q=${encodeURIComponent(suggestion.trim())}`;
+                            // Navigate immediately using Next.js router
+                            router.push(`/search?q=${encodeURIComponent(suggestion.trim())}`);
                             setIsMobileSearchOpen(false);
                           }}
                           className="suggestion-item w-full text-left px-4 py-2 hover:bg-gray-50 text-sm text-gray-700 border-b border-gray-100 last:border-b-0"
@@ -773,8 +775,8 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
                         onClick={() => {
                           setSearchTerm(suggestion);
                           setShowSuggestions(false);
-                          // Navigate immediately
-                          window.location.href = `/search?q=${encodeURIComponent(suggestion.trim())}`;
+                          // Navigate immediately using Next.js router
+                          router.push(`/search?q=${encodeURIComponent(suggestion.trim())}`);
                         }}
                       className="suggestion-item w-full text-left px-4 py-2 hover:bg-gray-50 text-sm text-gray-700 border-b border-gray-100 last:border-b-0"
                     >
