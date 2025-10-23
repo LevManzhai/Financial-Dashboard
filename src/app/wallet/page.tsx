@@ -57,18 +57,19 @@ function WalletContent() {
     return getSummaryStats();
   }, [getSummaryStats, timeframe, state.transactions]);
 
-  const formatCurrency = (amount: number) => {
-    if (isNaN(amount)) return '$0';
+  const formatCurrency = (amount: number | string | null | undefined) => {
+    if (!amount || isNaN(Number(amount))) return '$0';
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
-    }).format(amount);
+    }).format(Number(amount));
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
+  const formatDate = (dateInput: string | Date | null | undefined) => {
+    if (!dateInput) return '';
+    const date = new Date(dateInput);
     if (isNaN(date.getTime())) return '';
     return date.toLocaleDateString('en-US', {
       day: '2-digit',
@@ -126,7 +127,11 @@ function WalletContent() {
   // Memoize category grouping
   const categoryStats = useMemo(() => {
     return filteredTransactions.reduce((acc, transaction) => {
-      const category = transaction.category;
+      const category = typeof transaction.category === 'string'
+        ? transaction.category
+        : (typeof transaction.category === 'object' && transaction.category !== null && 'name' in transaction.category 
+            ? String((transaction.category as Record<string, unknown>).name) 
+            : 'Unknown');
       if (!acc[category]) {
         acc[category] = { income: 0, expenses: 0, count: 0 };
       }
@@ -315,7 +320,7 @@ function WalletContent() {
                 <p className={`text-lg xs:text-xl sm:text-2xl font-bold ${
                   periodBalance > 0 ? 'text-green-600' : periodBalance < 0 ? 'text-red-600' : 'text-gray-900'
                 }`}>
-                  {isClient ? formatCurrency(periodBalance) : '$0'}
+                  {isClient ? String(formatCurrency(periodBalance)) : '$0'}
                 </p>
               </div>
             </div>
@@ -368,7 +373,7 @@ function WalletContent() {
                        'All Time Income'}
                     </p>
                     <p className="text-lg xs:text-xl sm:text-2xl font-bold text-green-600">
-                      {isClient ? formatCurrency(periodStats.totalIncome) : '$0'}
+                      {isClient ? String(formatCurrency(periodStats.totalIncome)) : '$0'}
                     </p>
                   </div>
                   <div className="p-2 xs:p-3 bg-green-100 rounded-full">
@@ -388,7 +393,7 @@ function WalletContent() {
                        'All Time Expenses'}
                     </p>
                     <p className="text-lg xs:text-xl sm:text-2xl font-bold text-red-600">
-                      {isClient ? formatCurrency(periodStats.totalExpenses) : '$0'}
+                      {isClient ? String(formatCurrency(periodStats.totalExpenses)) : '$0'}
                     </p>
                   </div>
                   <div className="p-2 xs:p-3 bg-red-100 rounded-full">
@@ -432,7 +437,7 @@ function WalletContent() {
                           <span className="font-medium text-gray-900">{String(category)}</span>
                         </div>
                         <div className="text-right">
-                          <p className="font-semibold text-red-600">{isClient ? formatCurrency(data.expenses) : '$0'}</p>
+                          <p className="font-semibold text-red-600">{isClient ? String(formatCurrency(data.expenses)) : '$0'}</p>
                           <p className="text-xs text-gray-500">{data.count} transactions</p>
                         </div>
                       </div>
@@ -469,8 +474,20 @@ function WalletContent() {
                         )}
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900">{String(transaction.category ?? '')}</p>
-                        <p className="text-sm text-gray-500">{String(transaction.description ?? '')}</p>
+                        <p className="font-medium text-gray-900">{String(
+                          typeof transaction.category === 'string' 
+                            ? transaction.category 
+                            : (typeof transaction.category === 'object' && transaction.category !== null && 'name' in transaction.category 
+                                ? String((transaction.category as Record<string, unknown>).name) 
+                                : 'Unknown')
+                        )}</p>
+                        <p className="text-sm text-gray-500">{String(
+                          typeof transaction.description === 'string' 
+                            ? transaction.description 
+                            : (typeof transaction.description === 'object' && transaction.description !== null && 'name' in transaction.description 
+                                ? String((transaction.description as Record<string, unknown>).name) 
+                                : '')
+                        )}</p>
                         <p className="text-xs text-gray-400">{String(formatDate(transaction.date))}</p>
                       </div>
                     </div>
@@ -478,7 +495,7 @@ function WalletContent() {
                       <p className={`font-semibold ${
                         transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
                       }`}>
-                        {transaction.type === 'income' ? '+' : '-'}{isClient ? formatCurrency(transaction.amount) : '$0'}
+                        {transaction.type === 'income' ? '+' : '-'}{isClient ? String(formatCurrency(transaction.amount)) : '$0'}
                       </p>
                     </div>
                   </div>
@@ -518,14 +535,14 @@ function WalletContent() {
                       <div className="w-4 h-4 bg-green-500 rounded"></div>
                       <span className="text-sm text-gray-600">Income</span>
                     </div>
-                    <span className="font-semibold text-green-600">{isClient ? formatCurrency(periodStats.totalIncome) : '$0'}</span>
+                    <span className="font-semibold text-green-600">{isClient ? String(formatCurrency(periodStats.totalIncome)) : '$0'}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <div className="w-4 h-4 bg-red-500 rounded"></div>
                       <span className="text-sm text-gray-600">Expenses</span>
                     </div>
-                    <span className="font-semibold text-red-600">{isClient ? formatCurrency(periodStats.totalExpenses) : '$0'}</span>
+                    <span className="font-semibold text-red-600">{isClient ? String(formatCurrency(periodStats.totalExpenses)) : '$0'}</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div 
@@ -560,7 +577,7 @@ function WalletContent() {
                             </div>
                             <span className="text-sm font-medium text-gray-900">{String(category)}</span>
                           </div>
-                          <span className="text-sm font-semibold text-gray-900">{isClient ? formatCurrency(data.expenses) : '$0'}</span>
+                          <span className="text-sm font-semibold text-gray-900">{isClient ? String(formatCurrency(data.expenses)) : '$0'}</span>
                         </div>
                       ))
                   }

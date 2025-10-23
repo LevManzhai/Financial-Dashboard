@@ -69,6 +69,28 @@ function applyFilters(transactions: Transaction[], filters: FilterOptions): Tran
   return filtered;
 }
 
+// Clean transaction data to ensure all fields are strings
+const cleanTransactionData = (transaction: Record<string, unknown>): Transaction => {
+  return {
+    id: String(transaction.id || ''),
+    category: typeof transaction.category === 'string' 
+      ? transaction.category 
+      : (typeof transaction.category === 'object' && transaction.category !== null && 'name' in transaction.category 
+          ? String(transaction.category.name) 
+          : String(transaction.category || 'Unknown')),
+    description: typeof transaction.description === 'string' 
+      ? transaction.description 
+      : (typeof transaction.description === 'object' && transaction.description !== null && 'name' in transaction.description 
+          ? String(transaction.description.name) 
+          : String(transaction.description || '')),
+    amount: Number(transaction.amount) || 0,
+    date: String(transaction.date || ''),
+    type: ['income', 'expense'].includes(transaction.type) ? transaction.type : 'expense',
+    createdAt: String(transaction.createdAt || new Date().toISOString()),
+    updatedAt: String(transaction.updatedAt || new Date().toISOString())
+  };
+};
+
 // Load initial state from localStorage - optimized for performance
 const loadStateFromStorage = (): TransactionState => {
   if (typeof window === 'undefined') {
@@ -96,10 +118,13 @@ const loadStateFromStorage = (): TransactionState => {
     const savedState = localStorage.getItem('financial-dashboard-transactions');
     if (savedState) {
       const parsed = JSON.parse(savedState);
+      // Clean all transaction data to ensure proper types
+      const cleanedTransactions = (parsed.transactions || []).map(cleanTransactionData);
       // Use requestIdleCallback for heavy filtering operations
-      const filteredTransactions = applyFilters(parsed.transactions, parsed.filters);
+      const filteredTransactions = applyFilters(cleanedTransactions, parsed.filters);
       return {
         ...parsed,
+        transactions: cleanedTransactions,
         filteredTransactions
       };
     }
@@ -254,25 +279,30 @@ export function TransactionProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(transactionReducer, initialState);
 
   const addTransaction = (transactionData: TransactionFormData) => {
-    // Validate transaction data
-    if (!transactionData.amount || transactionData.amount <= 0) {
+    // Clean and validate transaction data
+    const cleanedData = {
+      category: String(transactionData.category || ''),
+      description: String(transactionData.description || ''),
+      amount: Number(transactionData.amount) || 0,
+      date: String(transactionData.date || ''),
+      type: ['income', 'expense'].includes(transactionData.type) ? transactionData.type : 'expense'
+    };
+
+    if (!cleanedData.amount || cleanedData.amount <= 0) {
       throw new Error('Amount must be greater than 0');
     }
-    if (!transactionData.category || transactionData.category.trim() === '') {
+    if (!cleanedData.category || cleanedData.category.trim() === '') {
       throw new Error('Category is required');
     }
-    if (!transactionData.description || transactionData.description.trim() === '') {
+    if (!cleanedData.description || cleanedData.description.trim() === '') {
       throw new Error('Description is required');
     }
-    if (!transactionData.date) {
+    if (!cleanedData.date) {
       throw new Error('Date is required');
-    }
-    if (!['income', 'expense'].includes(transactionData.type)) {
-      throw new Error('Type must be either income or expense');
     }
 
     const newTransaction: Transaction = {
-      ...transactionData,
+      ...cleanedData,
       id: `txn-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -295,25 +325,30 @@ export function TransactionProvider({ children }: { children: ReactNode }) {
       throw new Error('Transaction not found');
     }
 
-    // Validate transaction data
-    if (!transactionData.amount || transactionData.amount <= 0) {
+    // Clean and validate transaction data
+    const cleanedData = {
+      category: String(transactionData.category || ''),
+      description: String(transactionData.description || ''),
+      amount: Number(transactionData.amount) || 0,
+      date: String(transactionData.date || ''),
+      type: ['income', 'expense'].includes(transactionData.type) ? transactionData.type : 'expense'
+    };
+
+    if (!cleanedData.amount || cleanedData.amount <= 0) {
       throw new Error('Amount must be greater than 0');
     }
-    if (!transactionData.category || transactionData.category.trim() === '') {
+    if (!cleanedData.category || cleanedData.category.trim() === '') {
       throw new Error('Category is required');
     }
-    if (!transactionData.description || transactionData.description.trim() === '') {
+    if (!cleanedData.description || cleanedData.description.trim() === '') {
       throw new Error('Description is required');
     }
-    if (!transactionData.date) {
+    if (!cleanedData.date) {
       throw new Error('Date is required');
-    }
-    if (!['income', 'expense'].includes(transactionData.type)) {
-      throw new Error('Type must be either income or expense');
     }
 
     const updatedTransaction: Transaction = {
-      ...transactionData,
+      ...cleanedData,
       id,
       createdAt: existingTransaction.createdAt,
       updatedAt: new Date().toISOString()
