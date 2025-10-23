@@ -155,11 +155,19 @@ function WalletContent() {
   // Memoize category grouping
   const categoryStats = useMemo(() => {
     return filteredTransactions.reduce((acc, transaction) => {
-      const category = typeof transaction.category === 'string'
-        ? transaction.category
-        : (typeof transaction.category === 'object' && transaction.category !== null && 'name' in transaction.category 
-            ? String((transaction.category as Record<string, unknown>).name) 
-            : 'Unknown');
+      const getCategoryName = (cat: unknown): string => {
+        if (!cat) return 'Unknown';
+        if (typeof cat === 'string') return cat;
+        if (typeof cat === 'object' && cat !== null) {
+          const catObj = cat as Record<string, unknown>;
+          const possibleName = catObj.name || catObj.type || catObj.category;
+          return typeof possibleName === 'string' ? possibleName : 'Unknown';
+        }
+        return String(cat);
+      };
+      
+      const category = getCategoryName(transaction.category);
+      
       if (!acc[category]) {
         acc[category] = { income: 0, expenses: 0, count: 0 };
       }
@@ -489,7 +497,16 @@ function WalletContent() {
             </div>
             <div className="divide-y divide-gray-200">
               {recentTransactions.length > 0 ? (
-                recentTransactions.map((transaction) => (
+                recentTransactions.map((transaction) => {
+                  // Debug log to identify problematic transactions
+                  console.log('Rendering transaction:', transaction);
+                  
+                  if (!transaction || typeof transaction !== 'object') {
+                    console.error('Invalid transaction:', transaction);
+                    return null;
+                  }
+                  
+                  return (
                   <div key={transaction.id} className="px-6 py-4 flex items-center justify-between hover:bg-gray-50">
                     <div className="flex items-center space-x-4">
                       <div className={`p-2 rounded-full ${
@@ -502,20 +519,32 @@ function WalletContent() {
                         )}
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900">{String(
-                          typeof transaction.category === 'string' 
-                            ? transaction.category 
-                            : (typeof transaction.category === 'object' && transaction.category !== null && 'name' in transaction.category 
-                                ? String((transaction.category as Record<string, unknown>).name) 
-                                : 'Unknown')
-                        )}</p>
-                        <p className="text-sm text-gray-500">{String(
-                          typeof transaction.description === 'string' 
-                            ? transaction.description 
-                            : (typeof transaction.description === 'object' && transaction.description !== null && 'name' in transaction.description 
-                                ? String((transaction.description as Record<string, unknown>).name) 
-                                : '')
-                        )}</p>
+                        <p className="font-medium text-gray-900">
+                          {(() => {
+                            const cat = transaction.category;
+                            if (!cat) return 'Unknown';
+                            if (typeof cat === 'string') return cat;
+                            if (typeof cat === 'object' && cat !== null) {
+                              const catObj = cat as Record<string, unknown>;
+                              const possibleName = catObj.name || catObj.type || catObj.category;
+                              return typeof possibleName === 'string' ? possibleName : 'Unknown';
+                            }
+                            return String(cat);
+                          })()}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {(() => {
+                            const desc = transaction.description;
+                            if (!desc) return '';
+                            if (typeof desc === 'string') return desc;
+                            if (typeof desc === 'object' && desc !== null) {
+                              const descObj = desc as Record<string, unknown>;
+                              const possibleText = descObj.text || descObj.description || descObj.name;
+                              return typeof possibleText === 'string' ? possibleText : '';
+                            }
+                            return String(desc);
+                          })()}
+                        </p>
                         <p className="text-xs text-gray-400">{formatDate(transaction.date)}</p>
                       </div>
                     </div>
@@ -527,7 +556,8 @@ function WalletContent() {
                       </p>
                     </div>
                   </div>
-                ))
+                  );
+                })
               ) : (
                 <div className="px-6 py-12 text-center">
                   <Wallet className="w-16 h-16 mx-auto mb-4 text-primary" />
