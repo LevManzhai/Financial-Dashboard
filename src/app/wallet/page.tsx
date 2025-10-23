@@ -12,6 +12,14 @@ function WalletContent() {
   const router = useRouter();
   const { state, getSummaryStats } = useTransactions();
   const { isDark, themeSettings } = useTheme();
+  
+  // Debug logs to check data structure
+  console.log(
+    "Sample transaction:",
+    state?.transactions?.[0],
+    "Stats:",
+    getSummaryStats?.()
+  );
   const [activeTab, setActiveTab] = useState<'overview' | 'transactions' | 'analytics'>('overview');
   const [timeframe, setTimeframe] = useState<'day' | 'week' | 'month' | 'year' | 'all'>('month');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -52,12 +60,23 @@ function WalletContent() {
     };
   }, [isTimeframeDropdownOpen]);
 
-  // Memoize statistics calculations
-  const stats = useMemo(() => {
-    return getSummaryStats();
-  }, [getSummaryStats, timeframe, state.transactions]);
+  // Temporarily removed stats calculation to debug React error #418
+  // const stats = useMemo(() => {
+  //   return getSummaryStats();
+  // }, [getSummaryStats, timeframe, state.transactions]);
 
-  const formatCurrency = (amount: number | string | null | undefined) => {
+  const formatCurrency = (amount: number | string | null | undefined | Record<string, unknown>) => {
+    // Handle object amounts (e.g., { value: 100 })
+    if (typeof amount === 'object' && amount !== null) {
+      if ('value' in amount) {
+        amount = Number(amount.value);
+      } else if ('amount' in amount) {
+        amount = Number(amount.amount);
+      } else {
+        return '$0';
+      }
+    }
+    
     if (!amount || isNaN(Number(amount))) return '$0';
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -136,9 +155,9 @@ function WalletContent() {
         acc[category] = { income: 0, expenses: 0, count: 0 };
       }
       if (transaction.type === 'income') {
-        acc[category].income += transaction.amount;
+        acc[category].income += Number(transaction.amount) || 0;
       } else {
-        acc[category].expenses += transaction.amount;
+        acc[category].expenses += Number(transaction.amount) || 0;
       }
       acc[category].count += 1;
       return acc;
@@ -155,9 +174,9 @@ function WalletContent() {
   const periodStats = useMemo(() => {
     return filteredTransactions.reduce((acc, transaction) => {
       if (transaction.type === 'income') {
-        acc.totalIncome += transaction.amount;
+        acc.totalIncome += Number(transaction.amount) || 0;
       } else {
-        acc.totalExpenses += transaction.amount;
+        acc.totalExpenses += Number(transaction.amount) || 0;
       }
       acc.transactionCount += 1;
       return acc;
