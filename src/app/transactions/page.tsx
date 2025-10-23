@@ -416,18 +416,7 @@ function TransactionsContent() {
                     a.download = 'transactions.csv';
                     a.click();
                   }}
-                  className="w-full flex items-center justify-center space-x-2 px-4 py-3 text-white rounded-lg transition-colors"
-                  style={{ 
-                    backgroundColor: '#10B981'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#10B981';
-                    e.currentTarget.style.opacity = '0.8';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#10B981';
-                    e.currentTarget.style.opacity = '1';
-                  }}
+                  className="w-full flex items-center justify-center space-x-2 px-4 py-3 text-white rounded-lg transition-colors bg-emerald-500 hover:opacity-80"
                 >
                   <Download className="w-4 h-4" />
                   <span>Export CSV</span>
@@ -440,17 +429,7 @@ function TransactionsContent() {
                       setSearchTerm('');
                     }
                   }}
-                  className="w-full flex items-center justify-center space-x-2 px-4 py-3 text-white rounded-lg transition-colors"
-                  style={{ 
-                    backgroundColor: '#6B7280',
-                    color: '#ffffff'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#4B5563';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#6B7280';
-                  }}
+                  className="w-full flex items-center justify-center space-x-2 px-4 py-3 text-white rounded-lg transition-colors bg-gray-500 hover:bg-gray-600"
                 >
                   <Filter className="w-4 h-4" />
                   <span>Clear Filters</span>

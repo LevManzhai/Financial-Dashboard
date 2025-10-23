@@ -325,10 +325,7 @@ function SearchContent() {
             <div className="flex items-center space-x-1 xs:space-x-2 flex-shrink-0">
               <button
                 onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                className="flex items-center space-x-1 xs:space-x-2 px-2 xs:px-3 py-1.5 xs:py-2 rounded-lg transition-colors text-white text-xs xs:text-sm"
-                style={{
-                  border: 'none'
-                }}
+                className="flex items-center space-x-1 xs:space-x-2 px-2 xs:px-3 py-1.5 xs:py-2 rounded-lg transition-colors text-white text-xs xs:text-sm border-none"
                 onMouseEnter={(e) => {
                   if (isClient && themeSettings.primaryColor) {
                     const hex = themeSettings.primaryColor.replace('#', '');

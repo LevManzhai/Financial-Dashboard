@@ -664,9 +664,9 @@ function RevenueContent() {
                   onClick={() => setChartType('line')}
                     className={`px-2 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
                     chartType === 'line'
-                        ? 'text-white shadow-sm'
+                        ? 'text-white bg-primary shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
-                    }`}
+                  }`}
                   >
                     Line
                   </button>
@@ -674,7 +674,7 @@ function RevenueContent() {
                   onClick={() => setChartType('bar')}
                     className={`px-2 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
                     chartType === 'bar'
-                        ? 'text-white shadow-sm'
+                        ? 'text-white bg-primary shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
                   }`}
                 >
@@ -684,7 +684,7 @@ function RevenueContent() {
                   onClick={() => setChartType('area')}
                     className={`px-2 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
                     chartType === 'area'
-                        ? 'text-white shadow-sm'
+                        ? 'text-white bg-primary shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
                   }`}
                 >
