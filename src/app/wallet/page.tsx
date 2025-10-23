@@ -62,36 +62,48 @@ function WalletContent() {
 
   // Removed unused stats calculation that was causing React error #418
 
-  const formatCurrency = (amount: number | string | null | undefined | Record<string, unknown>) => {
-    // Handle object amounts (e.g., { value: 100 })
-    if (typeof amount === 'object' && amount !== null) {
-      if ('value' in amount) {
-        amount = Number(amount.value);
-      } else if ('amount' in amount) {
-        amount = Number(amount.amount);
-      } else {
-        return '$0';
+  const formatCurrency = (amount: number | string | null | undefined | Record<string, unknown>): string => {
+    try {
+      // Handle object amounts (e.g., { value: 100 })
+      if (typeof amount === 'object' && amount !== null) {
+        if ('value' in amount) {
+          amount = Number(amount.value);
+        } else if ('amount' in amount) {
+          amount = Number(amount.amount);
+        } else {
+          return '$0';
+        }
       }
+      
+      if (!amount || isNaN(Number(amount))) return '$0';
+      const result = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }).format(Number(amount));
+      return String(result);
+    } catch (error) {
+      console.error('Error formatting currency:', error);
+      return '$0';
     }
-    
-    if (!amount || isNaN(Number(amount))) return '$0';
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(Number(amount));
   };
 
-  const formatDate = (dateInput: string | Date | null | undefined) => {
-    if (!dateInput) return '';
-    const date = new Date(dateInput);
-    if (isNaN(date.getTime())) return '';
-    return date.toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric'
-    });
+  const formatDate = (dateInput: string | Date | null | undefined): string => {
+    try {
+      if (!dateInput) return '';
+      const date = new Date(dateInput);
+      if (isNaN(date.getTime())) return '';
+      const result = date.toLocaleDateString('en-US', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      });
+      return String(result);
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return '';
+    }
   };
 
 
@@ -336,7 +348,7 @@ function WalletContent() {
                 <p className={`text-lg xs:text-xl sm:text-2xl font-bold ${
                   periodBalance > 0 ? 'text-green-600' : periodBalance < 0 ? 'text-red-600' : 'text-gray-900'
                 }`}>
-                  {isClient ? String(formatCurrency(periodBalance)) : '$0'}
+                  {isClient ? formatCurrency(periodBalance) : '$0'}
                 </p>
               </div>
             </div>
@@ -389,7 +401,7 @@ function WalletContent() {
                        'All Time Income'}
                     </p>
                     <p className="text-lg xs:text-xl sm:text-2xl font-bold text-green-600">
-                      {isClient ? String(formatCurrency(periodStats.totalIncome)) : '$0'}
+                      {isClient ? formatCurrency(periodStats.totalIncome) : '$0'}
                     </p>
                   </div>
                   <div className="p-2 xs:p-3 bg-green-100 rounded-full">
@@ -409,7 +421,7 @@ function WalletContent() {
                        'All Time Expenses'}
                     </p>
                     <p className="text-lg xs:text-xl sm:text-2xl font-bold text-red-600">
-                      {isClient ? String(formatCurrency(periodStats.totalExpenses)) : '$0'}
+                      {isClient ? formatCurrency(periodStats.totalExpenses) : '$0'}
                     </p>
                   </div>
                   <div className="p-2 xs:p-3 bg-red-100 rounded-full">
@@ -453,7 +465,7 @@ function WalletContent() {
                           <span className="font-medium text-gray-900">{String(category)}</span>
                         </div>
                         <div className="text-right">
-                          <p className="font-semibold text-red-600">{isClient ? String(formatCurrency(data.expenses)) : '$0'}</p>
+                          <p className="font-semibold text-red-600">{isClient ? formatCurrency(data.expenses) : '$0'}</p>
                           <p className="text-xs text-gray-500">{data.count} transactions</p>
                         </div>
                       </div>
@@ -504,14 +516,14 @@ function WalletContent() {
                                 ? String((transaction.description as Record<string, unknown>).name) 
                                 : '')
                         )}</p>
-                        <p className="text-xs text-gray-400">{String(formatDate(transaction.date))}</p>
+                        <p className="text-xs text-gray-400">{formatDate(transaction.date)}</p>
                       </div>
                     </div>
                     <div className="text-right">
                       <p className={`font-semibold ${
                         transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
                       }`}>
-                        {transaction.type === 'income' ? '+' : '-'}{isClient ? String(formatCurrency(transaction.amount)) : '$0'}
+                        {transaction.type === 'income' ? '+' : '-'}{isClient ? formatCurrency(transaction.amount) : '$0'}
                       </p>
                     </div>
                   </div>
@@ -551,14 +563,14 @@ function WalletContent() {
                       <div className="w-4 h-4 bg-green-500 rounded"></div>
                       <span className="text-sm text-gray-600">Income</span>
                     </div>
-                    <span className="font-semibold text-green-600">{isClient ? String(formatCurrency(periodStats.totalIncome)) : '$0'}</span>
+                    <span className="font-semibold text-green-600">{isClient ? formatCurrency(periodStats.totalIncome) : '$0'}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <div className="w-4 h-4 bg-red-500 rounded"></div>
                       <span className="text-sm text-gray-600">Expenses</span>
                     </div>
-                    <span className="font-semibold text-red-600">{isClient ? String(formatCurrency(periodStats.totalExpenses)) : '$0'}</span>
+                    <span className="font-semibold text-red-600">{isClient ? formatCurrency(periodStats.totalExpenses) : '$0'}</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div 
@@ -593,7 +605,7 @@ function WalletContent() {
                             </div>
                             <span className="text-sm font-medium text-gray-900">{String(category)}</span>
                           </div>
-                          <span className="text-sm font-semibold text-gray-900">{isClient ? String(formatCurrency(data.expenses)) : '$0'}</span>
+                          <span className="text-sm font-semibold text-gray-900">{isClient ? formatCurrency(data.expenses) : '$0'}</span>
                         </div>
                       ))
                   }
