@@ -488,9 +488,6 @@ function RevenueContent() {
                         ? 'text-white shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
                   }`}
-                  style={timeframe === 'day' ? { 
-                    color: '#ffffff'
-                  } : {}}
                 >
                   Day
                 </button>
@@ -501,9 +498,6 @@ function RevenueContent() {
                         ? 'text-white shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
                   }`}
-                  style={timeframe === 'week' ? { 
-                    color: '#ffffff'
-                  } : {}}
                 >
                   Week
                 </button>
@@ -514,9 +508,6 @@ function RevenueContent() {
                         ? 'text-white shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
                   }`}
-                  style={timeframe === 'month' ? { 
-                    color: '#ffffff'
-                  } : {}}
                 >
                   Month
                 </button>
@@ -527,9 +518,6 @@ function RevenueContent() {
                         ? 'text-white shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
                   }`}
-                  style={timeframe === 'year' ? { 
-                    color: '#ffffff'
-                  } : {}}
                 >
                   Year
                 </button>
@@ -540,9 +528,6 @@ function RevenueContent() {
                         ? 'text-white shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
                   }`}
-                  style={timeframe === 'all' ? { 
-                    color: '#ffffff'
-                  } : {}}
                   >
                     All
                   </button>
@@ -692,9 +677,6 @@ function RevenueContent() {
                         ? 'text-white shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
                   }`}
-                  style={chartType === 'bar' ? { 
-                    color: '#ffffff'
-                  } : {}}
                 >
                   Bar
                 </button>
@@ -705,9 +687,6 @@ function RevenueContent() {
                         ? 'text-white shadow-sm'
                         : 'text-gray-700 hover:text-gray-900'
                   }`}
-                  style={chartType === 'area' ? { 
-                    color: '#ffffff'
-                  } : {}}
                 >
                   Area
                 </button>
