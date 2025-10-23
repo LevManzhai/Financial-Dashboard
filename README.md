@@ -2,7 +2,10 @@
 
 A modern, responsive financial dashboard built with Next.js 14, featuring comprehensive transaction management, analytics, and customizable theming.
 
-![Dashboard Preview](https://via.placeholder.com/800x400/3B82F6/FFFFFF?text=Financial+Dashboard+Preview)
+## 🚀 Live Demo
+
+**👉 [View Live Demo](https://levmanzhai.github.io/Financial-Dashboard)**
+
 
 ## ✨ Features
 
@@ -69,14 +72,6 @@ A modern, responsive financial dashboard built with Next.js 14, featuring compre
 - **Skeleton Loading**: Better user experience during loading
 - **Preloading**: Critical components preloaded in background
 
-
-## 📋 Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-- `npm run type-check` - Run TypeScript checks
 
 ## 🎯 Key Features Breakdown
 
@@ -208,4 +203,4 @@ If you have any questions or need help, please:
 
 ---
 
-**Made with ❤️ by the Financial Dashboard Team**# Updated Wed Oct 22 22:36:08 BST 2025
+**Made with ❤️ by the Financial Dashboard Team**

@@ -565,6 +565,16 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
             <Search className="h-4 w-4" />
           </button>
 
+          {/* Mobile Load Mock Data Button */}
+          {isClient && (
+            <button
+              onClick={handleLoadMockData}
+              className="md:hidden p-1.5 text-gray-400 hover:text-gray-600 transition-colors"
+              title="Load Mock Data"
+            >
+              <Database className="h-4 w-4" />
+            </button>
+          )}
 
           {/* Load Mock Data Button - Hidden on mobile */}
           {isClient && (
