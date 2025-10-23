@@ -2,7 +2,9 @@
 
 A modern, responsive financial dashboard built with Next.js 14, featuring comprehensive transaction management, analytics, and customizable theming.
 
-![Dashboard Preview](https://levmanzhai.github.io/Financial-Dashboard/)
+## 🚀 Live Demo
+
+**👉 [View Live Demo](https://levmanzhai.github.io/Financial-Dashboard)**
 
 ## ✨ Features
 
