@@ -356,12 +356,24 @@ function SettingsContent() {
                       onClick={() => updateThemeSetting('mode', preset.mode)}
                       className={`p-3 border rounded-lg transition-colors ${
                         isClient && themeSettings.mode === preset.mode
-                          ? 'border-blue-500 bg-blue-50 text-blue-700'
-                          : 'border-gray-200 hover:border-gray-300'
+                          ? isDark 
+                            ? 'border-blue-500 bg-blue-900/20 text-blue-300' 
+                            : 'border-blue-500 bg-blue-50 text-blue-700'
+                          : isDark
+                            ? 'border-gray-600 hover:border-gray-500'
+                            : 'border-gray-200 hover:border-gray-300'
                       }`}
                     >
                       <Icon className="w-5 h-5 mx-auto mb-2" />
-                      <p className={`text-sm font-medium ${isClient ? (themeSettings.mode === 'dark' ? 'text-white' : 'text-gray-900') : 'text-gray-900'}`}>{preset.name}</p>
+                      <p className={`text-sm font-medium ${
+                        isClient && themeSettings.mode === preset.mode
+                          ? isDark 
+                            ? 'text-blue-300' 
+                            : 'text-blue-700'
+                          : isDark 
+                            ? 'text-white' 
+                            : 'text-gray-900'
+                      }`}>{preset.name}</p>
                     </button>
                   );
                 })}
