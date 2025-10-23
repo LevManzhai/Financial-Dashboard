@@ -16,6 +16,7 @@ function SearchContent() {
   const [isClient, setIsClient] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isDark, setIsDark] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState({
     type: 'all',
     category: '',
@@ -42,6 +43,26 @@ function SearchContent() {
       localStorage.removeItem('searchQuery');
     }
   }, []);
+
+  useEffect(() => {
+    const checkDark = () => {
+      if (themeSettings.mode === 'dark') return true;
+      if (themeSettings.mode === 'light') return false;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    };
+    
+    setIsDark(checkDark());
+    
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = () => {
+      if (themeSettings.mode === 'system') {
+        setIsDark(mediaQuery.matches);
+      }
+    };
+    
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, [themeSettings.mode]);
 
   // Update showSuggestions based on searchTerm - but only if user is actively typing
   useEffect(() => {
@@ -325,8 +346,8 @@ function SearchContent() {
           <div className="max-w-7xl mx-auto">
             {/* Search Header */}
             <div className="mb-6">
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Search Transactions</h1>
-              <p className="text-gray-600">Find and filter your financial transactions</p>
+              <h1 className={`text-2xl sm:text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>Search Transactions</h1>
+              <p className={`${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Find and filter your financial transactions</p>
             </div>
 
             {/* Search Bar */}
@@ -340,17 +361,29 @@ function SearchContent() {
                   onChange={handleInputChange}
                   onFocus={() => setIsUserTyping(true)}
                   onBlur={handleInputBlur}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+                  className={`w-full pl-10 pr-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg ${
+                    isDark 
+                      ? 'bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:border-blue-400' 
+                      : 'bg-white border border-gray-300 text-gray-900 placeholder-gray-500'
+                  }`}
                 />
                 
                 {/* Search Suggestions */}
                 {showSuggestions && suggestions.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+                  <div className={`absolute top-full left-0 right-0 mt-1 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto ${
+                    isDark 
+                      ? 'bg-gray-800 border border-gray-600' 
+                      : 'bg-white border border-gray-200'
+                  }`}>
                     {suggestions.map((suggestion, index) => (
                       <button
                         key={index}
                         onClick={() => handleSuggestionClick(suggestion)}
-                        className="w-full text-left px-4 py-2 hover:bg-gray-50 text-sm text-gray-700 border-b border-gray-100 last:border-b-0"
+                        className={`w-full text-left px-4 py-2 text-sm border-b last:border-b-0 ${
+                          isDark 
+                            ? 'hover:bg-gray-700 text-gray-200 border-gray-600' 
+                            : 'hover:bg-gray-50 text-gray-700 border-gray-100'
+                        }`}
                       >
                         <div className="flex items-center space-x-2">
                           <Search className="w-4 h-4 text-gray-400" />
@@ -367,22 +400,36 @@ function SearchContent() {
             <div className="mb-6">
               <button
                 onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
+                className={`flex items-center space-x-2 transition-colors ${
+                  isDark 
+                    ? 'text-gray-300 hover:text-white' 
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
               >
                 <Filter className="h-4 w-4" />
                 <span>Advanced Filters</span>
               </button>
               
               {showAdvancedFilters && (
-                <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                <div className={`mt-4 p-4 rounded-lg ${
+                  isDark 
+                    ? 'bg-gray-800 border border-gray-600' 
+                    : 'bg-gray-50'
+                }`}>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {/* Type Filter */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                      <label className={`block text-sm font-medium mb-1 ${
+                        isDark ? 'text-gray-300' : 'text-gray-700'
+                      }`}>Type</label>
                       <select
                         value={selectedFilters.type}
                         onChange={(e) => handleFilterChange('type', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          isDark 
+                            ? 'bg-gray-700 border border-gray-600 text-white' 
+                            : 'bg-white border border-gray-300 text-gray-900'
+                        }`}
                       >
                         <option value="all">All Types</option>
                         <option value="income">Income</option>
@@ -392,11 +439,17 @@ function SearchContent() {
 
                     {/* Category Filter */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                      <label className={`block text-sm font-medium mb-1 ${
+                        isDark ? 'text-gray-300' : 'text-gray-700'
+                      }`}>Category</label>
                       <select
                         value={selectedFilters.category}
                         onChange={(e) => handleFilterChange('category', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          isDark 
+                            ? 'bg-gray-700 border border-gray-600 text-white' 
+                            : 'bg-white border border-gray-300 text-gray-900'
+                        }`}
                       >
                         <option value="">All Categories</option>
                         {categories.map(category => (
@@ -407,57 +460,87 @@ function SearchContent() {
 
                     {/* Date From */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">From Date</label>
+                      <label className={`block text-sm font-medium mb-1 ${
+                        isDark ? 'text-gray-300' : 'text-gray-700'
+                      }`}>From Date</label>
                       <input
                         type="date"
                         value={selectedFilters.dateFrom}
                         onChange={(e) => handleFilterChange('dateFrom', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          isDark 
+                            ? 'bg-gray-700 border border-gray-600 text-white' 
+                            : 'bg-white border border-gray-300 text-gray-900'
+                        }`}
                       />
                     </div>
 
                     {/* Date To */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">To Date</label>
+                      <label className={`block text-sm font-medium mb-1 ${
+                        isDark ? 'text-gray-300' : 'text-gray-700'
+                      }`}>To Date</label>
                       <input
                         type="date"
                         value={selectedFilters.dateTo}
                         onChange={(e) => handleFilterChange('dateTo', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          isDark 
+                            ? 'bg-gray-700 border border-gray-600 text-white' 
+                            : 'bg-white border border-gray-300 text-gray-900'
+                        }`}
                       />
                     </div>
 
                     {/* Amount Min */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Min Amount</label>
+                      <label className={`block text-sm font-medium mb-1 ${
+                        isDark ? 'text-gray-300' : 'text-gray-700'
+                      }`}>Min Amount</label>
                       <input
                         type="number"
                         placeholder="0"
                         value={selectedFilters.amountMin}
                         onChange={(e) => handleFilterChange('amountMin', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          isDark 
+                            ? 'bg-gray-700 border border-gray-600 text-white placeholder-gray-400' 
+                            : 'bg-white border border-gray-300 text-gray-900 placeholder-gray-500'
+                        }`}
                       />
                     </div>
 
                     {/* Amount Max */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Max Amount</label>
+                      <label className={`block text-sm font-medium mb-1 ${
+                        isDark ? 'text-gray-300' : 'text-gray-700'
+                      }`}>Max Amount</label>
                       <input
                         type="number"
                         placeholder="1000"
                         value={selectedFilters.amountMax}
                         onChange={(e) => handleFilterChange('amountMax', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          isDark 
+                            ? 'bg-gray-700 border border-gray-600 text-white placeholder-gray-400' 
+                            : 'bg-white border border-gray-300 text-gray-900 placeholder-gray-500'
+                        }`}
                       />
                     </div>
 
                     {/* Sort By */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
+                      <label className={`block text-sm font-medium mb-1 ${
+                        isDark ? 'text-gray-300' : 'text-gray-700'
+                      }`}>Sort By</label>
                       <select
                         value={selectedFilters.sortBy}
                         onChange={(e) => handleFilterChange('sortBy', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          isDark 
+                            ? 'bg-gray-700 border border-gray-600 text-white' 
+                            : 'bg-white border border-gray-300 text-gray-900'
+                        }`}
                       >
                         <option value="date">Date</option>
                         <option value="amount">Amount</option>
@@ -468,11 +551,17 @@ function SearchContent() {
 
                     {/* Sort Order */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Order</label>
+                      <label className={`block text-sm font-medium mb-1 ${
+                        isDark ? 'text-gray-300' : 'text-gray-700'
+                      }`}>Order</label>
                       <select
                         value={selectedFilters.sortOrder}
                         onChange={(e) => handleFilterChange('sortOrder', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                          isDark 
+                            ? 'bg-gray-700 border border-gray-600 text-white' 
+                            : 'bg-white border border-gray-300 text-gray-900'
+                        }`}
                       >
                         <option value="desc">Newest First</option>
                         <option value="asc">Oldest First</option>
