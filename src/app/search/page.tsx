@@ -34,23 +34,13 @@ function SearchContent() {
   useEffect(() => {
     setIsClient(true);
     
-    // Get search query from URL
-    const updateSearchFromURL = () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const query = urlParams.get('q');
-      if (query) {
-        setSearchTerm(query);
-      }
-    };
-    
-    updateSearchFromURL();
-    
-    // Listen for URL changes (back/forward navigation)
-    window.addEventListener('popstate', updateSearchFromURL);
-    
-    return () => {
-      window.removeEventListener('popstate', updateSearchFromURL);
-    };
+    // Get search query from localStorage
+    const query = localStorage.getItem('searchQuery');
+    if (query) {
+      setSearchTerm(query);
+      // Clear the stored query after reading it
+      localStorage.removeItem('searchQuery');
+    }
   }, []);
 
   // Update showSuggestions based on searchTerm - but only if user is actively typing
@@ -189,15 +179,6 @@ function SearchContent() {
     const value = e.target.value;
     setSearchTerm(value);
     setIsUserTyping(true);
-    
-    // Update URL without page reload
-    const url = new URL(window.location.href);
-    if (value.trim()) {
-      url.searchParams.set('q', value);
-    } else {
-      url.searchParams.delete('q');
-    }
-    window.history.replaceState({}, '', url.toString());
   };
 
   const handleInputBlur = () => {
@@ -209,11 +190,6 @@ function SearchContent() {
     setSearchTerm(suggestion);
     setIsUserTyping(false);
     setShowSuggestions(false);
-    
-    // Update URL
-    const url = new URL(window.location.href);
-    url.searchParams.set('q', suggestion);
-    window.history.replaceState({}, '', url.toString());
   };
 
   const handleFilterChange = (key: string, value: string) => {

@@ -96,8 +96,9 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
     e.preventDefault();
     if (searchTerm.trim()) {
       setShowSuggestions(false);
-      // Navigate to search page with query using Next.js router
-      router.push(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
+      // Store search term in localStorage and navigate to search page
+      localStorage.setItem('searchQuery', searchTerm.trim());
+      router.push('/search');
       setIsMobileSearchOpen(false);
     }
   };
@@ -541,8 +542,9 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
                     onClick={() => {
                       setSearchTerm(suggestion);
                       setShowSuggestions(false);
-                      // Navigate immediately using Next.js router
-                      router.push(`/search?q=${encodeURIComponent(suggestion.trim())}`);
+                      // Store search term and navigate to search page
+                      localStorage.setItem('searchQuery', suggestion.trim());
+                      router.push('/search');
                     }}
                     className="suggestion-item w-full text-left px-4 py-2 hover:bg-gray-50 text-sm text-gray-700 border-b border-gray-100 last:border-b-0"
                   >
@@ -713,8 +715,9 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
                           onClick={() => {
                             setSearchTerm(suggestion);
                             setShowSuggestions(false);
-                            // Navigate immediately using Next.js router
-                            router.push(`/search?q=${encodeURIComponent(suggestion.trim())}`);
+                            // Store search term and navigate to search page
+                            localStorage.setItem('searchQuery', suggestion.trim());
+                            router.push('/search');
                             setIsMobileSearchOpen(false);
                           }}
                           className="suggestion-item w-full text-left px-4 py-2 hover:bg-gray-50 text-sm text-gray-700 border-b border-gray-100 last:border-b-0"
@@ -775,8 +778,9 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
                         onClick={() => {
                           setSearchTerm(suggestion);
                           setShowSuggestions(false);
-                          // Navigate immediately using Next.js router
-                          router.push(`/search?q=${encodeURIComponent(suggestion.trim())}`);
+                          // Store search term and navigate to search page
+                          localStorage.setItem('searchQuery', suggestion.trim());
+                          router.push('/search');
                         }}
                       className="suggestion-item w-full text-left px-4 py-2 hover:bg-gray-50 text-sm text-gray-700 border-b border-gray-100 last:border-b-0"
                     >
