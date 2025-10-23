@@ -4,6 +4,7 @@ import { useState, useEffect, lazy, Suspense, useMemo, useCallback } from 'react
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
 import { TransactionProvider, useTransactions } from '@/contexts/TransactionContext';
+import React from 'react'; // Added for React.useTransition
 
 // Lazy load all heavy components for faster initial load
 const CreditCardWidget = lazy(() => import('@/components/CreditCardWidget'));
@@ -50,7 +51,6 @@ function DashboardContent() {
     }
     try {
       const stats = getSummaryStats();
-      // Ensure all values are numbers, not objects
       return {
         totalIncome: Number(stats?.totalIncome) || 0,
         totalExpenses: Number(stats?.totalExpenses) || 0,
@@ -58,7 +58,6 @@ function DashboardContent() {
         transactionCount: Number(stats?.transactionCount) || 0
       };
     } catch (error) {
-      console.error('Error getting summary stats:', error);
       return {
         totalIncome: 0,
         totalExpenses: 0,
@@ -78,18 +77,14 @@ function DashboardContent() {
   }, []);
 
   useEffect(() => {
-    // Set client immediately for faster rendering
     setIsClient(true);
     
-    // Preload critical components after initial render
     const preloadComponents = () => {
-      // Preload the most important widgets
       import('@/components/CreditCardWidget');
       import('@/components/WalletWidget');
       import('@/components/TransactionsWidget');
     };
     
-    // Use requestIdleCallback for preloading
     if (window.requestIdleCallback) {
       window.requestIdleCallback(preloadComponents);
     } else {

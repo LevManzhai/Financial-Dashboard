@@ -32,7 +32,7 @@ export default function SummaryStatsWidget({ stats, period = 'All Time' }: Summa
   };
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+    <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-semibold text-gray-900">Summary</h3>
         <span className="text-sm text-gray-500">{period}</span>
@@ -42,8 +42,8 @@ export default function SummaryStatsWidget({ stats, period = 'All Time' }: Summa
         {/* Total Income */}
         <div className="bg-green-50 rounded-lg p-4 border border-green-200">
           <div className="flex items-center justify-between mb-2">
-            <div className="p-2 bg-green-100 rounded-full">
-              <TrendingUp className="w-4 h-4 text-green-600" />
+            <div className="p-3 bg-green-100 rounded-full w-11 h-11 flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-green-600" />
             </div>
             <span className="text-xs text-green-600 font-medium">INCOME</span>
           </div>
@@ -55,8 +55,8 @@ export default function SummaryStatsWidget({ stats, period = 'All Time' }: Summa
         {/* Total Expenses */}
         <div className="bg-red-50 rounded-lg p-4 border border-red-200">
           <div className="flex items-center justify-between mb-2">
-            <div className="p-2 bg-red-100 rounded-full">
-              <TrendingDown className="w-4 h-4 text-red-600" />
+            <div className="p-3 bg-red-100 rounded-full w-11 h-11 flex items-center justify-center">
+              <TrendingDown className="w-5 h-5 text-red-600" />
             </div>
             <span className="text-xs text-red-600 font-medium">EXPENSES</span>
           </div>
@@ -70,10 +70,10 @@ export default function SummaryStatsWidget({ stats, period = 'All Time' }: Summa
       <div className={`rounded-lg p-4 border ${getBalanceBgColor(stats.balance)}`}>
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <div className={`p-2 rounded-full ${
+            <div className={`p-3 rounded-full w-11 h-11 flex items-center justify-center ${
               stats.balance > 0 ? 'bg-green-100' : stats.balance < 0 ? 'bg-red-100' : 'bg-gray-100'
             }`}>
-              <Wallet className={`w-4 h-4 ${
+              <Wallet className={`w-5 h-5 ${
                 stats.balance > 0 ? 'text-green-600' : stats.balance < 0 ? 'text-red-600' : 'text-gray-600'
               }`} />
             </div>

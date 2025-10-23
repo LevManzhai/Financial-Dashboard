@@ -11,7 +11,6 @@ import {
   Settings, 
   User
 } from 'lucide-react';
-import { useTransactions } from '@/contexts/TransactionContext';
 import { useTheme } from '@/contexts/ThemeContext';
 
 interface SidebarProps {
@@ -22,15 +21,29 @@ interface SidebarProps {
 export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }: SidebarProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const { themeSettings, isClient } = useTheme();
-  // Get current active item based on pathname
+  const { themeSettings } = useTheme();
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const checkDark = () => {
+      if (themeSettings.mode === 'dark') return true;
+      if (themeSettings.mode === 'light') return false;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    };
+    setIsDark(checkDark());
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = () => setIsDark(checkDark());
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, [themeSettings.mode]);
+
   const getCurrentPage = () => {
     if (pathname === '/') return 'Dashboard';
-    const pageName = pathname.slice(1).replace('/', ''); // Remove trailing slash
-    // Map path to menu item id
+    const pageName = pathname.slice(1).replace('/', '');
     const pathMap: { [key: string]: string } = {
       'wallet': 'Wallet',
-      'transactions': 'Transactions', 
+      'transactions': 'Transactions',
       'revenue': 'Revenue',
       'search': 'Search',
       'settings': 'Settings'
@@ -39,10 +52,6 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
   };
 
   const activeItem = getCurrentPage();
-  
-  // Debug logging
-  console.log('Current pathname:', pathname);
-  console.log('Active item:', activeItem);
 
   const menuItems = [
     { id: 'Dashboard', icon: LayoutDashboard, label: 'Dashboard', path: '/' },
@@ -60,7 +69,6 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
     if (item.path) {
       router.push(item.path);
     }
-    // Close mobile menu after navigation
     if (onCloseMobileMenu) {
       onCloseMobileMenu();
     }
@@ -72,14 +80,14 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
       ${isMobileMenuOpen ? 'fixed inset-y-0 left-0 z-50 lg:relative lg:z-auto' : 'hidden lg:flex'}
     `}>
       {/* User Profile */}
-      <div className="p-4 xs:p-6 border-b border-gray-200">
-        <div className="flex items-center space-x-3">
+      <div className="h-12 xs:h-14 sm:h-16 flex items-center px-4 xs:px-6 border-b border-gray-200">
+        <div className="flex items-center space-x-3 w-full">
           <div className="w-10 h-10 xs:w-12 xs:h-12 rounded-full flex items-center justify-center bg-primary">
             <User className="w-5 h-5 xs:w-6 xs:h-6 text-white" />
           </div>
           <div>
-            <h3 className="font-semibold text-gray-900 text-sm xs:text-base">Lev Manzhai</h3>
-            <p className="text-xs xs:text-sm text-gray-500">Web Developer</p>
+            <h3 className={`font-semibold text-sm xs:text-base ${isDark ? 'text-white' : 'text-gray-900'}`}>Lev Manzhai</h3>
+            <p className={`text-xs xs:text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>Web Developer</p>
           </div>
         </div>
       </div>
@@ -96,11 +104,11 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
                   className={`w-full flex items-center space-x-3 px-2 xs:px-3 py-2 rounded-lg transition-colors text-sm xs:text-base ${
                     activeItem === item.id
                       ? 'text-white bg-primary hover:bg-primary'
-                      : 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700'
+                      : isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-50'
                   }`}
                 >
                   <Icon className="w-4 h-4 xs:w-5 xs:h-5" />
-                  <span className="font-medium">{item.label}</span>
+                  <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{item.label}</span>
                 </button>
               </li>
             );
@@ -121,11 +129,11 @@ export default function Sidebar({ isMobileMenuOpen = false, onCloseMobileMenu }:
                   className={`w-full flex items-center space-x-3 px-2 xs:px-3 py-2 rounded-lg transition-colors text-sm xs:text-base ${
                     activeItem === item.id
                       ? 'text-white bg-primary hover:bg-primary'
-                      : 'text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700'
+                      : isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-50'
                   }`}
                 >
                   <Icon className="w-4 h-4 xs:w-5 xs:h-5" />
-                  <span className="font-medium">{item.label}</span>
+                  <span className={`font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{item.label}</span>
                 </button>
               </li>
             );

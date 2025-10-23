@@ -15,6 +15,21 @@ function SettingsContent() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [saved, setSaved] = useState(false);
   const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const checkDark = () => {
+      if (themeSettings.mode === 'dark') return true;
+      if (themeSettings.mode === 'light') return false;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    };
+    setIsDark(checkDark());
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = () => setIsDark(checkDark());
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, [themeSettings.mode]);
 
   const colorPresets = [
     {
@@ -158,7 +173,7 @@ function SettingsContent() {
         {/* Header */}
         <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
-          <div className="flex items-center justify-between h-12 xs:h-14 sm:h-16 min-w-0">
+          <div className="flex items-center justify-between h-[47px] xs:h-[55px] sm:h-[63px]">
             <div className="flex items-center space-x-1 xs:space-x-2 min-w-0 flex-1">
               {/* Mobile Menu Button */}
               <button
@@ -225,16 +240,14 @@ function SettingsContent() {
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
             <div className="flex items-center mb-6">
               <Palette className="w-5 h-5 text-gray-600" />
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <h3 className={`text-lg font-semibold ml-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                 Chart Colors
               </h3>
             </div>
 
             {/* Color Presets */}
             <div className="mb-6">
-              <h4 className="text-sm font-medium mb-3 text-gray-900 dark:text-white">
-                Color Presets
-              </h4>
+              <h4 className={`text-sm font-medium mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>Color Presets</h4>
               <div className="grid grid-cols-1 xs:grid-cols-2 gap-2 xs:gap-3">
                 {colorPresets.map((preset) => (
                   <button
@@ -256,7 +269,7 @@ function SettingsContent() {
                         <Check className="w-3 h-3 xs:w-4 xs:h-4 text-blue-600 dark:text-blue-400" />
                       )}
                     </div>
-                    <p className="text-xs xs:text-sm font-medium text-gray-900 dark:text-white">
+                    <p className={`text-xs xs:text-sm font-medium ${isClient ? (themeSettings.mode === 'dark' ? 'text-white' : 'text-gray-900') : 'text-gray-900'}`}>
                       {preset.name}
                     </p>
                   </button>
@@ -266,13 +279,11 @@ function SettingsContent() {
 
             {/* Custom Colors */}
             <div className="space-y-4">
-              <h4 className="text-sm font-medium text-gray-900 dark:text-white">
-                Custom Colors
-              </h4>
+              <h4 className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>Custom Colors</h4>
               
               <div className="grid grid-cols-1 xs:grid-cols-2 gap-3 xs:gap-4">
                 <div>
-                  <label className="block text-xs xs:text-sm font-medium text-gray-700 mb-2">Income Color</label>
+                  <label className={`block text-xs xs:text-sm font-medium ${isClient ? (themeSettings.mode === 'dark' ? 'text-gray-300' : 'text-gray-700') : 'text-gray-700'} mb-2`}>Income Color</label>
                   <div className="flex items-center space-x-2">
                     <input
                       type="color"
@@ -285,7 +296,7 @@ function SettingsContent() {
                 </div>
 
                 <div>
-                  <label className="block text-xs xs:text-sm font-medium text-gray-700 mb-2">Expenses Color</label>
+                  <label className={`block text-xs xs:text-sm font-medium ${isClient ? (themeSettings.mode === 'dark' ? 'text-gray-300' : 'text-gray-700') : 'text-gray-700'} mb-2`}>Expenses Color</label>
                   <div className="flex items-center space-x-2">
                     <input
                       type="color"
@@ -298,7 +309,7 @@ function SettingsContent() {
                 </div>
 
                 <div>
-                  <label className="block text-xs xs:text-sm font-medium text-gray-700 mb-2">Balance Color</label>
+                  <label className={`block text-xs xs:text-sm font-medium ${isClient ? (themeSettings.mode === 'dark' ? 'text-gray-300' : 'text-gray-700') : 'text-gray-700'} mb-2`}>Balance Color</label>
                   <div className="flex items-center space-x-2">
                     <input
                       type="color"
@@ -311,7 +322,7 @@ function SettingsContent() {
                 </div>
 
                 <div>
-                  <label className="block text-xs xs:text-sm font-medium text-gray-700 mb-2">Background Color</label>
+                  <label className={`block text-xs xs:text-sm font-medium ${isClient ? (themeSettings.mode === 'dark' ? 'text-gray-300' : 'text-gray-700') : 'text-gray-700'} mb-2`}>Background Color</label>
                   <div className="flex items-center space-x-2">
                     <input
                       type="color"
@@ -330,12 +341,12 @@ function SettingsContent() {
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
             <div className="flex items-center mb-6">
               <Eye className="w-5 h-5 text-gray-600" />
-              <h3 className="text-lg font-semibold text-gray-900">Theme Settings</h3>
+              <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Theme Settings</h3>
             </div>
 
             {/* Theme Mode */}
             <div className="mb-6">
-              <h4 className="text-sm font-medium text-gray-900 mb-3">Theme Mode</h4>
+              <h4 className={`text-sm font-medium mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>Theme Mode</h4>
               <div className="grid grid-cols-3 gap-3">
                 {themePresets.map((preset) => {
                   const Icon = preset.icon;
@@ -350,7 +361,7 @@ function SettingsContent() {
                       }`}
                     >
                       <Icon className="w-5 h-5 mx-auto mb-2" />
-                      <p className="text-sm font-medium">{preset.name}</p>
+                      <p className={`text-sm font-medium ${isClient ? (themeSettings.mode === 'dark' ? 'text-white' : 'text-gray-900') : 'text-gray-900'}`}>{preset.name}</p>
                     </button>
                   );
                 })}
@@ -359,7 +370,7 @@ function SettingsContent() {
 
             {/* Primary Color */}
             <div className="mb-6">
-              <h4 className="text-sm font-medium text-gray-900 mb-3">Primary Color</h4>
+              <h4 className={`text-sm font-medium mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>Primary Color</h4>
               <div className="flex flex-wrap gap-2">
                 {primaryColors.map((color) => (
                   <button
@@ -392,32 +403,32 @@ function SettingsContent() {
         <div className="mt-8 bg-white rounded-xl p-6 shadow-sm border border-gray-200">
           <div className="flex items-center mb-6">
             <BarChart3 className="w-5 h-5 text-gray-600" />
-            <h3 className="text-lg font-semibold text-gray-900">Preview</h3>
+            <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Preview</h3>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Sample Chart Colors */}
             <div className="space-y-4">
-              <h4 className="text-sm font-medium text-gray-900">Chart Colors Preview</h4>
+              <h4 className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>Chart Colors Preview</h4>
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 rounded-lg bg-white dark:bg-gray-800">
+                <div className="flex items-center justify-between p-3 rounded-lg bg-transparent border border-gray-200 dark:border-gray-600">
                   <div className="flex items-center space-x-2">
                     <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">Income</span>
+                    <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>Income</span>
                   </div>
                   <span className="text-sm font-semibold text-green-600">+$2,500</span>
                 </div>
-                <div className="flex items-center justify-between p-3 rounded-lg bg-white dark:bg-gray-800">
+                <div className="flex items-center justify-between p-3 rounded-lg bg-transparent border border-gray-200 dark:border-gray-600">
                   <div className="flex items-center space-x-2">
                     <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">Expenses</span>
+                    <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>Expenses</span>
                   </div>
                   <span className="text-sm font-semibold text-red-600">-$1,200</span>
                 </div>
-                <div className="flex items-center justify-between p-3 rounded-lg bg-white dark:bg-gray-800">
+                <div className="flex items-center justify-between p-3 rounded-lg bg-transparent border border-gray-200 dark:border-gray-600">
                   <div className="flex items-center space-x-2">
                     <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">Balance</span>
+                    <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>Balance</span>
                   </div>
                   <span className="text-sm font-semibold text-blue-600">+$1,300</span>
                 </div>
@@ -426,12 +437,12 @@ function SettingsContent() {
 
             {/* Sample Theme Colors */}
             <div className="space-y-4">
-              <h4 className="text-sm font-medium text-gray-900">Theme Colors Preview</h4>
+              <h4 className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>Theme Colors Preview</h4>
               <div className="space-y-3">
                 <div className="p-3 rounded-lg border border-blue-500">
                   <div className="flex items-center space-x-2 mb-2">
                     <div className="w-4 h-4 rounded bg-blue-500"></div>
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">Primary Button</span>
+                    <span className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>Primary Button</span>
                   </div>
                   <button className="px-4 py-2 rounded text-white text-sm font-medium bg-blue-500 hover:bg-blue-600">
                     Click Me
@@ -442,7 +453,7 @@ function SettingsContent() {
 
             {/* Theme Mode Preview */}
             <div className="space-y-4">
-              <h4 className="text-sm font-medium text-gray-900">Theme Mode Preview</h4>
+              <h4 className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>Theme Mode Preview</h4>
               <div className="p-4 rounded-lg border border-gray-200">
                 <div className="flex items-center space-x-2 mb-3">
                   {isClient && themeSettings.mode === 'light' && <Sun className="w-4 h-4 text-yellow-500" />}

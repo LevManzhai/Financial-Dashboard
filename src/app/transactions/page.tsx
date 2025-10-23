@@ -10,18 +10,23 @@ import { ArrowUpRight, ArrowDownLeft, Plus, Edit, Trash2, Search, Filter, Downlo
 import { Transaction, TransactionFormData } from '@/types/financial';
 import TransactionForm from '@/components/TransactionForm';
 import TransactionFilters from '@/components/TransactionFilters';
+import { Suspense } from 'react';
 
 function TransactionsContent() {
   const router = useRouter();
-  const { state, addTransaction, updateTransaction, deleteTransaction, setFilters, clearFilters, loadTransactions } = useTransactions();
+  const { state, addTransaction, updateTransaction, deleteTransaction, setFilters, clearFilters, loadTransactions, isLoading } = useTransactions();
   const { themeSettings } = useTheme();
   const [isClient, setIsClient] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
     setIsClient(true);
+  }, []);
+  useEffect(() => {
+    setIsMounted(true);
   }, []);
 
   // Force re-render when theme settings change
@@ -127,7 +132,7 @@ function TransactionsContent() {
         {/* Header */}
         <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
-          <div className="flex items-center justify-between h-12 xs:h-14 sm:h-16">
+          <div className="flex items-center justify-between h-[47px] xs:h-[55px] sm:h-[63px]">
             <div className="flex items-center space-x-2 xs:space-x-3 sm:space-x-4">
               {/* Mobile Menu Button */}
               <button
@@ -182,8 +187,16 @@ function TransactionsContent() {
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto overflow-x-hidden p-3 xs:p-4 sm:p-6 min-w-0">
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-3 xs:gap-4 sm:gap-6 xl:gap-8 mb-4 xs:mb-6 sm:mb-8 min-w-0">
-          <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200">
+        {isLoading ? (
+    <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-3 xs:gap-4 sm:gap-6 xl:gap-8 mb-4 xs:mb-6 sm:mb-8 min-w-0">
+      <SkeletonBox />
+      <SkeletonBox />
+      <SkeletonBox />
+      <SkeletonBox />
+    </div>
+  ) : (
+    <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-3 xs:gap-4 sm:gap-6 xl:gap-8 mb-4 xs:mb-6 sm:mb-8 min-w-0">
+      <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Total Income</p>
@@ -194,8 +207,8 @@ function TransactionsContent() {
                   All time
                 </p>
               </div>
-              <div className="p-2 bg-green-100 rounded-full w-10 h-10 flex items-center justify-center">
-                <TrendingUp className="w-4 h-4 text-green-600" />
+              <div className="p-3 bg-green-100 rounded-full w-11 h-11 flex items-center justify-center">
+                <TrendingUp className="w-5 h-5 text-green-600" />
               </div>
             </div>
           </div>
@@ -211,48 +224,51 @@ function TransactionsContent() {
                   All time
                 </p>
               </div>
-              <div className="p-2 bg-red-100 rounded-full w-10 h-10 flex items-center justify-center">
-                <TrendingDown className="w-4 h-4 text-red-600" />
+              <div className="p-3 bg-red-100 rounded-full w-11 h-11 flex items-center justify-center">
+                <TrendingDown className="w-5 h-5 text-red-600" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs xs:text-sm font-medium text-gray-600">Balance</p>
-                <p className={`text-lg xs:text-xl sm:text-2xl font-bold ${
-                  isClient && balance > 0 ? 'text-green-600' : isClient && balance < 0 ? 'text-red-600' : 'text-gray-900'
-                }`}>
-                  {isClient ? formatCurrency(balance) : '$0'}
-                </p>
-                <p className="text-xs text-gray-500 mt-1">
-                  {isClient && balance > 0 ? 'Positive' : isClient && balance < 0 ? 'Negative' : 'Neutral'}
-                </p>
-              </div>
-              <div className="p-2 rounded-full w-10 h-10 flex items-center justify-center bg-primary-light">
-                <DollarSign className="w-4 h-4 text-primary" />
+          <Suspense fallback={<SkeletonBox />}>
+            <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs xs:text-sm font-medium text-gray-600">Balance</p>
+                  <p className={`text-lg xs:text-xl sm:text-2xl font-bold ${
+                    isMounted && balance > 0 ? 'text-green-600' : isMounted && balance < 0 ? 'text-red-600' : 'text-gray-900'
+                  }`}>
+                    {isMounted ? formatCurrency(balance) : '$0'}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {isMounted && balance > 0 ? 'Positive' : isMounted && balance < 0 ? 'Negative' : 'Neutral'}
+                  </p>
+                </div>
+                <div className="p-3 rounded-full w-11 h-11 flex items-center justify-center bg-primary-light">
+                  <DollarSign className="w-5 h-5 text-primary" />
+                </div>
               </div>
             </div>
-          </div>
+          </Suspense>
 
           <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Transactions</p>
                 <p className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-900">
-                  {!isClient ? '0' : filteredBySearch.length}
+                  {isClient ? filteredBySearch.length : 0}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
                   All time
                 </p>
               </div>
-              <div className="p-2 rounded-full w-10 h-10 flex items-center justify-center bg-primary-light">
-                <BarChart3 className="w-4 h-4 text-primary" />
+              <div className="p-3 rounded-full w-11 h-11 flex items-center justify-center bg-primary-light">
+                <BarChart3 className="w-5 h-5 text-primary" />
               </div>
             </div>
           </div>
         </div>
+  )}
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Main Content */}
@@ -448,6 +464,20 @@ function TransactionsContent() {
         title={editingTransaction ? 'Edit Transaction' : 'Add Transaction'}
       />
         </main>
+      </div>
+    </div>
+  );
+}
+
+function SkeletonBox() {
+  return (
+    <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 animate-pulse">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="h-4 bg-gray-200 rounded w-24 mb-2"></div>
+          <div className="h-8 bg-gray-200 rounded w-32"></div>
+        </div>
+        <div className="p-3 bg-gray-200 rounded-full w-11 h-11"></div>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useReducer, ReactNode } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
 import { Transaction, TransactionFormData, FilterOptions, SummaryStats } from '@/types/financial';
 
 // Global notification function
@@ -15,6 +15,7 @@ interface TransactionState {
   filteredTransactions: Transaction[];
   filters: FilterOptions;
   summaryStats: SummaryStats;
+  isLoading: boolean;
 }
 
 type TransactionAction =
@@ -23,7 +24,8 @@ type TransactionAction =
   | { type: 'DELETE_TRANSACTION'; payload: string }
   | { type: 'SET_FILTERS'; payload: FilterOptions }
   | { type: 'CLEAR_FILTERS' }
-  | { type: 'LOAD_TRANSACTIONS'; payload: Transaction[] };
+  | { type: 'LOAD_TRANSACTIONS'; payload: Transaction[] }
+  | { type: 'SET_LOADING'; payload: boolean };
 
 // Apply filters to transactions
 function applyFilters(transactions: Transaction[], filters: FilterOptions): Transaction[] {
@@ -110,7 +112,8 @@ const loadStateFromStorage = (): TransactionState => {
         totalExpenses: 0,
         balance: 0,
         transactionCount: 0
-      }
+      },
+      isLoading: true
     };
   }
 
@@ -125,7 +128,8 @@ const loadStateFromStorage = (): TransactionState => {
       return {
         ...parsed,
         transactions: cleanedTransactions,
-        filteredTransactions
+        filteredTransactions,
+        isLoading: false
       };
     }
   } catch (error) {
@@ -148,11 +152,30 @@ const loadStateFromStorage = (): TransactionState => {
       totalExpenses: 0,
       balance: 0,
       transactionCount: 0
-    }
+    },
+    isLoading: true
   };
 };
 
-const initialState: TransactionState = loadStateFromStorage();
+const initialState: TransactionState = {
+  transactions: [],
+  filteredTransactions: [],
+  filters: {
+    category: '',
+    type: 'all',
+    dateFrom: '',
+    dateTo: '',
+    sortBy: 'date',
+    sortOrder: 'desc'
+  },
+  summaryStats: {
+    totalIncome: 0,
+    totalExpenses: 0,
+    balance: 0,
+    transactionCount: 0
+  },
+  isLoading: true
+};
 
 // Save state to localStorage
 const saveStateToStorage = (state: TransactionState) => {
@@ -239,13 +262,18 @@ function transactionReducer(state: TransactionState, action: TransactionAction):
       saveStateToStorage(newState);
       return newState;
     }
+    case 'SET_LOADING':
+      return {
+        ...state,
+        isLoading: action.payload
+      };
     default:
       return state;
   }
 }
 
 
-function calculateSummaryStats(transactions: Transaction[]): SummaryStats {
+export function calculateSummaryStats(transactions: Transaction[]): SummaryStats {
   const totalIncome = transactions
     .filter(t => t.type === 'income')
     .reduce((sum, t) => sum + t.amount, 0);
@@ -271,12 +299,40 @@ interface TransactionContextType {
   clearFilters: () => void;
   loadTransactions: (transactions: Transaction[]) => void;
   getSummaryStats: () => SummaryStats;
+  isLoading: boolean;
 }
 
 const TransactionContext = createContext<TransactionContextType | undefined>(undefined);
 
 export function TransactionProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(transactionReducer, initialState);
+  useEffect(() => {
+    try {
+      const savedState = localStorage.getItem('financial-dashboard-transactions');
+      if (savedState) {
+        const parsed = JSON.parse(savedState);
+        const cleanedTransactions = (parsed.transactions || []).map(cleanTransactionData);
+        dispatch({ type: 'LOAD_TRANSACTIONS', payload: cleanedTransactions });
+        dispatch({ type: 'SET_FILTERS', payload: parsed.filters || {} });
+      } else {
+        // Load mock data if no saved state
+        const mockTransactions = [
+          { id: 'mock1', category: 'Salary', description: 'Monthly salary', amount: 5000, date: '2023-10-01', type: 'income', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+          { id: 'mock2', category: 'Rent', description: 'Apartment rent', amount: 1500, date: '2023-10-02', type: 'expense', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+          { id: 'mock3', category: 'Food', description: 'Groceries', amount: 300, date: '2023-10-03', type: 'expense', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+          { id: 'mock4', category: 'Freelance', description: 'Project payment', amount: 2000, date: '2023-10-04', type: 'income', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+          { id: 'mock5', category: 'Utilities', description: 'Electricity bill', amount: 150, date: '2023-10-05', type: 'expense', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }
+        ];
+        dispatch({ type: 'LOAD_TRANSACTIONS', payload: mockTransactions });
+        // Save mock data to localStorage for future loads
+        saveStateToStorage({ ...initialState, transactions: mockTransactions });
+      }
+    } catch (error) {
+      console.error('Error loading state from localStorage:', error);
+    } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }
+  }, []);
 
   const addTransaction = (transactionData: TransactionFormData) => {
     // Clean and validate transaction data
@@ -399,7 +455,8 @@ export function TransactionProvider({ children }: { children: ReactNode }) {
         setFilters,
         clearFilters,
         loadTransactions,
-        getSummaryStats
+        getSummaryStats,
+        isLoading: state.isLoading
       }}
     >
       {children}

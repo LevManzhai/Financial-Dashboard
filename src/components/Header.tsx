@@ -36,7 +36,10 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
 
 
   useEffect(() => {
-    setGlobalNotificationFunction(addNotification);
+    setGlobalNotificationFunction((notif) => {
+      const type = notif.type as 'success' | 'info' | 'warning' | 'error';
+      addNotification({ ...notif, title: type.charAt(0).toUpperCase() + type.slice(1), type });
+    });
   }, [addNotification]);
 
   // Close notification dropdown when clicking outside
@@ -494,8 +497,8 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
   ];
 
   return (
-    <header className="bg-white border-b border-gray-200 px-2 xs:px-3 sm:px-4 lg:px-6 py-2 xs:py-3 sm:py-4">
-      <div className="flex items-center justify-between">
+    <header className="w-full h-[47px] xs:h-[55px] sm:h-[64px] bg-white shadow-sm border-b border-gray-200 px-2 xs:px-3 sm:px-4 lg:px-6 flex items-center justify-between">
+      <div className="flex items-center justify-between w-full">
         {/* Left - Dashboard Title and Mobile Menu */}
         <div className="flex items-center space-x-3">
           {/* Mobile Menu Button */}
@@ -510,7 +513,7 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
         </div>
 
         {/* Center - Search Bar (hidden on mobile) */}
-        <div className="hidden md:flex flex-1 max-w-md mx-8">
+        <div className="hidden md:flex flex-1 max-w-sm mx-8">
           <form onSubmit={handleSearch} className="relative w-full">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <input

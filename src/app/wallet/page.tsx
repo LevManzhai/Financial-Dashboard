@@ -14,12 +14,6 @@ function WalletContent() {
   const { isDark, themeSettings } = useTheme();
   
   // Debug logs to check data structure
-  console.log(
-    "Sample transaction:",
-    state?.transactions?.[0],
-    "Stats:",
-    getSummaryStats?.()
-  );
   const [activeTab, setActiveTab] = useState<'overview' | 'transactions' | 'analytics'>('overview');
   const [timeframe, setTimeframe] = useState<'day' | 'week' | 'month' | 'year' | 'all'>('month');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -220,7 +214,7 @@ function WalletContent() {
         {/* Header */}
         <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
-          <div className="flex items-center justify-between h-12 xs:h-14 sm:h-16">
+          <div className="flex items-center justify-between h-[47px] xs:h-[55px] sm:h-[63px]">
             <div className="flex items-center space-x-4">
               {/* Mobile Menu Button */}
               <button
@@ -354,7 +348,7 @@ function WalletContent() {
               <div className="text-right hidden xs:block">
                 <p className="text-xs xs:text-sm text-gray-500">Total Balance</p>
                 <p className={`text-lg xs:text-xl sm:text-2xl font-bold ${
-                  periodBalance > 0 ? 'text-green-600' : periodBalance < 0 ? 'text-red-600' : 'text-gray-900'
+                  isClient && periodBalance > 0 ? 'text-green-600' : isClient && periodBalance < 0 ? 'text-red-600' : 'text-gray-900'
                 }`}>
                   {isClient ? formatCurrency(periodBalance) : '$0'}
                 </p>
@@ -398,7 +392,7 @@ function WalletContent() {
           <div className="space-y-6">
             {/* Stats Cards */}
             <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-3 xs:gap-4 sm:gap-6">
-              <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200">
+              <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs xs:text-sm font-medium text-gray-600">
@@ -412,13 +406,13 @@ function WalletContent() {
                       {isClient ? formatCurrency(periodStats.totalIncome) : '$0'}
                     </p>
                   </div>
-                  <div className="p-2 xs:p-3 bg-green-100 rounded-full">
-                    <TrendingUp className="w-5 h-5 xs:w-5 xs:h-5 text-green-600" />
+                  <div className="p-3 bg-green-100 rounded-full w-11 h-11 flex items-center justify-center">
+                    <TrendingUp className="w-5 h-5 text-green-600" />
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200">
+              <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs xs:text-sm font-medium text-gray-600">
@@ -432,13 +426,13 @@ function WalletContent() {
                       {isClient ? formatCurrency(periodStats.totalExpenses) : '$0'}
                     </p>
                   </div>
-                  <div className="p-2 xs:p-3 bg-red-100 rounded-full">
-                    <TrendingDown className="w-5 h-5 xs:w-5 xs:h-5 text-red-600" />
+                  <div className="p-3 bg-red-100 rounded-full w-11 h-11 flex items-center justify-center">
+                    <TrendingDown className="w-5 h-5 text-red-600" />
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200">
+              <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs xs:text-sm font-medium text-gray-600">
@@ -449,11 +443,11 @@ function WalletContent() {
                        'All Time Transactions'}
                     </p>
                     <p className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-900">
-                      {periodStats.transactionCount}
+                      {isClient ? periodStats.transactionCount : 0}
                     </p>
                   </div>
-                  <div className="p-2 xs:p-3 rounded-full bg-primary-light">
-                    <DollarSign className="w-5 h-5 xs:w-6 xs:h-6 text-primary" />
+                  <div className="p-3 rounded-full w-11 h-11 flex items-center justify-center bg-primary-light">
+                    <DollarSign className="w-5 h-5 text-primary" />
                   </div>
                 </div>
               </div>
@@ -462,7 +456,7 @@ function WalletContent() {
             {/* Category Breakdown */}
             <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200">
               <h3 className="text-base xs:text-lg font-semibold text-gray-900 mb-3 xs:mb-4">Spending by Category</h3>
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {Object.entries(categoryStats)
                     .filter(([_, data]) => data.expenses > 0)
                     .sort(([_, a], [__, b]) => b.expenses - a.expenses)
@@ -473,7 +467,7 @@ function WalletContent() {
                           <span className="font-medium text-gray-900">{String(category)}</span>
                         </div>
                         <div className="text-right">
-                          <p className="font-semibold text-red-600">{isClient ? formatCurrency(data.expenses) : '$0'}</p>
+                          <p className="font-semibold text-red-600">{formatCurrency(data.expenses)}</p>
                           <p className="text-xs text-gray-500">{data.count} transactions</p>
                         </div>
                       </div>
@@ -552,7 +546,7 @@ function WalletContent() {
                       <p className={`font-semibold ${
                         transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
                       }`}>
-                        {transaction.type === 'income' ? '+' : '-'}{isClient ? formatCurrency(transaction.amount) : '$0'}
+                        {transaction.type === 'income' ? '+' : '-'}{formatCurrency(transaction.amount)}
                       </p>
                     </div>
                   </div>
@@ -635,7 +629,7 @@ function WalletContent() {
                             </div>
                             <span className="text-sm font-medium text-gray-900">{String(category)}</span>
                           </div>
-                          <span className="text-sm font-semibold text-gray-900">{isClient ? formatCurrency(data.expenses) : '$0'}</span>
+                          <span className="text-sm font-semibold text-gray-900">{formatCurrency(data.expenses)}</span>
                         </div>
                       ))
                   }

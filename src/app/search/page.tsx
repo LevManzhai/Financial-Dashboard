@@ -11,7 +11,7 @@ import { Transaction } from '@/types/financial';
 
 function SearchContent() {
   const router = useRouter();
-  const { state, deleteTransaction, updateTransaction } = useTransactions();
+  const { state, deleteTransaction, updateTransaction, isLoading } = useTransactions();
   const { themeSettings } = useTheme();
   const [isClient, setIsClient] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -285,7 +285,7 @@ function SearchContent() {
         {/* Header */}
         <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
-          <div className="flex items-center justify-between h-12 xs:h-14 sm:h-16 min-w-0">
+          <div className="flex items-center justify-between h-[47px] xs:h-[55px] sm:h-[63px]">
             <div className="flex items-center space-x-1 xs:space-x-2 min-w-0 flex-1">
               {/* Mobile Menu Button */}
               <button
@@ -342,65 +342,74 @@ function SearchContent() {
         <div className="flex-1 overflow-y-auto overflow-x-hidden">
           <div className="px-2 xs:px-3 sm:px-4 lg:px-6 py-4 xs:py-6 sm:py-8 min-w-0">
         {/* Search Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Found Transactions</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {searchStats.count}
-                </p>
-              </div>
-              <div className="p-3 rounded-full w-11 h-11 flex items-center justify-center bg-primary-light">
-                <Search className="w-5 h-5 text-primary" />
-              </div>
-            </div>
+        {isLoading ? (
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <SkeletonBox />
+      <SkeletonBox />
+      <SkeletonBox />
+      <SkeletonBox />
+    </div>
+  ) : (
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium text-gray-600">Found Transactions</p>
+            <p className="text-2xl font-bold text-gray-900">
+              {searchStats.count}
+            </p>
           </div>
-
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Total Income</p>
-                <p className="text-2xl font-bold text-green-600">
-                  {formatCurrency(searchStats.totalIncome)}
-                </p>
-              </div>
-              <div className="p-3 bg-green-100 rounded-full w-11 h-11 flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-green-600" />
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Total Expenses</p>
-                <p className="text-2xl font-bold text-red-600">
-                  {formatCurrency(searchStats.totalExpenses)}
-                </p>
-              </div>
-              <div className="p-3 bg-red-100 rounded-full w-11 h-11 flex items-center justify-center">
-                <TrendingDown className="w-5 h-5 text-red-600" />
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Net Balance</p>
-                <p className={`text-2xl font-bold ${
-                  searchStats.balance > 0 ? 'text-green-600' : searchStats.balance < 0 ? 'text-red-600' : 'text-gray-900'
-                }`}>
-                  {isClient ? formatCurrency(searchStats.balance) : '$0'}
-                </p>
-              </div>
-              <div className="p-3 rounded-full w-11 h-11 flex items-center justify-center bg-primary-light">
-                <BarChart3 className="w-5 h-5 text-primary" />
-              </div>
-            </div>
+          <div className="p-3 rounded-full w-11 h-11 flex items-center justify-center bg-primary-light">
+            <Search className="w-5 h-5 text-primary" />
           </div>
         </div>
+      </div>
+
+      <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium text-gray-600">Total Income</p>
+            <p className="text-2xl font-bold text-green-600">
+              {formatCurrency(searchStats.totalIncome)}
+            </p>
+          </div>
+          <div className="p-3 bg-green-100 rounded-full w-11 h-11 flex items-center justify-center">
+            <TrendingUp className="w-5 h-5 text-green-600" />
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium text-gray-600">Total Expenses</p>
+            <p className="text-2xl font-bold text-red-600">
+              {formatCurrency(searchStats.totalExpenses)}
+            </p>
+          </div>
+          <div className="p-3 bg-red-100 rounded-full w-11 h-11 flex items-center justify-center">
+            <TrendingDown className="w-5 h-5 text-red-600" />
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium text-gray-600">Net Balance</p>
+            <p className={`text-2xl font-bold ${
+              searchStats.balance > 0 ? 'text-green-600' : searchStats.balance < 0 ? 'text-red-600' : 'text-gray-900'
+            }`}>
+              {isClient ? formatCurrency(searchStats.balance) : '$0'}
+            </p>
+          </div>
+          <div className="p-3 rounded-full w-11 h-11 flex items-center justify-center bg-primary-light">
+            <BarChart3 className="w-5 h-5 text-primary" />
+          </div>
+        </div>
+      </div>
+    </div>
+  )}
 
         {/* Search and Filters */}
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 mb-6">
@@ -701,6 +710,20 @@ export default function SearchPage() {
     <TransactionProvider>
       <SearchContent />
     </TransactionProvider>
+  );
+}
+
+function SkeletonBox() {
+  return (
+    <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px] animate-pulse">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="h-4 bg-gray-200 rounded w-24 mb-2"></div>
+          <div className="h-8 bg-gray-200 rounded w-32"></div>
+        </div>
+        <div className="p-3 bg-gray-200 rounded-full w-11 h-11"></div>
+      </div>
+    </div>
   );
 }
 

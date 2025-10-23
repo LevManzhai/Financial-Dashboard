@@ -9,10 +9,11 @@ import Header from '@/components/Header';
 import { ArrowUpRight, ArrowDownLeft, TrendingUp, TrendingDown, DollarSign, Calendar, BarChart3, PieChart, LineChart, Activity, Target, Zap, ChevronDown, Briefcase, Heart, Utensils, Car, ShoppingBag, Gamepad2, Home, CreditCard, Wifi, Coffee, BookOpen, Music, Camera, Plane } from 'lucide-react';
 import { Transaction } from '@/types/financial';
 import { LineChart as RechartsLineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell, AreaChart, Area, CartesianGrid, Legend } from 'recharts';
+import { Suspense } from 'react';
 
 function RevenueContent() {
   const router = useRouter();
-  const { state } = useTransactions();
+  const { state, isLoading } = useTransactions();
   const { isDark, themeSettings } = useTheme();
   const { chartColors } = useTheme();
   const [isClient, setIsClient] = useState(false);
@@ -24,6 +25,7 @@ function RevenueContent() {
   const [isChartTypeDropdownOpen, setIsChartTypeDropdownOpen] = useState(false);
   const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false);
   const [iconBgColor, setIconBgColor] = useState('rgba(59, 130, 246, 0.1)');
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -38,6 +40,10 @@ function RevenueContent() {
       setIconBgColor(`rgba(${r}, ${g}, ${b}, 0.1)`);
     }
   }, [themeSettings.primaryColor, isClient]); 
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -194,9 +200,9 @@ function RevenueContent() {
   const chartData = getChartData();
   
   // Debug: log data
-  console.log('Revenue Analytics - filteredTransactions:', filteredTransactions.length);
-  console.log('Revenue Analytics - chartData:', chartData.length);
-  console.log('Revenue Analytics - isClient:', isClient);
+  // console.log('Revenue Analytics - filteredTransactions:', filteredTransactions.length);
+  // console.log('Revenue Analytics - chartData:', chartData.length);
+  // console.log('Revenue Analytics - isClient:', isClient);
 
   // Statistics by categories
   const categoryStats = filteredTransactions.reduce((acc, transaction) => {
@@ -303,7 +309,7 @@ function RevenueContent() {
         {/* Header */}
         <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
-          <div className="flex items-center justify-between h-12 xs:h-14 sm:h-16 min-w-0">
+          <div className="flex items-center justify-between h-[47px] xs:h-[55px] sm:h-[63px]">
             <div className="flex items-center space-x-1 xs:space-x-2 min-w-0 flex-1">
               {/* Mobile Menu Button */}
               <button
@@ -706,8 +712,17 @@ function RevenueContent() {
         <div className="flex-1 overflow-y-auto overflow-x-hidden">
           <div className="px-2 xs:px-3 sm:px-4 lg:px-6 xl:px-8 py-4 xs:py-6 sm:py-8 min-w-0">
         {/* Key Metrics */}
-        <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-3 xs:gap-4 sm:gap-6 xl:gap-8 mb-4 xs:mb-6 sm:mb-8 min-w-0">
-          <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200">
+        <>
+  {isLoading ? (
+    <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-3 xs:gap-4 sm:gap-6 xl:gap-8 mb-4 xs:mb-6 sm:mb-8 min-w-0">
+      <SkeletonBox />
+      <SkeletonBox />
+      <SkeletonBox />
+      <SkeletonBox />
+    </div>
+  ) : (
+    <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-3 xs:gap-4 sm:gap-6 xl:gap-8 mb-4 xs:mb-6 sm:mb-8 min-w-0">
+      <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Total Revenue</p>
@@ -727,7 +742,7 @@ function RevenueContent() {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200">
+          <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Total Expenses</p>
@@ -747,26 +762,28 @@ function RevenueContent() {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs xs:text-sm font-medium text-gray-600">Net Profit</p>
-                <p className={`text-lg xs:text-xl sm:text-2xl font-bold ${
-                  balance > 0 ? 'text-green-600' : balance < 0 ? 'text-red-600' : 'text-gray-900'
-                }`}>
-                  {isClient ? formatCurrency(balance) : '$0'}
-                </p>
-                <p className="text-xs text-gray-500 mt-1">
-                  {balance > 0 ? 'Positive' : balance < 0 ? 'Negative' : 'Neutral'}
-                </p>
-              </div>
-              <div className="p-3 bg-blue-100 rounded-full w-11 h-11 flex items-center justify-center">
-                <Target className="w-5 h-5 text-blue-600" />
+          <Suspense fallback={<SkeletonBox />}>
+            <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs xs:text-sm font-medium text-gray-600">Net Profit</p>
+                  <p className={`text-lg xs:text-xl sm:text-2xl font-bold ${
+                    isMounted && balance > 0 ? 'text-green-600' : isMounted && balance < 0 ? 'text-red-600' : 'text-gray-900'
+                  }`}>
+                    {isMounted ? formatCurrency(balance) : '$0'}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {isMounted && balance > 0 ? 'Positive' : isMounted && balance < 0 ? 'Negative' : 'Neutral'}
+                  </p>
+                </div>
+                <div className="p-3 rounded-full w-11 h-11 flex items-center justify-center bg-primary-light">
+                  <Target className="w-5 h-5 text-primary" />
+                </div>
               </div>
             </div>
-          </div>
+          </Suspense>
 
-          <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200">
+          <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Transactions</p>
@@ -780,12 +797,14 @@ function RevenueContent() {
                    timeframe === 'year' ? 'This year' : 'All time'}
                 </p>
               </div>
-              <div className="p-3 bg-purple-100 rounded-full w-11 h-11 flex items-center justify-center">
-                <Activity className="w-5 h-5 text-purple-600" />
+              <div className="p-3 rounded-full w-11 h-11 flex items-center justify-center bg-primary-light">
+                <Activity className="w-5 h-5 text-primary" />
               </div>
             </div>
           </div>
         </div>
+  )}
+</>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-6 lg:gap-8 xl:gap-12">
           {/* Main Chart */}
@@ -1089,5 +1108,19 @@ export default function RevenuePage() {
     <TransactionProvider>
       <RevenueContent />
     </TransactionProvider>
+  );
+}
+
+function SkeletonBox() {
+  return (
+    <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px] animate-pulse">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="h-4 bg-gray-200 rounded w-24 mb-2"></div>
+          <div className="h-8 bg-gray-200 rounded w-32"></div>
+        </div>
+        <div className="p-3 bg-gray-200 rounded-full w-11 h-11"></div>
+      </div>
+    </div>
   );
 }
