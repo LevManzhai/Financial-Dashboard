@@ -325,20 +325,7 @@ function SearchContent() {
             <div className="flex items-center space-x-1 xs:space-x-2 flex-shrink-0">
               <button
                 onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                className="flex items-center space-x-1 xs:space-x-2 px-2 xs:px-3 py-1.5 xs:py-2 rounded-lg transition-colors text-white text-xs xs:text-sm border-none"
-                onMouseEnter={(e) => {
-                  if (isClient && themeSettings.primaryColor) {
-                    const hex = themeSettings.primaryColor.replace('#', '');
-                    const r = parseInt(hex.substr(0, 2), 16);
-                    const g = parseInt(hex.substr(2, 2), 16);
-                    const b = parseInt(hex.substr(4, 2), 16);
-                    e.currentTarget.style.backgroundColor = `rgba(${r}, ${g}, ${b}, 0.8)`;
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (isClient && themeSettings.primaryColor) {
-                  }
-                }}
+                className="flex items-center space-x-1 xs:space-x-2 px-2 xs:px-3 py-1.5 xs:py-2 rounded-lg transition-colors text-white text-xs xs:text-sm border-none hover:bg-primary hover:opacity-80"
               >
                 <Filter className="w-3 h-3 xs:w-4 xs:h-4" />
                 <span className="hidden xs:inline">Advanced Filters</span>

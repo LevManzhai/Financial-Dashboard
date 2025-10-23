@@ -200,32 +200,14 @@ function SettingsContent() {
             <div className="flex items-center space-x-1 xs:space-x-2 flex-shrink-0">
               <button
                 onClick={handleResetSettings}
-                className="flex items-center px-2 xs:px-3 py-1.5 xs:py-2 lg:px-3 lg:py-2 text-white rounded-lg transition-colors text-xs xs:text-sm lg:text-sm"
-                style={{ 
-                  color: '#ffffff'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.opacity = '0.8';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.opacity = '1';
-                }}
+                className="flex items-center px-2 xs:px-3 py-1.5 xs:py-2 lg:px-3 lg:py-2 text-white rounded-lg transition-colors text-xs xs:text-sm lg:text-sm hover:opacity-80"
               >
                 <RotateCcw className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
                 <span className="hidden xs:inline">Reset</span>
               </button>
               <button
                 onClick={handleSaveSettings}
-                className="flex items-center px-2 xs:px-3 py-1.5 xs:py-2 lg:px-3 lg:py-2 text-white rounded-lg transition-colors text-xs xs:text-sm lg:text-sm"
-                style={{ 
-                  backgroundColor: 'var(--primary-color)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.opacity = '0.8';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.opacity = '1';
-                }}
+                className="flex items-center px-2 xs:px-3 py-1.5 xs:py-2 lg:px-3 lg:py-2 text-white rounded-lg transition-colors text-xs xs:text-sm lg:text-sm bg-primary hover:opacity-80"
               >
                 <Save className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
                 <span className="hidden xs:inline">{saved ? 'Saved!' : 'Save'}</span>
