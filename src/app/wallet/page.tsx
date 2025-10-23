@@ -58,6 +58,7 @@ function WalletContent() {
   }, [getSummaryStats, timeframe, state.transactions]);
 
   const formatCurrency = (amount: number) => {
+    if (isNaN(amount)) return '$0';
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -67,7 +68,9 @@ function WalletContent() {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return '';
+    return date.toLocaleDateString('en-US', {
       day: '2-digit',
       month: 'short',
       year: 'numeric'
@@ -426,7 +429,7 @@ function WalletContent() {
                       <div key={category} className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
                           <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                          <span className="font-medium text-gray-900">{category}</span>
+                          <span className="font-medium text-gray-900">{String(category)}</span>
                         </div>
                         <div className="text-right">
                           <p className="font-semibold text-red-600">{isClient ? formatCurrency(data.expenses) : '$0'}</p>
@@ -466,9 +469,9 @@ function WalletContent() {
                         )}
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900">{transaction.category}</p>
-                        <p className="text-sm text-gray-500">{transaction.description}</p>
-                        <p className="text-xs text-gray-400">{formatDate(transaction.date)}</p>
+                        <p className="font-medium text-gray-900">{String(transaction.category ?? '')}</p>
+                        <p className="text-sm text-gray-500">{String(transaction.description ?? '')}</p>
+                        <p className="text-xs text-gray-400">{String(formatDate(transaction.date))}</p>
                       </div>
                     </div>
                     <div className="text-right">
@@ -555,7 +558,7 @@ function WalletContent() {
                             <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-xs font-semibold text-gray-600">
                               {index + 1}
                             </div>
-                            <span className="text-sm font-medium text-gray-900">{category}</span>
+                            <span className="text-sm font-medium text-gray-900">{String(category)}</span>
                           </div>
                           <span className="text-sm font-semibold text-gray-900">{isClient ? formatCurrency(data.expenses) : '$0'}</span>
                         </div>
