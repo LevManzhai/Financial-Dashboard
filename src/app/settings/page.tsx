@@ -202,15 +202,12 @@ function SettingsContent() {
                 onClick={handleResetSettings}
                 className="flex items-center px-2 xs:px-3 py-1.5 xs:py-2 lg:px-3 lg:py-2 text-white rounded-lg transition-colors text-xs xs:text-sm lg:text-sm"
                 style={{ 
-                  backgroundColor: 'var(--primary-color)',
                   color: '#ffffff'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'var(--primary-color)';
                   e.currentTarget.style.opacity = '0.8';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'var(--primary-color)';
                   e.currentTarget.style.opacity = '1';
                 }}
               >
@@ -224,11 +221,9 @@ function SettingsContent() {
                   backgroundColor: 'var(--primary-color)'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'var(--primary-color)';
                   e.currentTarget.style.opacity = '0.8';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'var(--primary-color)';
                   e.currentTarget.style.opacity = '1';
                 }}
               >

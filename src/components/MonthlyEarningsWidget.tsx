@@ -350,12 +350,9 @@ export default function MonthlyEarningsWidget() {
                 onClick={() => handleTimeframeChange('day')}
                 className={`px-2 sm:px-3 py-1 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
                   timeframe === 'day'
-                    ? 'text-white shadow-sm'
+                    ? 'text-white bg-primary shadow-sm'
                     : 'text-gray-700 hover:text-gray-900'
                 }`}
-                style={timeframe === 'day' ? { 
-                  backgroundColor: 'var(--primary-color)'
-                } : {}}
               >
                 Days
               </button>
@@ -363,12 +360,9 @@ export default function MonthlyEarningsWidget() {
                 onClick={() => handleTimeframeChange('week')}
                 className={`px-2 sm:px-3 py-1 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
                   timeframe === 'week'
-                    ? 'text-white shadow-sm'
+                      ? 'text-white bg-primary shadow-sm'
                     : 'text-gray-700 hover:text-gray-900'
                 }`}
-                style={timeframe === 'week' ? { 
-                  backgroundColor: 'var(--primary-color)'
-                } : {}}
               >
                 Weeks
               </button>
@@ -376,12 +370,9 @@ export default function MonthlyEarningsWidget() {
                 onClick={() => handleTimeframeChange('month')}
                 className={`px-2 sm:px-3 py-1 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
                   timeframe === 'month'
-                    ? 'text-white shadow-sm'
+                      ? 'text-white bg-primary shadow-sm'
                     : 'text-gray-700 hover:text-gray-900'
                 }`}
-                style={timeframe === 'month' ? { 
-                  backgroundColor: 'var(--primary-color)'
-                } : {}}
               >
                 Months
               </button>
@@ -389,12 +380,9 @@ export default function MonthlyEarningsWidget() {
                 onClick={() => handleTimeframeChange('year')}
                 className={`px-2 sm:px-3 py-1 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
                   timeframe === 'year'
-                    ? 'text-white shadow-sm'
+                      ? 'text-white bg-primary shadow-sm'
                     : 'text-gray-700 hover:text-gray-900'
                 }`}
-                style={timeframe === 'year' ? { 
-                  backgroundColor: 'var(--primary-color)'
-                } : {}}
               >
                 Year
               </button>
@@ -402,12 +390,9 @@ export default function MonthlyEarningsWidget() {
                 onClick={() => handleTimeframeChange('all')}
                 className={`px-2 sm:px-3 py-1 text-xs font-medium rounded-md transition-colors whitespace-nowrap ${
                   timeframe === 'all'
-                    ? 'text-white shadow-sm'
+                      ? 'text-white bg-primary shadow-sm'
                     : 'text-gray-700 hover:text-gray-900'
                 }`}
-                style={timeframe === 'all' ? { 
-                  backgroundColor: 'var(--primary-color)'
-                } : {}}
               >
                 All Time
               </button>

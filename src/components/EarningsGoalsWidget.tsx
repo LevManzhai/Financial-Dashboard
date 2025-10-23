@@ -82,7 +82,7 @@ export default function EarningsGoalsWidget() {
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: isClient ? chartColors.balance : '#3B82F6' }}></div>
+            <div className="w-3 h-3 rounded-full bg-blue-500"></div>
             <span className="text-sm text-gray-600">Earnings</span>
           </div>
           {isClient && (
@@ -93,7 +93,7 @@ export default function EarningsGoalsWidget() {
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: isClient ? chartColors.grid : '#E5E7EB' }}></div>
+            <div className="w-3 h-3 rounded-full bg-gray-300"></div>
             <span className="text-sm text-gray-600">Goals</span>
           </div>
           {isClient && (

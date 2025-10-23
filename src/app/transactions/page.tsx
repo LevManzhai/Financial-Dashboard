@@ -169,18 +169,7 @@ function TransactionsContent() {
             <div className="flex items-center space-x-2 xs:space-x-4">
               <button
                 onClick={() => setIsFormOpen(true)}
-                className="flex items-center gap-1 xs:gap-2 px-2 xs:px-3 sm:px-4 py-1.5 xs:py-2 text-white rounded-lg transition-colors text-xs xs:text-sm font-medium"
-          style={{
-            backgroundColor: 'var(--primary-color)'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = 'var(--primary-color)';
-            e.currentTarget.style.opacity = '0.8';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'var(--primary-color)';
-            e.currentTarget.style.opacity = '1';
-          }}
+                className="flex items-center gap-1 xs:gap-2 px-2 xs:px-3 sm:px-4 py-1.5 xs:py-2 text-white rounded-lg transition-colors text-xs xs:text-sm font-medium bg-primary"
               >
                 <Plus className="w-3 h-3 xs:w-4 xs:h-4" />
                 <span>Add</span>
@@ -401,18 +390,7 @@ function TransactionsContent() {
               <div className="space-y-3">
                 <button
                   onClick={() => setIsFormOpen(true)}
-                  className="w-full flex items-center justify-center space-x-2 px-4 py-3 text-white rounded-lg transition-colors"
-          style={{
-            backgroundColor: 'var(--primary-color)'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = 'var(--primary-color)';
-            e.currentTarget.style.opacity = '0.8';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'var(--primary-color)';
-            e.currentTarget.style.opacity = '1';
-          }}
+                  className="w-full flex items-center justify-center space-x-2 px-4 py-3 text-white rounded-lg transition-colors bg-primary"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Add Transaction</span>

@@ -116,18 +116,7 @@ export default function TransactionsWidget() {
             )}
             <button
               onClick={() => setIsFormOpen(true)}
-              className="flex items-center gap-1 xs:gap-2 px-2 xs:px-3 py-1.5 xs:py-2 text-white rounded-lg transition-colors text-xs xs:text-sm font-medium"
-              style={{
-                backgroundColor: 'var(--primary-color)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--primary-color)';
-                e.currentTarget.style.opacity = '0.8';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--primary-color)';
-                e.currentTarget.style.opacity = '1';
-              }}
+              className="flex items-center gap-1 xs:gap-2 px-2 xs:px-3 py-1.5 xs:py-2 text-white rounded-lg transition-colors text-xs xs:text-sm font-medium bg-primary"
             >
               <Plus className="w-3 h-3 xs:w-4 xs:h-4" />
               <span className="hidden xs:inline">Add</span>

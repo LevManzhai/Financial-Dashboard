@@ -327,7 +327,6 @@ function SearchContent() {
                 onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
                 className="flex items-center space-x-1 xs:space-x-2 px-2 xs:px-3 py-1.5 xs:py-2 rounded-lg transition-colors text-white text-xs xs:text-sm"
                 style={{
-                  backgroundColor: 'var(--primary-color)',
                   border: 'none'
                 }}
                 onMouseEnter={(e) => {
@@ -341,7 +340,6 @@ function SearchContent() {
                 }}
                 onMouseLeave={(e) => {
                   if (isClient && themeSettings.primaryColor) {
-                    e.currentTarget.style.backgroundColor = 'var(--primary-color)';
                   }
                 }}
               >

@@ -489,7 +489,6 @@ function RevenueContent() {
                         : 'text-gray-700 hover:text-gray-900'
                   }`}
                   style={timeframe === 'day' ? { 
-                    backgroundColor: 'var(--primary-color)',
                     color: '#ffffff'
                   } : {}}
                 >
@@ -503,7 +502,6 @@ function RevenueContent() {
                         : 'text-gray-700 hover:text-gray-900'
                   }`}
                   style={timeframe === 'week' ? { 
-                    backgroundColor: 'var(--primary-color)',
                     color: '#ffffff'
                   } : {}}
                 >
@@ -517,7 +515,6 @@ function RevenueContent() {
                         : 'text-gray-700 hover:text-gray-900'
                   }`}
                   style={timeframe === 'month' ? { 
-                    backgroundColor: 'var(--primary-color)',
                     color: '#ffffff'
                   } : {}}
                 >
@@ -531,7 +528,6 @@ function RevenueContent() {
                         : 'text-gray-700 hover:text-gray-900'
                   }`}
                   style={timeframe === 'year' ? { 
-                    backgroundColor: 'var(--primary-color)',
                     color: '#ffffff'
                   } : {}}
                 >
@@ -545,7 +541,6 @@ function RevenueContent() {
                         : 'text-gray-700 hover:text-gray-900'
                   }`}
                   style={timeframe === 'all' ? { 
-                    backgroundColor: 'var(--primary-color)',
                     color: '#ffffff'
                   } : {}}
                   >
@@ -698,7 +693,6 @@ function RevenueContent() {
                         : 'text-gray-700 hover:text-gray-900'
                   }`}
                   style={chartType === 'bar' ? { 
-                    backgroundColor: 'var(--primary-color)',
                     color: '#ffffff'
                   } : {}}
                 >
@@ -712,7 +706,6 @@ function RevenueContent() {
                         : 'text-gray-700 hover:text-gray-900'
                   }`}
                   style={chartType === 'area' ? { 
-                    backgroundColor: 'var(--primary-color)',
                     color: '#ffffff'
                   } : {}}
                 >
