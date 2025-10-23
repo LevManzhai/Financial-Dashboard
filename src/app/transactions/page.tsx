@@ -33,7 +33,7 @@ function TransactionsContent() {
 
 
   // Search filtering - use state.filteredTransactions which already includes filters
-  const filteredBySearch = state.filteredTransactions.filter(transaction =>
+  const filteredBySearch = (state?.filteredTransactions || []).filter(transaction =>
     transaction.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
     transaction.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -283,7 +283,7 @@ function TransactionsContent() {
 
               {/* Filters */}
               <TransactionFilters
-                filters={state.filters}
+                filters={state?.filters || {}}
                 onFiltersChange={(filters) => setFilters(filters)}
                 onClearFilters={clearFilters}
               />

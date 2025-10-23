@@ -65,7 +65,7 @@ function SearchContent() {
 
   // Get search suggestions
   const getSuggestions = (query: string) => {
-    if (!query || query.length < 2) return [];
+    if (!query || query.length < 2 || !isClient || !state?.transactions) return [];
     
     const suggestions = new Set<string>();
     const lowerQuery = query.toLowerCase();
@@ -86,10 +86,11 @@ function SearchContent() {
 
   const suggestions = useMemo(() => {
     return getSuggestions(searchTerm);
-  }, [searchTerm, state.transactions]);
+  }, [searchTerm, state?.transactions, isClient]);
 
   // Advanced search with filtering
   const filteredTransactions = useMemo(() => {
+    if (!isClient || !state?.filteredTransactions) return [];
     let filtered = state.filteredTransactions;
 
     // Text search
@@ -152,7 +153,7 @@ function SearchContent() {
     });
 
     return filtered;
-  }, [state.filteredTransactions, searchTerm, selectedFilters]);
+  }, [state?.filteredTransactions, searchTerm, selectedFilters, isClient]);
 
   // Search statistics
   const searchStats = useMemo(() => {
@@ -179,8 +180,9 @@ function SearchContent() {
 
   // Unique categories for filter
   const categories = useMemo(() => {
+    if (!isClient || !state?.filteredTransactions) return [];
     return Array.from(new Set(state.filteredTransactions.map(t => t.category))).sort();
-  }, [state.filteredTransactions]);
+  }, [state?.filteredTransactions, isClient]);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {

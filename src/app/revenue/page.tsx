@@ -62,6 +62,10 @@ function RevenueContent() {
 
   // Filter transactions by selected period
   const getFilteredTransactions = () => {
+    // Safe access to state on server
+    if (!isClient || !state?.filteredTransactions) {
+      return [];
+    }
     
     const now = new Date();
     let startDate: Date;
@@ -95,7 +99,7 @@ function RevenueContent() {
     });
   };
 
-  const filteredTransactions = useMemo(() => getFilteredTransactions(), [isClient, timeframe, selectedDate, state.transactions]);
+  const filteredTransactions = useMemo(() => getFilteredTransactions(), [isClient, timeframe, selectedDate, state?.transactions]);
 
   // Group by periods for charts
   const getChartData = () => {
