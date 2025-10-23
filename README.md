@@ -6,7 +6,6 @@ A modern, responsive financial dashboard built with Next.js 14, featuring compre
 
 **👉 [View Live Demo](https://levmanzhai.github.io/Financial-Dashboard)**
 
-
 ## ✨ Features
 
 ### 📊 **Dashboard Overview**
