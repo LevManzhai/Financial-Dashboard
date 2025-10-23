@@ -4,30 +4,10 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Area, Area
 import { TrendingUp, TrendingDown, DollarSign, Calendar, BarChart3, ChevronDown } from 'lucide-react';
 import { useTransactions } from '@/contexts/TransactionContext';
 import { useTheme } from '@/contexts/ThemeContext';
-import { Transaction } from '@/types/financial';
+import { Transaction, YearlyData, DailyData, WeeklyData, MonthlyData } from '@/types/financial';
 import { useState, useEffect, useMemo, useCallback } from 'react';
 
-interface MonthlyData {
-  month: string;
-  income: number;
-  expenses: number;
-  balance: number;
-  week?: string;
-}
 
-interface WeeklyData {
-  week: string;
-  income: number;
-  expenses: number;
-  balance: number;
-}
-
-interface DailyData {
-  day: string;
-  income: number;
-  expenses: number;
-  balance: number;
-}
 
 export default function MonthlyEarningsWidget() {
   const { state } = useTransactions();
@@ -231,7 +211,7 @@ export default function MonthlyEarningsWidget() {
     });
   }, [state.filteredTransactions]);
 
-  const getYearlyData = useCallback((): MonthlyData[] => {
+  const getYearlyData = useCallback((): YearlyData[] => {
     const yearlyMap = new Map<string, { income: number; expenses: number }>();
     
     state.filteredTransactions.forEach((transaction: Transaction) => {
@@ -568,7 +548,11 @@ export default function MonthlyEarningsWidget() {
             </span>
           </div>
           <p className="text-sm text-gray-600 font-semibold">
-            {isClient && maxIncomePeriod ? (timeframe === 'day' ? maxIncomePeriod.day : timeframe === 'week' ? maxIncomePeriod.week : maxIncomePeriod.month) : 'N/A'}
+            {isClient && maxIncomePeriod ? (
+              timeframe === 'day' ? (maxIncomePeriod as DailyData).day : 
+              timeframe === 'week' ? (maxIncomePeriod as WeeklyData).week : 
+              (maxIncomePeriod as MonthlyData).month
+            ) : 'N/A'}
           </p>
           <p className="text-xs text-gray-500">
             {isClient && maxIncomePeriod ? formatCurrency(maxIncomePeriod.income) : ''}

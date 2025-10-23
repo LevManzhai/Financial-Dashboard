@@ -66,3 +66,32 @@ export interface Wallet {
   income: number;
   expenses: number;
 }
+
+export interface MonthlyData {
+  month: string;
+  monthKey: string;
+  income: number;
+  expenses: number;
+  balance: number;
+}
+
+export interface YearlyData {
+  year: string;
+  income: number;
+  expenses: number;
+  balance: number;
+}
+
+export interface DailyData {
+  day: string;
+  income: number;
+  expenses: number;
+  balance: number;
+}
+
+export interface WeeklyData {
+  week: string;
+  income: number;
+  expenses: number;
+  balance: number;
+}
