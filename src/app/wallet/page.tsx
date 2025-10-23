@@ -60,10 +60,7 @@ function WalletContent() {
     };
   }, [isTimeframeDropdownOpen]);
 
-  // Temporarily removed stats calculation to debug React error #418
-  // const stats = useMemo(() => {
-  //   return getSummaryStats();
-  // }, [getSummaryStats, timeframe, state.transactions]);
+  // Removed unused stats calculation that was causing React error #418
 
   const formatCurrency = (amount: number | string | null | undefined | Record<string, unknown>) => {
     // Handle object amounts (e.g., { value: 100 })

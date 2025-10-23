@@ -38,7 +38,7 @@ function DashboardContent() {
   const [isClient, setIsClient] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Memoize summary stats calculation
+  // Memoize summary stats calculation with protection
   const summaryStats = useMemo(() => {
     if (!isClient) {
       return {
@@ -48,7 +48,24 @@ function DashboardContent() {
         transactionCount: 0
       };
     }
-    return getSummaryStats();
+    try {
+      const stats = getSummaryStats();
+      // Ensure all values are numbers, not objects
+      return {
+        totalIncome: Number(stats?.totalIncome) || 0,
+        totalExpenses: Number(stats?.totalExpenses) || 0,
+        balance: Number(stats?.balance) || 0,
+        transactionCount: Number(stats?.transactionCount) || 0
+      };
+    } catch (error) {
+      console.error('Error getting summary stats:', error);
+      return {
+        totalIncome: 0,
+        totalExpenses: 0,
+        balance: 0,
+        transactionCount: 0
+      };
+    }
   }, [getSummaryStats, isClient]);
 
   // Memoize mobile menu handlers
