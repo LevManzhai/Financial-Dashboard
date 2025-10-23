@@ -77,150 +77,147 @@ function SearchContent() {
       }
       // Description suggestions
       if (transaction.description.toLowerCase().includes(lowerQuery)) {
-        suggestions.add(transaction.description);
+        const words = transaction.description.split(' ');
+        words.forEach(word => {
+          if (word.toLowerCase().includes(lowerQuery) && word.length > 2) {
+            suggestions.add(word);
+          }
+        });
       }
     });
     
     return Array.from(suggestions).slice(0, 5);
   };
 
-  const suggestions = useMemo(() => {
-    return getSuggestions(searchTerm);
-  }, [searchTerm, state?.transactions, isClient]);
+  const suggestions = useMemo(() => getSuggestions(searchTerm), [searchTerm, state?.transactions, isClient]);
 
-  // Advanced search with filtering
+  // Filter transactions based on search term and filters
   const filteredTransactions = useMemo(() => {
-    if (!isClient || !state?.filteredTransactions) return [];
-    let filtered = state.filteredTransactions;
-
+    if (!isClient || !state?.transactions) return [];
+    
+    let filtered = state.transactions;
+    
     // Text search
-    if (searchTerm) {
-      const term = searchTerm.toLowerCase();
-      filtered = filtered.filter(transaction =>
-        transaction.description.toLowerCase().includes(term) ||
-        transaction.category.toLowerCase().includes(term) ||
-        transaction.amount.toString().includes(term) ||
-        transaction.date.includes(term)
+    if (searchTerm.trim()) {
+      const searchLower = searchTerm.toLowerCase();
+      filtered = filtered.filter(transaction => 
+        transaction.description.toLowerCase().includes(searchLower) ||
+        transaction.category.toLowerCase().includes(searchLower) ||
+        transaction.amount.toString().includes(searchTerm)
       );
     }
-
+    
     // Type filter
     if (selectedFilters.type !== 'all') {
       filtered = filtered.filter(transaction => transaction.type === selectedFilters.type);
     }
-
+    
     // Category filter
     if (selectedFilters.category) {
       filtered = filtered.filter(transaction => transaction.category === selectedFilters.category);
     }
-
-    // Date filter
+    
+    // Date filters
     if (selectedFilters.dateFrom) {
-      filtered = filtered.filter(transaction => transaction.date >= selectedFilters.dateFrom);
+      filtered = filtered.filter(transaction => 
+        new Date(transaction.date) >= new Date(selectedFilters.dateFrom)
+      );
     }
+    
     if (selectedFilters.dateTo) {
-      filtered = filtered.filter(transaction => transaction.date <= selectedFilters.dateTo);
+      filtered = filtered.filter(transaction => 
+        new Date(transaction.date) <= new Date(selectedFilters.dateTo)
+      );
     }
-
-    // Amount filter
+    
+    // Amount filters
     if (selectedFilters.amountMin) {
-      filtered = filtered.filter(transaction => transaction.amount >= parseFloat(selectedFilters.amountMin));
+      filtered = filtered.filter(transaction => 
+        transaction.amount >= parseFloat(selectedFilters.amountMin)
+      );
     }
+    
     if (selectedFilters.amountMax) {
-      filtered = filtered.filter(transaction => transaction.amount <= parseFloat(selectedFilters.amountMax));
+      filtered = filtered.filter(transaction => 
+        transaction.amount <= parseFloat(selectedFilters.amountMax)
+      );
     }
-
-    // Sorting
+    
+    // Sort
     filtered.sort((a, b) => {
-      let comparison = 0;
+      let aValue, bValue;
       
       switch (selectedFilters.sortBy) {
         case 'date':
-          comparison = new Date(a.date).getTime() - new Date(b.date).getTime();
+          aValue = new Date(a.date).getTime();
+          bValue = new Date(b.date).getTime();
           break;
         case 'amount':
-          comparison = a.amount - b.amount;
-          break;
-        case 'category':
-          comparison = a.category.localeCompare(b.category);
+          aValue = a.amount;
+          bValue = b.amount;
           break;
         case 'description':
-          comparison = a.description.localeCompare(b.description);
+          aValue = a.description.toLowerCase();
+          bValue = b.description.toLowerCase();
           break;
+        case 'category':
+          aValue = a.category.toLowerCase();
+          bValue = b.category.toLowerCase();
+          break;
+        default:
+          aValue = new Date(a.date).getTime();
+          bValue = new Date(b.date).getTime();
       }
       
-      return selectedFilters.sortOrder === 'asc' ? comparison : -comparison;
+      if (selectedFilters.sortOrder === 'asc') {
+        return aValue > bValue ? 1 : -1;
+      } else {
+        return aValue < bValue ? 1 : -1;
+      }
     });
-
+    
     return filtered;
-  }, [state?.filteredTransactions, searchTerm, selectedFilters, isClient]);
+  }, [searchTerm, selectedFilters, state?.transactions, isClient]);
 
-  // Search statistics
-  const searchStats = useMemo(() => {
-    if (!isClient || !filteredTransactions) {
-      return {
-        totalIncome: 0,
-        totalExpenses: 0,
-        balance: 0,
-        count: 0
-      };
-    }
-    
-    const totalIncome = filteredTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
-    const totalExpenses = filteredTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
-    const balance = totalIncome - totalExpenses;
-    
-    return {
-      totalIncome,
-      totalExpenses,
-      balance,
-      count: filteredTransactions.length
-    };
-  }, [filteredTransactions, isClient]);
-
-  // Unique categories for filter
+  // Get unique categories for filter dropdown
   const categories = useMemo(() => {
-    if (!isClient || !state?.filteredTransactions) return [];
-    return Array.from(new Set(state.filteredTransactions.map(t => t.category))).sort();
-  }, [state?.filteredTransactions, isClient]);
+    if (!isClient || !state?.transactions) return [];
+    return Array.from(new Set(state.transactions.map(t => t.category))).sort();
+  }, [state?.transactions, isClient]);
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(amount);
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('ru-RU', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
-  };
-
-  const handleDelete = (id: string) => {
-    if (confirm('Are you sure you want to delete this transaction?')) {
-      deleteTransaction(id);
-      setSelectedTransactions(prev => prev.filter(t => t !== id));
-    }
-  };
-
-  const handleBulkDelete = () => {
-    if (confirm(`Are you sure you want to delete ${selectedTransactions.length} transactions?`)) {
-      selectedTransactions.forEach(id => deleteTransaction(id));
-      setSelectedTransactions([]);
-    }
-  };
-
-  const handleSelectAll = () => {
-    if (isClient && selectedTransactions.length === filteredTransactions.length) {
-      setSelectedTransactions([]);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    setIsUserTyping(true);
+    
+    // Update URL without page reload
+    const url = new URL(window.location.href);
+    if (value.trim()) {
+      url.searchParams.set('q', value);
     } else {
-      setSelectedTransactions(filteredTransactions.map(t => t.id));
+      url.searchParams.delete('q');
     }
+    window.history.replaceState({}, '', url.toString());
+  };
+
+  const handleInputBlur = () => {
+    setIsUserTyping(false);
+    setTimeout(() => setShowSuggestions(false), 200);
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setSearchTerm(suggestion);
+    setIsUserTyping(false);
+    setShowSuggestions(false);
+    
+    // Update URL
+    const url = new URL(window.location.href);
+    url.searchParams.set('q', suggestion);
+    window.history.replaceState({}, '', url.toString());
+  };
+
+  const handleFilterChange = (key: string, value: string) => {
+    setSelectedFilters(prev => ({ ...prev, [key]: value }));
   };
 
   const handleSelectTransaction = (id: string) => {
@@ -231,475 +228,400 @@ function SearchContent() {
     );
   };
 
-  const exportSelected = () => {
+  const handleSelectAll = () => {
+    if (selectedTransactions.length === filteredTransactions.length) {
+      setSelectedTransactions([]);
+    } else {
+      setSelectedTransactions(filteredTransactions.map(t => t.id));
+    }
+  };
+
+  const handleDeleteSelected = async () => {
+    if (selectedTransactions.length === 0) return;
+    
+    try {
+      for (const id of selectedTransactions) {
+        await deleteTransaction(id);
+      }
+      setSelectedTransactions([]);
+    } catch (error) {
+      console.error('Error deleting transactions:', error);
+    }
+  };
+
+  const handleExportSelected = () => {
+    if (selectedTransactions.length === 0) return;
+    
     const selectedData = filteredTransactions.filter(t => selectedTransactions.includes(t.id));
-    const csv = [
-      ['Date', 'Category', 'Description', 'Type', 'Amount'].join(','),
+    const csvContent = [
+      ['Date', 'Description', 'Category', 'Type', 'Amount'],
       ...selectedData.map(t => [
         t.date,
-        t.category,
         t.description,
+        t.category,
         t.type,
-        t.amount
-      ].join(','))
-    ].join('\n');
+        t.amount.toString()
+      ])
+    ].map(row => row.join(',')).join('\n');
     
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = `transactions-${new Date().toISOString().split('T')[0]}.csv`;
     a.click();
+    window.URL.revokeObjectURL(url);
   };
 
-  const clearFilters = () => {
-    setSearchTerm('');
-    setSelectedFilters({
-      type: 'all',
-      category: '',
-      dateFrom: '',
-      dateTo: '',
-      amountMin: '',
-      amountMax: '',
-      sortBy: 'date',
-      sortOrder: 'desc'
-    });
-    setSelectedTransactions([]);
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(amount);
   };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
+  const getTransactionIcon = (type: string) => {
+    return type === 'income' ? ArrowUpRight : ArrowDownLeft;
+  };
+
+  const getTransactionColor = (type: string) => {
+    return type === 'income' ? 'text-green-600' : 'text-red-600';
+  };
+
+  const handleCloseMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleToggleMobileMenu = () => {
+    setIsMobileMenuOpen(prev => !prev);
+  };
+
+  if (!isClient) {
+    return (
+      <div className="flex h-screen bg-gray-50">
+        <Sidebar isMobileMenuOpen={isMobileMenuOpen} onCloseMobileMenu={handleCloseMobileMenu} />
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <Header isMobileMenuOpen={isMobileMenuOpen} onToggleMobileMenu={handleToggleMobileMenu} />
+          <main className="flex-1 overflow-y-auto p-6">
+            <div className="animate-pulse">
+              <div className="h-8 bg-gray-200 rounded w-1/3 mb-6"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
+              <div className="space-y-4">
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className="h-16 bg-gray-200 rounded"></div>
+                ))}
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
-      <Sidebar isMobileMenuOpen={isMobileMenuOpen} onCloseMobileMenu={() => setIsMobileMenuOpen(false)} />
-      
+      <Sidebar isMobileMenuOpen={isMobileMenuOpen} onCloseMobileMenu={handleCloseMobileMenu} />
+
       {/* Mobile Overlay */}
       {isMobileMenuOpen && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-          onClick={() => setIsMobileMenuOpen(false)}
+          onClick={handleCloseMobileMenu}
         />
       )}
-      
+
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
-          <div className="flex items-center justify-between h-[47px] xs:h-[55px] sm:h-[63px]">
-            <div className="flex items-center space-x-1 xs:space-x-2 min-w-0 flex-1">
-              {/* Mobile Menu Button */}
-              <button
-                onClick={() => setIsMobileMenuOpen(true)}
-                className="lg:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </button>
-              
-              {/* Navigation Menu */}
-              <div className="flex items-center space-x-1 xs:space-x-2">
-                <button
-                  onClick={() => router.back()}
-                  className="flex items-center space-x-1 xs:space-x-2 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  <ArrowDownLeft className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
-                  <span className="hidden xs:inline">Back</span>
-                </button>
-                <div className="h-4 w-px bg-gray-300 hidden xs:block"></div>
-                <button
-                  onClick={() => router.push('/')}
-                  className="flex items-center space-x-1 xs:space-x-2 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  <DollarSign className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
-                  <span className="hidden xs:inline">Dashboard</span>
-                </button>
-              </div>
-              
-              <div className="flex items-center space-x-2 xs:space-x-3 min-w-0">
-                <div className="p-2 xs:p-3 rounded-lg flex-shrink-0 bg-primary-light">
-                  <Search className="w-5 h-5 xs:w-6 xs:h-6 text-primary" />
-                </div>
-                <h1 className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-900 truncate">Search & Filter</h1>
+        <Header isMobileMenuOpen={isMobileMenuOpen} onToggleMobileMenu={handleToggleMobileMenu} />
+
+        {/* Search Content */}
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6">
+          <div className="max-w-7xl mx-auto">
+            {/* Search Header */}
+            <div className="mb-6">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Search Transactions</h1>
+              <p className="text-gray-600">Find and filter your financial transactions</p>
+            </div>
+
+            {/* Search Bar */}
+            <div className="relative mb-6">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search transactions, categories, amounts..."
+                  value={searchTerm}
+                  onChange={handleInputChange}
+                  onFocus={() => setIsUserTyping(true)}
+                  onBlur={handleInputBlur}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+                />
+                
+                {/* Search Suggestions */}
+                {showSuggestions && suggestions.length > 0 && (
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+                    {suggestions.map((suggestion, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleSuggestionClick(suggestion)}
+                        className="w-full text-left px-4 py-2 hover:bg-gray-50 text-sm text-gray-700 border-b border-gray-100 last:border-b-0"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <Search className="w-4 h-4 text-gray-400" />
+                          <span>{suggestion}</span>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
-            
-            <div className="flex items-center space-x-1 xs:space-x-2 flex-shrink-0">
+
+            {/* Advanced Filters */}
+            <div className="mb-6">
               <button
                 onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                className="flex items-center space-x-1 xs:space-x-2 px-2 xs:px-3 py-1.5 xs:py-2 rounded-lg transition-colors text-white text-xs xs:text-sm border-none hover:bg-primary hover:opacity-80"
+                className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
               >
-                <Filter className="w-3 h-3 xs:w-4 xs:h-4" />
-                <span className="hidden xs:inline">Advanced Filters</span>
-                <span className="xs:hidden">Filters</span>
+                <Filter className="h-4 w-4" />
+                <span>Advanced Filters</span>
               </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-        {/* Main Content Area */}
-        <div className="flex-1 overflow-y-auto overflow-x-hidden">
-          <div className="px-2 xs:px-3 sm:px-4 lg:px-6 py-4 xs:py-6 sm:py-8 min-w-0">
-        {/* Search Stats */}
-        {isLoading ? (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-      <SkeletonBox />
-      <SkeletonBox />
-      <SkeletonBox />
-      <SkeletonBox />
-    </div>
-  ) : (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-      <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium text-gray-600">Found Transactions</p>
-            <p className="text-2xl font-bold text-gray-900">
-              {searchStats.count}
-            </p>
-          </div>
-          <div className="p-3 rounded-full w-11 h-11 flex items-center justify-center bg-primary-light">
-            <Search className="w-5 h-5 text-primary" />
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium text-gray-600">Total Income</p>
-            <p className="text-2xl font-bold text-green-600">
-              {formatCurrency(searchStats.totalIncome)}
-            </p>
-          </div>
-          <div className="p-3 bg-green-100 rounded-full w-11 h-11 flex items-center justify-center">
-            <TrendingUp className="w-5 h-5 text-green-600" />
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium text-gray-600">Total Expenses</p>
-            <p className="text-2xl font-bold text-red-600">
-              {formatCurrency(searchStats.totalExpenses)}
-            </p>
-          </div>
-          <div className="p-3 bg-red-100 rounded-full w-11 h-11 flex items-center justify-center">
-            <TrendingDown className="w-5 h-5 text-red-600" />
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium text-gray-600">Net Balance</p>
-            <p className={`text-2xl font-bold ${
-              searchStats.balance > 0 ? 'text-green-600' : searchStats.balance < 0 ? 'text-red-600' : 'text-gray-900'
-            }`}>
-              {isClient ? formatCurrency(searchStats.balance) : '$0'}
-            </p>
-          </div>
-          <div className="p-3 rounded-full w-11 h-11 flex items-center justify-center bg-primary-light">
-            <BarChart3 className="w-5 h-5 text-primary" />
-          </div>
-        </div>
-      </div>
-    </div>
-  )}
-
-        {/* Search and Filters */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 mb-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-gray-900">Search & Filter</h3>
-            <button
-              onClick={clearFilters}
-              className="flex items-center space-x-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
-            >
-              <X className="w-4 h-4" />
-              <span>Clear All</span>
-            </button>
-          </div>
-
-          {/* Main Search */}
-          <div className="mb-6">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search transactions by description, category, amount, or date..."
-                value={searchTerm}
-                onChange={(e) => {
-                  setSearchTerm(e.target.value);
-                  setIsUserTyping(true);
-                }}
-                onFocus={() => {
-                  if (searchTerm.length >= 2) {
-                    setIsUserTyping(true);
-                    setShowSuggestions(true);
-                  }
-                }}
-                onBlur={() => {
-                  setIsUserTyping(false);
-                  setShowSuggestions(false);
-                }}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-              />
               
-              {/* Search Suggestions */}
-              {showSuggestions && suggestions.length > 0 && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
-                  {suggestions.map((suggestion, index) => (
-                    <button
-                      key={index}
-                      onClick={() => {
-                        setSearchTerm(suggestion);
-                        setShowSuggestions(false);
-                      }}
-                      className="w-full text-left px-4 py-2 hover:bg-gray-50 text-sm text-gray-700 border-b border-gray-100 last:border-b-0"
-                    >
-                      <div className="flex items-center space-x-2">
-                        <Search className="w-4 h-4 text-gray-400" />
-                        <span>{suggestion}</span>
-                      </div>
-                    </button>
-                  ))}
+              {showAdvancedFilters && (
+                <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {/* Type Filter */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                      <select
+                        value={selectedFilters.type}
+                        onChange={(e) => handleFilterChange('type', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="all">All Types</option>
+                        <option value="income">Income</option>
+                        <option value="expense">Expense</option>
+                      </select>
+                    </div>
+
+                    {/* Category Filter */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                      <select
+                        value={selectedFilters.category}
+                        onChange={(e) => handleFilterChange('category', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="">All Categories</option>
+                        {categories.map(category => (
+                          <option key={category} value={category}>{category}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Date From */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">From Date</label>
+                      <input
+                        type="date"
+                        value={selectedFilters.dateFrom}
+                        onChange={(e) => handleFilterChange('dateFrom', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+
+                    {/* Date To */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">To Date</label>
+                      <input
+                        type="date"
+                        value={selectedFilters.dateTo}
+                        onChange={(e) => handleFilterChange('dateTo', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+
+                    {/* Amount Min */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Min Amount</label>
+                      <input
+                        type="number"
+                        placeholder="0"
+                        value={selectedFilters.amountMin}
+                        onChange={(e) => handleFilterChange('amountMin', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+
+                    {/* Amount Max */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Max Amount</label>
+                      <input
+                        type="number"
+                        placeholder="1000"
+                        value={selectedFilters.amountMax}
+                        onChange={(e) => handleFilterChange('amountMax', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+
+                    {/* Sort By */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
+                      <select
+                        value={selectedFilters.sortBy}
+                        onChange={(e) => handleFilterChange('sortBy', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="date">Date</option>
+                        <option value="amount">Amount</option>
+                        <option value="description">Description</option>
+                        <option value="category">Category</option>
+                      </select>
+                    </div>
+
+                    {/* Sort Order */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Order</label>
+                      <select
+                        value={selectedFilters.sortOrder}
+                        onChange={(e) => handleFilterChange('sortOrder', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="desc">Newest First</option>
+                        <option value="asc">Oldest First</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
-          </div>
 
-          {/* Advanced Filters */}
-          {showAdvancedFilters && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">Type</label>
-                <select
-                  value={selectedFilters.type}
-                  onChange={(e) => setSelectedFilters(prev => ({ ...prev, type: e.target.value }))}
-                  className="w-full p-1.5 xs:p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-sm min-w-0"
-                >
-                  <option value="all">All Types</option>
-                  <option value="income">Income</option>
-                  <option value="expense">Expense</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">Category</label>
-                <select
-                  value={selectedFilters.category}
-                  onChange={(e) => setSelectedFilters(prev => ({ ...prev, category: e.target.value }))}
-                  className="w-full p-1.5 xs:p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-sm min-w-0"
-                >
-                  <option value="">All Categories</option>
-                  {categories.map(category => (
-                    <option key={category} value={category}>{category}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">From Date</label>
-                <input
-                  type="date"
-                  value={selectedFilters.dateFrom}
-                  onChange={(e) => setSelectedFilters(prev => ({ ...prev, dateFrom: e.target.value }))}
-                  className="w-full p-1.5 xs:p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-sm min-w-0"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">To Date</label>
-                <input
-                  type="date"
-                  value={selectedFilters.dateTo}
-                  onChange={(e) => setSelectedFilters(prev => ({ ...prev, dateTo: e.target.value }))}
-                  className="w-full p-1.5 xs:p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-sm min-w-0"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">Min Amount</label>
-                <input
-                  type="number"
-                  placeholder="0"
-                  value={selectedFilters.amountMin}
-                  onChange={(e) => setSelectedFilters(prev => ({ ...prev, amountMin: e.target.value }))}
-                  className="w-full p-1.5 xs:p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-sm min-w-0"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">Max Amount</label>
-                <input
-                  type="number"
-                  placeholder="1000"
-                  value={selectedFilters.amountMax}
-                  onChange={(e) => setSelectedFilters(prev => ({ ...prev, amountMax: e.target.value }))}
-                  className="w-full p-1.5 xs:p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-sm min-w-0"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">Sort By</label>
-                <select
-                  value={selectedFilters.sortBy}
-                  onChange={(e) => setSelectedFilters(prev => ({ ...prev, sortBy: e.target.value }))}
-                  className="w-full p-1.5 xs:p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-sm min-w-0"
-                >
-                  <option value="date">Date</option>
-                  <option value="amount">Amount</option>
-                  <option value="category">Category</option>
-                  <option value="description">Description</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">Order</label>
-                <select
-                  value={selectedFilters.sortOrder}
-                  onChange={(e) => setSelectedFilters(prev => ({ ...prev, sortOrder: e.target.value }))}
-                  className="w-full p-1.5 xs:p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-sm min-w-0"
-                >
-                  <option value="desc">Desc</option>
-                  <option value="asc">Ascending</option>
-                </select>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Results */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-2">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Search Results ({isClient ? filteredTransactions.length : 0})
-              </h3>
-              <div className="flex flex-wrap items-center gap-2">
-                {isClient && selectedTransactions.length > 0 && (
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-xs xs:text-sm text-gray-600">
-                      {selectedTransactions.length} selected
-                    </span>
-                    <button
-                      onClick={handleBulkDelete}
-                      className="flex items-center gap-1 px-2 py-1 text-xs bg-red-50 text-red-700 border border-red-200 rounded-lg hover:bg-red-100 hover:border-red-300 transition-colors font-medium"
-                    >
-                      <Trash2 className="w-3 h-3" />
-                      <span>Delete</span>
-                    </button>
-                    <button
-                      onClick={exportSelected}
-                      className="flex items-center gap-1 px-2 py-1 text-xs bg-green-50 text-green-700 border border-green-200 rounded-lg hover:bg-green-100 hover:border-green-300 transition-colors font-medium"
-                    >
-                      <Download className="w-3 h-3" />
-                      <span>Export</span>
-                    </button>
-                  </div>
-                )}
-                {isClient && filteredTransactions.length > 0 && (
-                  <button
-                    onClick={handleSelectAll}
-                    className="flex items-center gap-1 px-2 py-1 text-xs bg-gray-50 text-gray-700 border border-gray-200 rounded-lg hover:bg-gray-100 hover:border-gray-300 transition-colors font-medium"
-                  >
-                    <Check className="w-3 h-3" />
-                    <span>
-                      {isClient && selectedTransactions.length === filteredTransactions.length ? 'Deselect All' : 'Select All'}
-                    </span>
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-
-          <div className="divide-y divide-gray-200">
-            {!isClient ? (
-              <div className="px-6 py-8 text-center text-gray-500">
-                <p>Loading...</p>
-              </div>
-            ) : isClient && filteredTransactions.length === 0 ? (
-              <div className="px-6 py-8 text-center text-gray-500">
-                <Search className="w-16 h-16 mx-auto mb-4 text-primary" />
-                <p className="text-lg font-medium text-gray-900 mb-2">No transactions found</p>
-                <p className="text-sm text-gray-500">Try adjusting your search terms or filters</p>
-              </div>
-            ) : (
-              filteredTransactions.map((transaction) => (
-                <div key={transaction.id} className="group pl-3 xs:pl-4 sm:pl-6 pr-3 xs:pr-4 sm:pr-6 py-3 xs:py-4 flex items-center justify-between hover:bg-gray-50 min-w-0">
-                  <div className="flex items-center space-x-2 xs:space-x-3 min-w-0 flex-1">
+            {/* Results Header */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center space-x-4">
+                <h2 className="text-lg font-semibold text-gray-900">
+                  {filteredTransactions.length} transaction{filteredTransactions.length !== 1 ? 's' : ''} found
+                </h2>
+                
+                {filteredTransactions.length > 0 && (
+                  <label className="flex items-center space-x-2 text-sm text-gray-600">
                     <input
                       type="checkbox"
-                      checked={selectedTransactions.includes(transaction.id)}
-                      onChange={() => handleSelectTransaction(transaction.id)}
-                      className={`w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 transition-opacity flex-shrink-0 ${
-                        selectedTransactions.includes(transaction.id) 
-                          ? 'opacity-100' 
-                          : 'opacity-0 group-hover:opacity-100'
-                      }`}
+                      checked={selectedTransactions.length === filteredTransactions.length}
+                      onChange={handleSelectAll}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
-                    <div className={`p-1.5 xs:p-2 rounded-full flex-shrink-0 ${
-                      transaction.type === 'income' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'
-                    }`}>
-                      {transaction.type === 'income' ? (
-                        <ArrowUpRight className="w-3 h-3 xs:w-4 xs:h-4" />
-                      ) : (
-                        <ArrowDownLeft className="w-3 h-3 xs:w-4 xs:h-4" />
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-1 xs:space-x-2">
-                        <p className="font-medium text-gray-900 text-sm xs:text-base truncate">{transaction.category}</p>
-                      </div>
-                      <p className="text-xs xs:text-sm text-gray-500 truncate">{transaction.description}</p>
-                      <div className="flex items-center space-x-2 xs:space-x-4 mt-1">
-                        <p className="text-xs text-gray-400 flex items-center">
-                          <Calendar className="w-3 h-3 mr-1" />
-                          {formatDate(transaction.date)}
-                        </p>
-                        <p className="text-xs text-gray-400 flex items-center">
-                          <Tag className="w-3 h-3 mr-1" />
-                          {transaction.category}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-1 xs:space-x-2 flex-shrink-0">
-                    <div className="text-right">
-                      <p className={`font-semibold text-sm xs:text-base ${
-                        transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
-                      }`}>
-                        {transaction.type === 'income' ? '+' : '-'}{formatCurrency(transaction.amount)}
-                      </p>
-                    </div>
-                    <div className="flex items-center space-x-0.5">
-                      <button
-                        onClick={() => {/* TODO: Add edit functionality */}}
-                        className="p-1 xs:p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                        title="Edit"
-                      >
-                        <Edit className="w-3 h-3 xs:w-4 xs:h-4" />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(transaction.id)}
-                        className="p-1 xs:p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                        title="Delete"
-                      >
-                        <Trash2 className="w-3 h-3 xs:w-4 xs:h-4" />
-                      </button>
-                    </div>
-                  </div>
+                    <span>Select All</span>
+                  </label>
+                )}
+              </div>
+
+              {selectedTransactions.length > 0 && (
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm text-gray-600">
+                    {selectedTransactions.length} selected
+                  </span>
+                  <button
+                    onClick={handleExportSelected}
+                    className="flex items-center space-x-1 px-3 py-1 text-sm bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                  >
+                    <Download className="h-4 w-4" />
+                    <span>Export</span>
+                  </button>
+                  <button
+                    onClick={handleDeleteSelected}
+                    className="flex items-center space-x-1 px-3 py-1 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    <span>Delete</span>
+                  </button>
                 </div>
-              ))
+              )}
+            </div>
+
+            {/* Results */}
+            {isLoading ? (
+              <div className="space-y-4">
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className="animate-pulse">
+                    <div className="h-16 bg-gray-200 rounded"></div>
+                  </div>
+                ))}
+              </div>
+            ) : filteredTransactions.length === 0 ? (
+              <div className="text-center py-12">
+                <Search className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No transactions found</h3>
+                <p className="text-gray-600">
+                  {searchTerm ? 'Try adjusting your search terms or filters' : 'Start by adding some transactions or adjusting your filters'}
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {filteredTransactions.map((transaction) => {
+                  const Icon = getTransactionIcon(transaction.type);
+                  const colorClass = getTransactionColor(transaction.type);
+                  
+                  return (
+                    <div
+                      key={transaction.id}
+                      className={`bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow ${
+                        selectedTransactions.includes(transaction.id) ? 'ring-2 ring-blue-500' : ''
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <input
+                            type="checkbox"
+                            checked={selectedTransactions.includes(transaction.id)}
+                            onChange={() => handleSelectTransaction(transaction.id)}
+                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                          />
+                          
+                          <div className={`p-2 rounded-full ${transaction.type === 'income' ? 'bg-green-100' : 'bg-red-100'}`}>
+                            <Icon className={`h-4 w-4 ${colorClass}`} />
+                          </div>
+                          
+                          <div>
+                            <h3 className="font-medium text-gray-900">{transaction.description}</h3>
+                            <div className="flex items-center space-x-2 text-sm text-gray-500">
+                              <span className="flex items-center space-x-1">
+                                <Tag className="h-3 w-3" />
+                                <span>{transaction.category}</span>
+                              </span>
+                              <span>•</span>
+                              <span className="flex items-center space-x-1">
+                                <Calendar className="h-3 w-3" />
+                                <span>{formatDate(transaction.date)}</span>
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <span className={`font-semibold ${colorClass}`}>
+                            {transaction.type === 'income' ? '+' : '-'}{formatCurrency(transaction.amount)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             )}
           </div>
-          </div>
-        </div>
-        </div>
+        </main>
       </div>
     </div>
   );
@@ -712,18 +634,3 @@ export default function SearchPage() {
     </TransactionProvider>
   );
 }
-
-function SkeletonBox() {
-  return (
-    <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px] animate-pulse">
-      <div className="flex items-center justify-between">
-        <div>
-          <div className="h-4 bg-gray-200 rounded w-24 mb-2"></div>
-          <div className="h-8 bg-gray-200 rounded w-32"></div>
-        </div>
-        <div className="p-3 bg-gray-200 rounded-full w-11 h-11"></div>
-      </div>
-    </div>
-  );
-}
-
