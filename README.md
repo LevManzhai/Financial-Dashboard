@@ -6,6 +6,16 @@ A modern, responsive financial dashboard built with Next.js 14, featuring compre
 
 **👉 [View Live Demo](https://levmanzhai.github.io/Financial-Dashboard)**
 
+## 🛠️ Technologies Used
+
+![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/React-18-blue?style=for-the-badge&logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3-blue?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-blue?style=for-the-badge&logo=css3&logoColor=white)
+![Responsive](https://img.shields.io/badge/Responsive-Yes-green?style=for-the-badge)
+![Context API](https://img.shields.io/badge/Context_API-React-blue?style=for-the-badge)
+
 ## ✨ Features
 
 ### 📊 **Dashboard Overview**

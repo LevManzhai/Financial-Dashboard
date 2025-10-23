@@ -565,22 +565,11 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
             <Search className="h-4 w-4" />
           </button>
 
-          {/* Mobile Load Mock Data Button */}
+          {/* Load Mock Data Button - Visible on all screens */}
           {isClient && (
             <button
               onClick={handleLoadMockData}
-              className="md:hidden p-1.5 text-gray-400 hover:text-gray-600 transition-colors"
-              title="Load Mock Data"
-            >
-              <Database className="h-4 w-4" />
-            </button>
-          )}
-
-          {/* Load Mock Data Button - Hidden on mobile */}
-          {isClient && (
-            <button
-              onClick={handleLoadMockData}
-              className="hidden sm:flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors text-xs font-medium text-primary border border-primary"
+              className="flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors text-xs font-medium text-primary border border-primary"
             >
               <Database className="h-3 w-3" />
               <span className="hidden lg:inline">Load Mock Data</span>
