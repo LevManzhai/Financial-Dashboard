@@ -4,9 +4,10 @@ import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { TransactionProvider, useTransactions } from '@/contexts/TransactionContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useNotifications } from '@/contexts/NotificationContext';
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
-import { ArrowUpRight, ArrowDownLeft, TrendingUp, TrendingDown, DollarSign, Calendar, BarChart3, PieChart, LineChart, Activity, Target, Zap, ChevronDown, Briefcase, Heart, Utensils, Car, ShoppingBag, Gamepad2, Home, CreditCard, Wifi, Coffee, BookOpen, Music, Camera, Plane } from 'lucide-react';
+import { ArrowUpRight, ArrowDownLeft, TrendingUp, TrendingDown, DollarSign, Calendar, BarChart3, PieChart, LineChart, Activity, Target, Zap, ChevronDown, Briefcase, Heart, Utensils, Car, ShoppingBag, Gamepad2, Home, CreditCard, Wifi, Coffee, BookOpen, Music, Camera, Plane, Bell, X, Check, Trash2, ArrowLeft, LayoutDashboard } from 'lucide-react';
 import { Transaction } from '@/types/financial';
 import { LineChart as RechartsLineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Pie, Cell, AreaChart, Area, CartesianGrid, Legend } from 'recharts';
 import { Suspense } from 'react';
@@ -16,6 +17,7 @@ function RevenueContent() {
   const { state, isLoading } = useTransactions();
   const { isDark, themeSettings } = useTheme();
   const { chartColors } = useTheme();
+  const { notifications, unreadCount, markAsRead, removeNotification, clearAllNotifications } = useNotifications();
   const [isClient, setIsClient] = useState(false);
   const [timeframe, setTimeframe] = useState<'day' | 'week' | 'month' | 'year' | 'all'>('month');
   const [chartType, setChartType] = useState<'line' | 'bar' | 'area'>('line');
@@ -26,6 +28,7 @@ function RevenueContent() {
   const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false);
   const [iconBgColor, setIconBgColor] = useState('rgba(59, 130, 246, 0.1)');
   const [isMounted, setIsMounted] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -44,6 +47,20 @@ function RevenueContent() {
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  // Close notification dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (isNotificationOpen && !target.closest('.notification-dropdown')) {
+        setIsNotificationOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isNotificationOpen]);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -175,7 +192,7 @@ function RevenueContent() {
 
         return {
           period: label,
-          date: date, // Сохраняем исходную дату для сортировки
+          date: date,
           income: data.income,
           expenses: data.expenses,
           balance: data.balance,
@@ -186,13 +203,12 @@ function RevenueContent() {
         return a.date.getTime() - b.date.getTime();
       });
 
-    // Добавляем кумулятивный баланс
     let cumulativeBalance = 0;
     return sortedData.map(item => {
       cumulativeBalance += item.net;
       return {
         ...item,
-        net: cumulativeBalance // Заменяем на кумулятивный баланс
+        net: cumulativeBalance
       };
     });
   };
@@ -327,15 +343,15 @@ function RevenueContent() {
                   onClick={() => router.back()}
                   className="flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
-                  <ArrowDownLeft className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
+                  <ArrowLeft className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
                   <span className="hidden xs:inline">Back</span>
                 </button>
-                <div className="h-4 w-px bg-gray-300 hidden xs:block"></div>
+                <div className="h-4 w-px bg-gray-300"></div>
                 <button
                   onClick={() => router.push('/')}
                   className="flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
-                  <DollarSign className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
+                  <LayoutDashboard className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
                   <span className="hidden xs:inline">Dashboard</span>
                 </button>
               </div>
@@ -578,7 +594,7 @@ function RevenueContent() {
                 </div>
               </div>
               
-              {/* Date Selector - показываем только для Day */}
+              {/* Date Selector - show only for Day */}
               {timeframe === 'day' && (
                 <>
                   {/* Large Screen Date - Show on lg screens */}
@@ -702,6 +718,138 @@ function RevenueContent() {
                 </button>
                 </div>
               </div>
+              
+              {/* Notifications - Hidden on mobile, shown on desktop */}
+              <div className="relative notification-dropdown flex items-center hidden lg:flex">
+                <button 
+                  onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                  className="p-1.5 text-gray-400 hover:text-gray-600 transition-colors relative"
+                >
+                  <Bell className="h-4 w-4" />
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                      {unreadCount > 9 ? '9+' : unreadCount}
+                    </span>
+                  )}
+                </button>
+                
+                {/* Notification Dropdown */}
+                {isNotificationOpen && (
+                  <div className={`absolute right-0 top-full mt-2 w-80 border rounded-lg shadow-lg z-50 ${
+                    isDark 
+                      ? 'bg-black border-gray-800' 
+                      : 'bg-white border-gray-200'
+                  }`}>
+                    <div className={`p-4 border-b ${
+                      isDark 
+                        ? 'bg-gray-800/90 border-gray-800' 
+                        : 'bg-gray-50/90 border-gray-200'
+                    }`}>
+                      <div className="flex items-center justify-between">
+                        <h3 className={`font-semibold ${
+                          isDark 
+                            ? 'text-white' 
+                            : 'text-gray-900'
+                        }`}>Notifications</h3>
+                        <div className="flex items-center space-x-2">
+                          {notifications.length > 0 && (
+                            <button
+                              onClick={clearAllNotifications}
+                              className={`text-xs flex items-center space-x-1 ${
+                                isDark 
+                                  ? 'text-gray-400 hover:text-gray-300' 
+                                  : 'text-gray-500 hover:text-gray-700'
+                              }`}
+                            >
+                              <Trash2 className="w-3 h-3" />
+                              <span>Clear All</span>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="max-h-96 overflow-y-auto">
+                      {notifications.length === 0 ? (
+                        <div className={`p-4 text-center text-sm ${
+                          isDark 
+                            ? 'bg-gray-900 text-gray-400' 
+                            : 'bg-white text-gray-500'
+                        }`}>
+                          No notifications
+                        </div>
+                      ) : (
+                        notifications.map((notification) => (
+                          <div
+                            key={notification.id}
+                            className={`p-4 border-b hover:transition-colors ${
+                              isDark 
+                                ? `border-gray-900 hover:bg-gray-700 ${!notification.read ? 'bg-blue-900/20' : 'bg-gray-700'}`
+                                : `border-gray-100 hover:bg-gray-100 ${!notification.read ? 'bg-blue-50' : 'bg-gray-100'}`
+                            }`}
+                          >
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <div className="flex items-center space-x-2">
+                                  <div className={`w-2 h-2 rounded-full ${
+                                    notification.type === 'success' ? 'bg-green-500' :
+                                    notification.type === 'error' ? 'bg-red-500' :
+                                    notification.type === 'warning' ? 'bg-yellow-500' :
+                                    'bg-blue-500'
+                                  }`}></div>
+                                  <h4 className={`font-medium text-sm ${
+                                    isDark 
+                                      ? 'text-gray-400' 
+                                      : 'text-gray-900'
+                                  }`}>{notification.title}</h4>
+                                </div>
+                                <p className={`text-sm mt-1 ${
+                                  isDark 
+                                    ? 'text-gray-500' 
+                                    : 'text-gray-600'
+                                }`}>{notification.message}</p>
+                                <p className={`text-xs mt-1 ${
+                                  isDark 
+                                    ? 'text-gray-600' 
+                                    : 'text-gray-400'
+                                }`}>
+                                  {notification.timestamp.toLocaleTimeString()}
+                                </p>
+                              </div>
+                              <div className="flex items-center space-x-1 ml-2">
+                                {!notification.read && (
+                                  <button
+                                    onClick={() => markAsRead(notification.id)}
+                                    className={`p-1 transition-colors ${
+                                      isDark 
+                                        ? 'text-gray-500 hover:text-blue-400' 
+                                        : 'text-gray-400 hover:text-blue-600'
+                                    }`}
+                                    title="Mark as read"
+                                  >
+                                    <Check className="w-3 h-3" />
+                                  </button>
+                                )}
+                                <button
+                                  onClick={() => removeNotification(notification.id)}
+                                  className={`p-1 transition-colors ${
+                                    isDark 
+                                      ? 'text-gray-500 hover:text-red-400' 
+                                      : 'text-gray-400 hover:text-red-600'
+                                  }`}
+                                  title="Remove"
+                                >
+                                  <X className="w-3 h-3" />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -819,8 +967,8 @@ function RevenueContent() {
               </div>
 
               <div className="h-80 flex justify-center">
-                <div className="h-80 w-full max-w-md">
-                  <ResponsiveContainer width="100%" height="100%">
+                <div className="h-80 w-full max-w-md min-h-0 min-w-0">
+                  <ResponsiveContainer width="100%" height="100%" aspect={1.5}>
                     {chartType === 'line' ? (
                       <RechartsLineChart data={chartData.length > 0 ? chartData : [{ period: 'No Data', income: 0, expenses: 0, balance: 0, net: 0 }]} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke={isClient ? chartColors.grid : '#f0f0f0'} />
@@ -1003,8 +1151,8 @@ function RevenueContent() {
             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 mb-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Category Breakdown</h3>
               <div className="h-64 flex justify-center">
-                <div className="h-64 w-56">
-                  <ResponsiveContainer width="100%" height="100%">
+                <div className="h-64 w-56 min-h-0 min-w-0">
+                  <ResponsiveContainer width="100%" height="100%" aspect={1.5}>
                     <RechartsPieChart>
                       <Pie
                         data={pieData.length > 0 ? pieData : [{ name: 'No Data', value: 0, color: '#E5E7EB' }]}

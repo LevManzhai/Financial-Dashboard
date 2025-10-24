@@ -6,7 +6,7 @@ import { TransactionProvider, useTransactions } from '@/contexts/TransactionCont
 import { useTheme } from '@/contexts/ThemeContext';
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
-import { Search, Filter, Calendar, DollarSign, Tag, ArrowUpRight, ArrowDownLeft, Edit, Trash2, Download, Upload, X, Check, Clock, TrendingUp, TrendingDown, BarChart3 } from 'lucide-react';
+import { Search, Filter, Calendar, DollarSign, Tag, ArrowUpRight, ArrowDownLeft, Edit, Trash2, Download, Upload, X, Check, Clock, TrendingUp, TrendingDown, BarChart3, ArrowLeft, LayoutDashboard } from 'lucide-react';
 import { Transaction } from '@/types/financial';
 
 function SearchContent() {
@@ -339,15 +339,20 @@ function SearchContent() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <Header isMobileMenuOpen={isMobileMenuOpen} onToggleMobileMenu={handleToggleMobileMenu} />
+        <Header isMobileMenuOpen={isMobileMenuOpen} onToggleMobileMenu={handleToggleMobileMenu} title="Search Transactions" />
 
         {/* Search Content */}
         <main className="flex-1 overflow-y-auto p-4 sm:p-6">
           <div className="max-w-7xl mx-auto">
             {/* Search Header */}
             <div className="mb-6">
-              <h1 className={`text-2xl sm:text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>Search Transactions</h1>
-              <p className={`${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Find and filter your financial transactions</p>
+              <div className="flex items-center space-x-2 xs:space-x-3">
+                <div className="p-2 xs:p-3 rounded-lg bg-primary-light">
+                  <Search className="w-5 h-5 xs:w-6 xs:h-6 text-primary" />
+                </div>
+                <h1 className={`text-2xl sm:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Search Transactions</h1>
+              </div>
+              <p className={`mt-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Find and filter your financial transactions</p>
             </div>
 
             {/* Search Bar */}
@@ -641,41 +646,38 @@ function SearchContent() {
                   return (
                     <div
                       key={transaction.id}
-                      className={`bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow ${
+                      className={`bg-white rounded-lg border border-gray-200 p-4 max-[320px]:p-2 hover:shadow-md transition-shadow ${
                         selectedTransactions.includes(transaction.id) ? 'ring-2 ring-blue-500' : ''
                       }`}
                     >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
+                      <div className="grid grid-cols-[auto,1fr,auto] items-center gap-3 max-[320px]:gap-1 min-[500px]:flex min-[500px]:justify-between min-[500px]:items-center">
+                        <div className="flex items-center space-x-3 max-[320px]:space-x-1 min-[500px]:space-x-4">
                           <input
                             type="checkbox"
                             checked={selectedTransactions.includes(transaction.id)}
                             onChange={() => handleSelectTransaction(transaction.id)}
-                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 max-[320px]:scale-75"
                           />
-                          
-                          <div className={`p-2 rounded-full ${transaction.type === 'income' ? 'bg-green-100' : 'bg-red-100'}`}>
-                            <Icon className={`h-4 w-4 ${colorClass}`} />
+                          <div className={`p-2 max-[320px]:p-1 rounded-full ${transaction.type === 'income' ? 'bg-green-100' : 'bg-red-100'}`}>
+                            <Icon className={`h-4 w-4 max-[320px]:h-3 max-[320px]:w-3 ${colorClass}`} />
                           </div>
-                          
-                          <div>
-                            <h3 className="font-medium text-gray-900">{transaction.description}</h3>
-                            <div className="flex items-center space-x-2 text-sm text-gray-500">
-                              <span className="flex items-center space-x-1">
-                                <Tag className="h-3 w-3" />
+                          <div className="min-w-0">
+                            <h3 className="font-medium text-gray-900 truncate max-[320px]:text-sm">{transaction.description}</h3>
+                            <div className="flex items-center space-x-2 max-[320px]:space-x-1 text-sm max-[320px]:text-xs text-gray-500">
+                              <span className="flex items-center space-x-1 max-[320px]:space-x-0.5 truncate">
+                                <Tag className="h-3 w-3 max-[320px]:h-2.5 max-[320px]:w-2.5" />
                                 <span>{transaction.category}</span>
                               </span>
                               <span>•</span>
-                              <span className="flex items-center space-x-1">
-                                <Calendar className="h-3 w-3" />
+                              <span className="flex items-center space-x-1 max-[320px]:space-x-0.5 whitespace-nowrap">
+                                <Calendar className="h-3 w-3 max-[320px]:h-2.5 max-[320px]:w-2.5" />
                                 <span>{formatDate(transaction.date)}</span>
                               </span>
                             </div>
                           </div>
                         </div>
-                        
-                        <div className="flex items-center space-x-3">
-                          <span className={`font-semibold ${colorClass}`}>
+                        <div className="text-right">
+                          <span className={`font-semibold ${colorClass} whitespace-nowrap max-[320px]:text-sm`}>
                             {transaction.type === 'income' ? '+' : '-'}{formatCurrency(transaction.amount)}
                           </span>
                         </div>

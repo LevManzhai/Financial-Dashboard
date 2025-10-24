@@ -4,9 +4,10 @@ import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { TransactionProvider, useTransactions } from '@/contexts/TransactionContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useNotifications } from '@/contexts/NotificationContext';
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
-import { ArrowUpRight, ArrowDownLeft, Plus, Edit, Trash2, Search, Filter, Download, Upload, Calendar, TrendingUp, TrendingDown, DollarSign, PieChart, BarChart3 } from 'lucide-react';
+import { ArrowUpRight, ArrowDownLeft, Plus, Edit, Trash2, Search, Filter, Download, Upload, Calendar, TrendingUp, TrendingDown, DollarSign, PieChart, BarChart3, Bell, X, Check, ArrowLeft, LayoutDashboard } from 'lucide-react';
 import { Transaction, TransactionFormData } from '@/types/financial';
 import TransactionForm from '@/components/TransactionForm';
 import TransactionFilters from '@/components/TransactionFilters';
@@ -16,18 +17,58 @@ function TransactionsContent() {
   const router = useRouter();
   const { state, addTransaction, updateTransaction, deleteTransaction, setFilters, clearFilters, loadTransactions, isLoading } = useTransactions();
   const { themeSettings } = useTheme();
+  const { notifications, unreadCount, markAsRead, removeNotification, clearAllNotifications } = useNotifications();
+  
+  // Debug theme
+  useEffect(() => {
+    console.log('Current theme:', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    console.log('themeSettings:', themeSettings);
+    console.log('isDark:', themeSettings?.mode === 'dark');
+  }, [themeSettings]);
   const [isClient, setIsClient] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [isMounted, setIsMounted] = useState(false);
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   useEffect(() => {
     setIsClient(true);
   }, []);
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  // Check dark theme
+  useEffect(() => {
+    const checkTheme = () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      setIsDarkTheme(isDark);
+    };
+    
+    checkTheme();
+    
+    // Watch for theme changes
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    
+    return () => observer.disconnect();
+  }, []);
+
+  // Close notification dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (isNotificationOpen && !target.closest('.notification-dropdown')) {
+        setIsNotificationOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isNotificationOpen]);
 
   // Force re-render when theme settings change
   useEffect(() => {
@@ -150,7 +191,7 @@ function TransactionsContent() {
                   onClick={() => router.back()}
                   className="flex items-center space-x-1 xs:space-x-2 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs xs:text-sm lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
-                  <ArrowDownLeft className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
+                  <ArrowLeft className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
                   <span className="hidden xs:inline">Back</span>
                 </button>
                 <div className="h-4 xs:h-6 w-px bg-gray-300"></div>
@@ -158,7 +199,7 @@ function TransactionsContent() {
                   onClick={() => router.push('/')}
                   className="flex items-center space-x-1 xs:space-x-2 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs xs:text-sm lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
-                  <DollarSign className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
+                  <LayoutDashboard className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
                   <span className="hidden xs:inline">Dashboard</span>
                 </button>
               </div>
@@ -179,6 +220,138 @@ function TransactionsContent() {
                 <Plus className="w-3 h-3 xs:w-4 xs:h-4" />
                 <span>Add</span>
               </button>
+              
+      {/* Notifications - Hidden on mobile, shown on desktop */}
+      <div className="relative notification-dropdown hidden lg:flex">
+                <button 
+                  onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                  className="p-1.5 text-gray-400 hover:text-gray-600 transition-colors relative"
+                >
+                  <Bell className="h-4 w-4" />
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                      {unreadCount > 9 ? '9+' : unreadCount}
+                    </span>
+                  )}
+                </button>
+                
+                {/* Notification Dropdown */}
+                {isNotificationOpen && (
+                  <div className={`absolute right-0 top-full mt-2 w-80 border rounded-lg shadow-lg z-50 ${
+                    isDarkTheme 
+                      ? 'bg-black border-gray-800' 
+                      : 'bg-white border-gray-200'
+                  }`}>
+                    <div className={`p-4 border-b ${
+                      isDarkTheme 
+                        ? 'bg-gray-800/90 border-gray-800' 
+                        : 'bg-gray-50/90 border-gray-200'
+                    }`}>
+                      <div className="flex items-center justify-between">
+                        <h3 className={`font-semibold ${
+                          isDarkTheme 
+                            ? 'text-white' 
+                            : 'text-gray-900'
+                        }`}>Notifications</h3>
+                        <div className="flex items-center space-x-2">
+                          {notifications.length > 0 && (
+                            <button
+                              onClick={clearAllNotifications}
+                              className={`text-xs flex items-center space-x-1 ${
+                                isDarkTheme 
+                                  ? 'text-gray-400 hover:text-gray-300' 
+                                  : 'text-gray-500 hover:text-gray-700'
+                              }`}
+                            >
+                              <Trash2 className="w-3 h-3" />
+                              <span>Clear All</span>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="max-h-96 overflow-y-auto">
+                      {notifications.length === 0 ? (
+                        <div className={`p-4 text-center text-sm ${
+                          isDarkTheme 
+                            ? 'bg-gray-900 text-gray-400' 
+                            : 'bg-white text-gray-500'
+                        }`}>
+                          No notifications
+                        </div>
+                      ) : (
+                        notifications.map((notification) => (
+                          <div
+                            key={notification.id}
+                            className={`p-4 border-b hover:transition-colors ${
+                              isDarkTheme 
+                                ? `border-gray-900 hover:bg-gray-700 ${!notification.read ? 'bg-blue-900/20' : 'bg-gray-700'}`
+                                : `border-gray-100 hover:bg-gray-100 ${!notification.read ? 'bg-blue-50' : 'bg-gray-100'}`
+                            }`}
+                          >
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <div className="flex items-center space-x-2">
+                                  <div className={`w-2 h-2 rounded-full ${
+                                    notification.type === 'success' ? 'bg-green-500' :
+                                    notification.type === 'error' ? 'bg-red-500' :
+                                    notification.type === 'warning' ? 'bg-yellow-500' :
+                                    'bg-blue-500'
+                                  }`}></div>
+                                  <h4 className={`font-medium text-sm ${
+                                    isDarkTheme 
+                                      ? 'text-gray-400' 
+                                      : 'text-gray-900'
+                                  }`}>{notification.title}</h4>
+                                </div>
+                                <p className={`text-sm mt-1 ${
+                                  isDarkTheme 
+                                    ? 'text-gray-500' 
+                                    : 'text-gray-600'
+                                }`}>{notification.message}</p>
+                                <p className={`text-xs mt-1 ${
+                                  isDarkTheme 
+                                    ? 'text-gray-600' 
+                                    : 'text-gray-400'
+                                }`}>
+                                  {notification.timestamp.toLocaleTimeString()}
+                                </p>
+                              </div>
+                              <div className="flex items-center space-x-1 ml-2">
+                                {!notification.read && (
+                                  <button
+                                    onClick={() => markAsRead(notification.id)}
+                                    className={`p-1 transition-colors ${
+                                      isDarkTheme 
+                                        ? 'text-gray-500 hover:text-blue-400' 
+                                        : 'text-gray-400 hover:text-blue-600'
+                                    }`}
+                                    title="Mark as read"
+                                  >
+                                    <Check className="w-3 h-3" />
+                                  </button>
+                                )}
+                                <button
+                                  onClick={() => removeNotification(notification.id)}
+                                  className={`p-1 transition-colors ${
+                                    isDarkTheme 
+                                      ? 'text-gray-500 hover:text-red-400' 
+                                      : 'text-gray-400 hover:text-red-600'
+                                  }`}
+                                  title="Remove"
+                                >
+                                  <X className="w-3 h-3" />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

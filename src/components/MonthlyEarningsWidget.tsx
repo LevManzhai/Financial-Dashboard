@@ -408,8 +408,8 @@ export default function MonthlyEarningsWidget() {
 
       {/* Binance-style Chart */}
       <div className="h-64 mb-4 flex justify-center">
-        <div className="h-64 w-full max-w-sm md:max-w-lg lg:max-w-xl xl:max-w-2xl">
-          <ResponsiveContainer width="100%" height="100%">
+        <div className="h-64 w-full max-w-sm md:max-w-lg lg:max-w-xl xl:max-w-2xl min-h-0 min-w-0">
+          <ResponsiveContainer width="100%" height="100%" aspect={1.5}>
           <LineChart 
             data={isClient ? safeCurrentData : []} 
             margin={{ top: 20, right: 30, left: 20, bottom: 20 }}

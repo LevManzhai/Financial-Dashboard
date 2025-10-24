@@ -1,6 +1,6 @@
 'use client';
 
-import { Search, Bell, Database, X, Menu, Check, Trash2 } from 'lucide-react';
+import { Search, Bell, Database, X, Menu, Check, Trash2, ArrowLeft, LayoutDashboard } from 'lucide-react';
 import { useTransactions, setGlobalNotificationFunction } from '@/contexts/TransactionContext';
 import { useNotifications } from '@/contexts/NotificationContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -10,15 +10,17 @@ import { useRouter } from 'next/navigation';
 interface HeaderProps {
   isMobileMenuOpen?: boolean;
   onToggleMobileMenu?: () => void;
+  title?: string;
 }
 
-export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }: HeaderProps) {
+export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu, title = 'Dashboard' }: HeaderProps) {
   const router = useRouter();
   const { state, loadTransactions, deleteTransaction } = useTransactions();
   const { notifications, unreadCount, markAsRead, removeNotification, clearAllNotifications, addNotification } = useNotifications();
   const { themeSettings } = useTheme();
   const [isClient, setIsClient] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
@@ -27,6 +29,22 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
 
   useEffect(() => {
     setIsClient(true);
+  }, []);
+
+  // Check dark theme
+  useEffect(() => {
+    const checkTheme = () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      setIsDarkTheme(isDark);
+    };
+    
+    checkTheme();
+    
+    // Watch for theme changes
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    
+    return () => observer.disconnect();
   }, []);
 
   // Force re-render when theme settings change
@@ -502,8 +520,8 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
   return (
     <header className="w-full h-[47px] xs:h-[55px] sm:h-[64px] bg-white shadow-sm border-b border-gray-200 px-2 xs:px-3 sm:px-4 lg:px-6 flex items-center justify-between">
       <div className="flex items-center justify-between w-full">
-        {/* Left - Dashboard Title and Mobile Menu */}
-        <div className="flex items-center space-x-3">
+        {/* Left - Navigation Buttons, Title and Mobile Menu */}
+        <div className="flex items-center space-x-2 xs:space-x-3">
           {/* Mobile Menu Button */}
           <button
             onClick={onToggleMobileMenu}
@@ -512,7 +530,42 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
             {isMobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
           
-          <h1 className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-900">Dashboard</h1>
+          {/* Navigation Menu */}
+          <div className="flex items-center space-x-1">
+            <button
+              onClick={() => router.back()}
+              className="flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <ArrowLeft className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
+              <span className="hidden xs:inline">Back</span>
+            </button>
+            {title !== 'Dashboard' && (
+              <>
+                <div className="h-4 w-px bg-gray-300"></div>
+                <button
+                  onClick={() => router.push('/')}
+                  className="flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  <LayoutDashboard className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
+                  <span className="hidden xs:inline">Dashboard</span>
+                </button>
+              </>
+            )}
+          </div>
+          
+          <div className="flex items-center space-x-2 xs:space-x-3">
+            {title === 'Search Transactions' && (
+              <div className="p-2 xs:p-3 rounded-lg bg-primary-light">
+                <Search className="w-5 h-5 xs:w-6 xs:h-6 text-primary" />
+              </div>
+            )}
+            {title === 'Dashboard' && (
+              <div className="p-2 xs:p-3 rounded-lg bg-primary-light">
+                <LayoutDashboard className="w-5 h-5 xs:w-6 xs:h-6 text-primary" />
+              </div>
+            )}
+            <h1 className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-900">{title}</h1>
+          </div>
         </div>
 
         {/* Center - Search Bar (hidden on mobile) */}
@@ -596,15 +649,31 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
             
             {/* Notification Dropdown */}
             {isNotificationOpen && (
-              <div className="absolute right-0 top-full mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                <div className="p-4 border-b border-gray-200">
+              <div className={`absolute right-0 top-full mt-2 w-80 border rounded-lg shadow-lg z-50 ${
+                isDarkTheme 
+                  ? 'bg-black border-gray-800' 
+                  : 'bg-white border-gray-200'
+              }`}>
+                <div className={`p-4 border-b ${
+                  isDarkTheme 
+                    ? 'bg-gray-800/90 border-gray-800' 
+                    : 'bg-gray-50/90 border-gray-200'
+                }`}>
                   <div className="flex items-center justify-between">
-                    <h3 className="font-semibold text-gray-900">Notifications</h3>
+                    <h3 className={`font-semibold ${
+                      isDarkTheme 
+                        ? 'text-white' 
+                        : 'text-gray-900'
+                    }`}>Notifications</h3>
                     <div className="flex items-center space-x-2">
                       {notifications.length > 0 && (
                         <button
                           onClick={clearAllNotifications}
-                          className="text-xs text-gray-500 hover:text-gray-700 flex items-center space-x-1"
+                          className={`text-xs flex items-center space-x-1 ${
+                            isDarkTheme 
+                              ? 'text-gray-400 hover:text-gray-300' 
+                              : 'text-gray-500 hover:text-gray-700'
+                          }`}
                         >
                           <Trash2 className="w-3 h-3" />
                           <span>Clear All</span>
@@ -616,15 +685,21 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
                 
                 <div className="max-h-96 overflow-y-auto">
                   {notifications.length === 0 ? (
-                    <div className="p-4 text-center text-gray-500 text-sm">
+                    <div className={`p-4 text-center text-sm ${
+                      isDarkTheme 
+                        ? 'bg-gray-900 text-gray-400' 
+                        : 'bg-white text-gray-500'
+                    }`}>
                       No notifications
                     </div>
                   ) : (
                     notifications.map((notification) => (
                       <div
                         key={notification.id}
-                        className={`p-4 border-b border-gray-100 hover:bg-gray-50 ${
-                          !notification.read ? 'bg-blue-50' : ''
+                        className={`p-4 border-b hover:transition-colors ${
+                          isDarkTheme 
+                            ? `border-gray-900 hover:bg-gray-700 ${!notification.read ? 'bg-blue-900/20' : 'bg-gray-700'}`
+                            : `border-gray-100 hover:bg-gray-100 ${!notification.read ? 'bg-blue-50' : 'bg-gray-100'}`
                         }`}
                       >
                         <div className="flex items-start justify-between">
@@ -636,10 +711,22 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
                                 notification.type === 'warning' ? 'bg-yellow-500' :
                                 'bg-blue-500'
                               }`}></div>
-                              <h4 className="font-medium text-gray-900 text-sm">{notification.title}</h4>
+                              <h4 className={`font-medium text-sm ${
+                                isDarkTheme 
+                                  ? 'text-gray-400' 
+                                  : 'text-gray-900'
+                              }`}>{notification.title}</h4>
                             </div>
-                            <p className="text-gray-600 text-sm mt-1">{notification.message}</p>
-                            <p className="text-xs text-gray-400 mt-1">
+                            <p className={`text-sm mt-1 ${
+                              isDarkTheme 
+                                ? 'text-gray-500' 
+                                : 'text-gray-600'
+                            }`}>{notification.message}</p>
+                            <p className={`text-xs mt-1 ${
+                              isDarkTheme 
+                                ? 'text-gray-600' 
+                                : 'text-gray-400'
+                            }`}>
                               {notification.timestamp.toLocaleTimeString()}
                             </p>
                           </div>
@@ -647,7 +734,11 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
                             {!notification.read && (
                               <button
                                 onClick={() => markAsRead(notification.id)}
-                                className="p-1 text-gray-400 hover:text-blue-600 transition-colors"
+                                className={`p-1 transition-colors ${
+                                  isDarkTheme 
+                                    ? 'text-gray-500 hover:text-blue-400' 
+                                    : 'text-gray-400 hover:text-blue-600'
+                                }`}
                                 title="Mark as read"
                               >
                                 <Check className="w-3 h-3" />
@@ -655,7 +746,11 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu }:
                             )}
                             <button
                               onClick={() => removeNotification(notification.id)}
-                              className="p-1 text-gray-400 hover:text-red-600 transition-colors"
+                              className={`p-1 transition-colors ${
+                                isDarkTheme 
+                                  ? 'text-gray-500 hover:text-red-400' 
+                                  : 'text-gray-400 hover:text-red-600'
+                              }`}
                               title="Remove"
                             >
                               <X className="w-3 h-3" />
