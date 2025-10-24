@@ -7,7 +7,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { useNotifications } from '@/contexts/NotificationContext';
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
-import { ArrowUpRight, ArrowDownLeft, Plus, Edit, Trash2, Search, Filter, Download, Upload, Calendar, TrendingUp, TrendingDown, DollarSign, PieChart, BarChart3, Bell, X, Check, ArrowLeft, LayoutDashboard } from 'lucide-react';
+import { ArrowUpRight, ArrowDownLeft, Plus, Edit, Trash2, Search, Filter, Download, Upload, Calendar, TrendingUp, TrendingDown, DollarSign, PieChart, BarChart3, Bell, X, Check, ArrowLeft, LayoutDashboard, Menu } from 'lucide-react';
 import { Transaction, TransactionFormData } from '@/types/financial';
 import TransactionForm from '@/components/TransactionForm';
 import TransactionFilters from '@/components/TransactionFilters';
@@ -178,15 +178,13 @@ function TransactionsContent() {
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setIsMobileMenuOpen(true)}
-                className="lg:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                className="lg:hidden w-9 h-9 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 mr-1 flex items-center justify-center"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
+                <Menu className="h-5 w-5" />
               </button>
               
               {/* Navigation Menu */}
-              <div className="flex items-center space-x-1 xs:space-x-2">
+              <div className="flex items-center mr-1">
                 <button
                   onClick={() => router.back()}
                   className="flex items-center space-x-1 xs:space-x-2 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs xs:text-sm lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
@@ -194,7 +192,7 @@ function TransactionsContent() {
                   <ArrowLeft className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
                   <span className="hidden xs:inline">Back</span>
                 </button>
-                <div className="h-4 xs:h-6 w-px bg-gray-300"></div>
+                <div className="h-4 xs:h-6 w-px bg-gray-300 mx-1"></div>
                 <button
                   onClick={() => router.push('/')}
                   className="flex items-center space-x-1 xs:space-x-2 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs xs:text-sm lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
@@ -222,7 +220,7 @@ function TransactionsContent() {
               </button>
               
       {/* Notifications - Hidden on mobile, shown on desktop */}
-      <div className="relative notification-dropdown hidden lg:flex">
+      <div className="relative notification-dropdown hidden min-[900px]:flex items-center">
                 <button 
                   onClick={() => setIsNotificationOpen(!isNotificationOpen)}
                   className="p-1.5 text-gray-400 hover:text-gray-600 transition-colors relative"

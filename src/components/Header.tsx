@@ -525,13 +525,13 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu, t
           {/* Mobile Menu Button */}
           <button
             onClick={onToggleMobileMenu}
-            className="lg:hidden p-1.5 text-gray-600 hover:text-gray-900 transition-colors"
+            className="lg:hidden w-9 h-9 text-gray-600 hover:text-gray-900 transition-colors mr-1 flex items-center justify-center"
           >
-            {isMobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
           
           {/* Navigation Menu */}
-          <div className="flex items-center space-x-1">
+          <div className="flex items-center mr-1">
             <button
               onClick={() => router.back()}
               className="flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
@@ -541,7 +541,7 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu, t
             </button>
             {title !== 'Dashboard' && (
               <>
-                <div className="h-4 w-px bg-gray-300"></div>
+                <div className="h-4 w-px bg-gray-300 mx-1"></div>
                 <button
                   onClick={() => router.push('/')}
                   className="flex items-center space-x-1 px-1.5 xs:px-2 py-1 xs:py-1.5 lg:px-3 lg:py-2 text-xs lg:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
@@ -553,18 +553,24 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu, t
             )}
           </div>
           
-          <div className="flex items-center space-x-2 xs:space-x-3">
-            {title === 'Search Transactions' && (
-              <div className="p-2 xs:p-3 rounded-lg bg-primary-light">
-                <Search className="w-5 h-5 xs:w-6 xs:h-6 text-primary" />
-              </div>
-            )}
-            {title === 'Dashboard' && (
-              <div className="p-2 xs:p-3 rounded-lg bg-primary-light">
-                <LayoutDashboard className="w-5 h-5 xs:w-6 xs:h-6 text-primary" />
-              </div>
-            )}
-            <h1 className="text-lg xs:text-xl sm:text-2xl font-bold text-gray-900">{title}</h1>
+          <div className="flex items-center">
+            <div className="flex items-center space-x-1 xs:space-x-2">
+              {title === 'Search Transactions' && (
+                <div className="p-2 xs:p-3 rounded-lg bg-primary-light">
+                  <Search className="w-5 h-5 xs:w-6 xs:h-6 text-primary" />
+                </div>
+              )}
+              {title === 'Dashboard' && (
+                <div className="p-2 xs:p-3 rounded-lg bg-primary-light">
+                  <LayoutDashboard className="w-5 h-5 xs:w-6 xs:h-6 text-primary" />
+                </div>
+              )}
+              <h1 className={`font-bold text-gray-900 ${
+                title === 'Search Transactions' 
+                  ? 'text-sm xs:text-lg sm:text-xl' 
+                  : 'text-lg xs:text-xl sm:text-2xl'
+              }`}>{title}</h1>
+            </div>
           </div>
         </div>
 
@@ -634,7 +640,7 @@ export default function Header({ isMobileMenuOpen = false, onToggleMobileMenu, t
           )}
 
           {/* Notifications */}
-          <div className="relative notification-dropdown">
+          <div className="relative notification-dropdown hidden min-[900px]:flex items-center">
             <button 
               onClick={() => setIsNotificationOpen(!isNotificationOpen)}
               className="p-1.5 text-gray-400 hover:text-gray-600 transition-colors relative"

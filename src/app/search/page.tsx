@@ -350,7 +350,7 @@ function SearchContent() {
                 <div className="p-2 xs:p-3 rounded-lg bg-primary-light">
                   <Search className="w-5 h-5 xs:w-6 xs:h-6 text-primary" />
                 </div>
-                <h1 className={`text-2xl sm:text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Search Transactions</h1>
+                <h1 className={`text-lg sm:text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Search Transactions</h1>
               </div>
               <p className={`mt-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Find and filter your financial transactions</p>
             </div>
@@ -646,38 +646,38 @@ function SearchContent() {
                   return (
                     <div
                       key={transaction.id}
-                      className={`bg-white rounded-lg border border-gray-200 p-4 max-[320px]:p-2 hover:shadow-md transition-shadow ${
+                      className={`bg-white rounded-lg border border-gray-200 p-4 max-[500px]:p-2 hover:shadow-md transition-shadow ${
                         selectedTransactions.includes(transaction.id) ? 'ring-2 ring-blue-500' : ''
                       }`}
                     >
-                      <div className="grid grid-cols-[auto,1fr,auto] items-center gap-3 max-[320px]:gap-1 min-[500px]:flex min-[500px]:justify-between min-[500px]:items-center">
-                        <div className="flex items-center space-x-3 max-[320px]:space-x-1 min-[500px]:space-x-4">
+                      <div className="grid grid-cols-[auto,1fr,auto] items-center gap-3 max-[500px]:gap-1 min-[500px]:flex min-[500px]:justify-between min-[500px]:items-center">
+                        <div className="flex items-center space-x-3 max-[500px]:space-x-1 min-[500px]:space-x-4">
                           <input
                             type="checkbox"
                             checked={selectedTransactions.includes(transaction.id)}
                             onChange={() => handleSelectTransaction(transaction.id)}
-                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 max-[320px]:scale-75"
+                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 max-[500px]:scale-75"
                           />
-                          <div className={`p-2 max-[320px]:p-1 rounded-full ${transaction.type === 'income' ? 'bg-green-100' : 'bg-red-100'}`}>
-                            <Icon className={`h-4 w-4 max-[320px]:h-3 max-[320px]:w-3 ${colorClass}`} />
+                          <div className={`p-2 max-[500px]:p-1 rounded-full ${transaction.type === 'income' ? 'bg-green-100' : 'bg-red-100'}`}>
+                            <Icon className={`h-4 w-4 max-[500px]:h-3 max-[500px]:w-3 ${colorClass}`} />
                           </div>
                           <div className="min-w-0">
-                            <h3 className="font-medium text-gray-900 truncate max-[320px]:text-sm">{transaction.description}</h3>
-                            <div className="flex items-center space-x-2 max-[320px]:space-x-1 text-sm max-[320px]:text-xs text-gray-500">
-                              <span className="flex items-center space-x-1 max-[320px]:space-x-0.5 truncate">
-                                <Tag className="h-3 w-3 max-[320px]:h-2.5 max-[320px]:w-2.5" />
+                            <h3 className="font-medium text-gray-900 truncate max-[500px]:text-sm">{transaction.description}</h3>
+                            <div className="flex items-center space-x-2 max-[500px]:space-x-1 text-sm max-[500px]:text-xs text-gray-500">
+                              <span className="flex items-center space-x-1 max-[500px]:space-x-0.5 truncate">
+                                <Tag className="h-3 w-3 max-[500px]:h-2.5 max-[500px]:w-2.5" />
                                 <span>{transaction.category}</span>
                               </span>
                               <span>•</span>
-                              <span className="flex items-center space-x-1 max-[320px]:space-x-0.5 whitespace-nowrap">
-                                <Calendar className="h-3 w-3 max-[320px]:h-2.5 max-[320px]:w-2.5" />
+                              <span className="flex items-center space-x-1 max-[500px]:space-x-0.5 whitespace-nowrap">
+                                <Calendar className="h-3 w-3 max-[500px]:h-2.5 max-[500px]:w-2.5" />
                                 <span>{formatDate(transaction.date)}</span>
                               </span>
                             </div>
                           </div>
                         </div>
                         <div className="text-right">
-                          <span className={`font-semibold ${colorClass} whitespace-nowrap max-[320px]:text-sm`}>
+                          <span className={`font-semibold ${colorClass} whitespace-nowrap max-[500px]:text-sm`}>
                             {transaction.type === 'income' ? '+' : '-'}{formatCurrency(transaction.amount)}
                           </span>
                         </div>
