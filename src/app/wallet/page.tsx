@@ -272,7 +272,7 @@ function WalletContent() {
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
         <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="w-full px-2 xs:px-3 sm:px-4 lg:px-6">
+          <div className="w-full px-2 xs:px-3 sm:px-4 lg:px-6">
           <div className="flex items-center justify-between h-[47px] xs:h-[55px] sm:h-[63px]">
             <div className="flex items-center space-x-4">
               {/* Mobile Menu Button */}
@@ -454,21 +454,16 @@ function WalletContent() {
                     
                     <div className="max-h-96 overflow-y-auto">
                       {notifications.length === 0 ? (
-                        <div className={`p-4 text-center text-sm ${
-                          isDark 
-                            ? 'bg-gray-900 text-gray-400' 
-                            : 'bg-white text-gray-500'
-                        }`}>
+                        <div className={`p-4 text-center text-sm ${isDark ? 'bg-gray-900 text-gray-400' : 'bg-white text-gray-500'}`}>
                           No notifications
                         </div>
                       ) : (
                         notifications.map((notification) => (
                           <div
                             key={notification.id}
-                            className={`p-4 border-b hover:transition-colors ${
-                              isDark 
-                                ? `border-gray-900 hover:bg-gray-700 ${!notification.read ? 'bg-blue-900/20' : 'bg-gray-700'}`
-                                : `border-gray-100 hover:bg-gray-100 ${!notification.read ? 'bg-blue-50' : 'bg-gray-100'}`
+                            className={`p-4 border-b transition-colors ${isDark 
+                              ? 'border-gray-900 hover:bg-gray-700 ' + (!notification.read ? 'bg-blue-900/20' : 'bg-gray-700')
+                              : 'border-gray-100 hover:bg-gray-100 ' + (!notification.read ? 'bg-blue-50' : 'bg-gray-100')
                             }`}
                           >
                             <div className="flex items-start justify-between">
@@ -545,7 +540,7 @@ function WalletContent() {
             </div>
           </div>
         </div>
-      </div>
+        </div>
 
         {/* Main Content Area */}
         <div className="flex-1 overflow-y-auto overflow-x-hidden">
@@ -580,10 +575,10 @@ function WalletContent() {
         {activeTab === 'overview' && (
           <div className="space-y-6">
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-2 grid-cols-3-1170 gap-3 xs:gap-4 sm:gap-6">
-              <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200 min-w-[272px]">
+            <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-2 grid-4-wide gap-3 xs:gap-4 sm:gap-6 xl:gap-8">
+              <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
                 <div className="flex items-center justify-between">
-                  <div>
+                  <div className="flex flex-col justify-center">
                     <p className="text-xs xs:text-sm font-medium text-gray-600">
                       {timeframe === 'day' ? 'Day Income' : 
                        timeframe === 'week' ? 'Week Income' : 
@@ -601,9 +596,9 @@ function WalletContent() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200 min-w-[272px]">
+              <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
                 <div className="flex items-center justify-between">
-                  <div>
+                  <div className="flex flex-col justify-center">
                     <p className="text-xs xs:text-sm font-medium text-gray-600">
                       {timeframe === 'day' ? 'Day Expenses' : 
                        timeframe === 'week' ? 'Week Expenses' : 
@@ -621,9 +616,9 @@ function WalletContent() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200 min-w-[272px]">
+              <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
                 <div className="flex items-center justify-between">
-                  <div>
+                  <div className="flex flex-col justify-center">
                     <p className="text-xs xs:text-sm font-medium text-gray-600">
                       {timeframe === 'day' ? 'Day Transactions' : 
                        timeframe === 'week' ? 'Week Transactions' : 
@@ -651,11 +646,11 @@ function WalletContent() {
                     .sort(([_, a], [__, b]) => b.expenses - a.expenses)
                     .map(([category, data]) => (
                       <div key={category} className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                          <span className="font-medium text-gray-900">{String(category)}</span>
+                        <div className="flex items-center space-x-3 min-w-0 flex-1">
+                          <div className="w-3 h-3 bg-red-500 rounded-full flex-shrink-0"></div>
+                          <span className="font-medium text-gray-900 truncate">{category}</span>
                         </div>
-                        <div className="text-right">
+                        <div className="text-right flex-shrink-0 ml-2">
                           <p className="font-semibold text-red-600">{formatCurrency(data.expenses)}</p>
                           <p className="text-xs text-gray-500">{data.count} transactions</p>
                         </div>
@@ -766,7 +761,7 @@ function WalletContent() {
             </div>
           }>
             <div className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
               {/* Income vs Expenses Chart */}
               <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Income vs Expenses</h3>
@@ -816,13 +811,13 @@ function WalletContent() {
                         
                         return (
                           <div key={category} className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                              <div className={`w-6 h-6 rounded-full flex items-center justify-center ${colorClasses}`}>
+                            <div className="flex items-center space-x-3 min-w-0 flex-1">
+                              <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${colorClasses}`}>
                                 <IconComponent className="w-3 h-3" />
                               </div>
-                              <span className="text-sm font-medium text-gray-900">{String(category)}</span>
+                              <span className="text-sm font-medium text-gray-900 truncate">{category}</span>
                             </div>
-                            <div className="text-right">
+                            <div className="text-right flex-shrink-0 ml-2">
                               <span className="text-sm font-semibold text-gray-900">{formatCurrency(data.expenses)}</span>
                               <p className="text-xs text-gray-500">{data.count} transactions</p>
                             </div>
@@ -836,9 +831,9 @@ function WalletContent() {
           </div>
           </Suspense>
         )}
-          </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

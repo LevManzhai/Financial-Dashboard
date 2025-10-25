@@ -868,7 +868,7 @@ function RevenueContent() {
     </div>
   ) : (
     <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-2 grid-4-wide gap-3 xs:gap-4 sm:gap-6 xl:gap-8 mb-4 xs:mb-6 sm:mb-8 min-w-0">
-      <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200 min-w-[272px]">
+      <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Total Revenue</p>
@@ -888,7 +888,7 @@ function RevenueContent() {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200 min-w-[272px]">
+          <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Total Expenses</p>
@@ -909,7 +909,7 @@ function RevenueContent() {
           </div>
 
           <Suspense fallback={<SkeletonBox />}>
-            <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200 min-w-[272px]">
+            <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs xs:text-sm font-medium text-gray-600">Net Profit</p>
@@ -929,7 +929,7 @@ function RevenueContent() {
             </div>
           </Suspense>
 
-          <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200 min-w-[272px]">
+          <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Transactions</p>

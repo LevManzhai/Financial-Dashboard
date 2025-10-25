@@ -359,14 +359,14 @@ function TransactionsContent() {
         <main className="flex-1 overflow-y-auto overflow-x-hidden p-3 xs:p-4 sm:p-6 min-w-0">
         {/* Stats Cards */}
         {isLoading ? (
-    <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-3 xs:gap-4 sm:gap-6 xl:gap-8 mb-4 xs:mb-6 sm:mb-8 min-w-0">
+    <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-2 grid-4-wide gap-3 xs:gap-4 sm:gap-6 xl:gap-8 mb-4 xs:mb-6 sm:mb-8 min-w-0">
       <SkeletonBox />
       <SkeletonBox />
       <SkeletonBox />
       <SkeletonBox />
     </div>
   ) : (
-    <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-3 xs:gap-4 sm:gap-6 xl:gap-8 mb-4 xs:mb-6 sm:mb-8 min-w-0">
+    <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-2 grid-4-wide gap-3 xs:gap-4 sm:gap-6 xl:gap-8 mb-4 xs:mb-6 sm:mb-8 min-w-0">
       <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
@@ -441,9 +441,9 @@ function TransactionsContent() {
         </div>
   )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 min-[1455px]:grid-cols-4 gap-8">
           {/* Main Content */}
-          <div className="lg:col-span-3">
+          <div className="min-[1455px]:col-span-3">
             {/* Search and Filters */}
             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 mb-6">
               <div className="flex items-center justify-between mb-4">
@@ -474,6 +474,17 @@ function TransactionsContent() {
                 onFiltersChange={(filters) => setFilters(filters)}
                 onClearFilters={clearFilters}
               />
+            </div>
+
+            {/* Add Transaction Button - Above transactions for screens < 1455px */}
+            <div className="flex justify-center mb-6 max-[1454px]:block hidden">
+              <button
+                onClick={() => setIsFormOpen(true)}
+                className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors flex items-center space-x-2"
+              >
+                <Plus className="h-4 w-4" />
+                <span>Add Transaction</span>
+              </button>
             </div>
 
             {/* Transactions List */}
@@ -546,7 +557,7 @@ function TransactionsContent() {
           </div>
 
           {/* Sidebar */}
-          <div className="lg:col-span-1">
+          <div className="min-[1455px]:col-span-1">
             {/* Category Breakdown */}
             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 mb-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Categories</h3>
@@ -556,11 +567,11 @@ function TransactionsContent() {
                   .slice(0, 8)
                   .map(([category, data]) => (
                     <div key={category} className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                        <span className="text-sm font-medium text-gray-900">{category}</span>
+                      <div className="flex items-center space-x-2 min-w-0 flex-1">
+                        <div className="w-3 h-3 bg-blue-500 rounded-full flex-shrink-0"></div>
+                        <span className="text-sm font-medium text-gray-900 truncate max-w-[120px] lg:max-w-[150px] xl:max-w-none">{category}</span>
                       </div>
-                      <div className="text-right">
+                      <div className="text-right flex-shrink-0 ml-2">
                         <p className="text-sm font-semibold text-gray-900">
                           {formatCurrency(data.income + data.expenses)}
                         </p>
@@ -577,7 +588,7 @@ function TransactionsContent() {
               <div className="space-y-3">
                 <button
                   onClick={() => setIsFormOpen(true)}
-                  className="w-full flex items-center justify-center space-x-2 px-4 py-3 text-white rounded-lg transition-colors bg-primary"
+                  className="w-full flex items-center justify-center space-x-2 px-4 py-3 text-white rounded-lg transition-colors bg-primary min-[1455px]:block hidden"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Add Transaction</span>
