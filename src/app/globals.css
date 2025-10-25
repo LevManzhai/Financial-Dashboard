@@ -204,3 +204,16 @@ html:not(.dark) {
 .hover\:bg-primary:hover {
   background-color: color-mix(in srgb, var(--primary-color) 80%, black) !important;
 }
+
+@layer utilities {
+  @media (min-width: 1400px) {
+    .grid-4-wide {
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    }
+  }
+  @media (min-width: 1170px) {
+    .grid-cols-3-1170 {
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
+  }
+}

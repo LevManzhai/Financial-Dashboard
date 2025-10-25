@@ -7,7 +7,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { useNotifications } from '@/contexts/NotificationContext';
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
-import { ArrowUpRight, ArrowDownLeft, Plus, Wallet, CreditCard, TrendingUp, TrendingDown, DollarSign, Calendar, PieChart, LayoutDashboard, ArrowLeft, ChevronDown, Bell, X, Check, Trash2, Menu } from 'lucide-react';
+import { ArrowUpRight, ArrowDownLeft, Plus, Wallet, CreditCard, TrendingUp, TrendingDown, DollarSign, Calendar, PieChart, LayoutDashboard, ArrowLeft, ChevronDown, Bell, X, Check, Trash2, Menu, Briefcase, Heart, Utensils, Car, ShoppingBag, Gamepad2, Home, Wifi, Coffee, BookOpen, Music, Camera, Plane } from 'lucide-react';
 
 function WalletContent() {
   const router = useRouter();
@@ -213,6 +213,48 @@ function WalletContent() {
 
   const periodBalance = periodStats.totalIncome - periodStats.totalExpenses;
 
+  const getCategoryIcon = (category: string) => {
+    const categoryIcons: { [key: string]: React.ComponentType<{ className?: string }> } = {
+      'Salary': Briefcase,
+      'Health': Heart,
+      'Food': Utensils,
+      'Transport': Car,
+      'Shopping': ShoppingBag,
+      'Entertainment': Gamepad2,
+      'Utilities': Wifi,
+      'Rent': Home,
+      'Insurance': CreditCard,
+      'Coffee': Coffee,
+      'Education': BookOpen,
+      'Music': Music,
+      'Photography': Camera,
+      'Travel': Plane,
+    };
+    
+    return categoryIcons[category] || DollarSign;
+  };
+
+  const getCategoryColor = (category: string) => {
+    const categoryColors: { [key: string]: string } = {
+      'Salary': 'bg-green-100 text-green-600',
+      'Health': 'bg-red-100 text-red-600',
+      'Food': 'bg-orange-100 text-orange-600',
+      'Transport': 'bg-blue-100 text-blue-600',
+      'Shopping': 'bg-purple-100 text-purple-600',
+      'Entertainment': 'bg-pink-100 text-pink-600',
+      'Utilities': 'bg-yellow-100 text-yellow-600',
+      'Rent': 'bg-indigo-100 text-indigo-600',
+      'Insurance': 'bg-cyan-100 text-cyan-600',
+      'Coffee': 'bg-amber-100 text-amber-600',
+      'Education': 'bg-emerald-100 text-emerald-600',
+      'Music': 'bg-violet-100 text-violet-600',
+      'Photography': 'bg-rose-100 text-rose-600',
+      'Travel': 'bg-sky-100 text-sky-600',
+    };
+    
+    return categoryColors[category] || 'bg-gray-100 text-gray-600';
+  };
+
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
@@ -230,7 +272,7 @@ function WalletContent() {
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
         <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
+        <div className="w-full px-2 xs:px-3 sm:px-4 lg:px-6">
           <div className="flex items-center justify-between h-[47px] xs:h-[55px] sm:h-[63px]">
             <div className="flex items-center space-x-4">
               {/* Mobile Menu Button */}
@@ -538,8 +580,8 @@ function WalletContent() {
         {activeTab === 'overview' && (
           <div className="space-y-6">
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-3 xs:gap-4 sm:gap-6">
-              <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
+            <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-2 grid-cols-3-1170 gap-3 xs:gap-4 sm:gap-6">
+              <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200 min-w-[272px]">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs xs:text-sm font-medium text-gray-600">
@@ -559,7 +601,7 @@ function WalletContent() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
+              <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200 min-w-[272px]">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs xs:text-sm font-medium text-gray-600">
@@ -579,7 +621,7 @@ function WalletContent() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
+              <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200 min-w-[272px]">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs xs:text-sm font-medium text-gray-600">
@@ -768,17 +810,25 @@ function WalletContent() {
                       .filter(([_, data]) => data.expenses > 0)
                       .sort(([_, a], [__, b]) => b.expenses - a.expenses)
                       .slice(0, 5)
-                      .map(([category, data], index) => (
-                        <div key={category} className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-xs font-semibold text-gray-600">
-                              {index + 1}
+                      .map(([category, data]) => {
+                        const IconComponent = getCategoryIcon(category);
+                        const colorClasses = getCategoryColor(category);
+                        
+                        return (
+                          <div key={category} className="flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                              <div className={`w-6 h-6 rounded-full flex items-center justify-center ${colorClasses}`}>
+                                <IconComponent className="w-3 h-3" />
+                              </div>
+                              <span className="text-sm font-medium text-gray-900">{String(category)}</span>
                             </div>
-                            <span className="text-sm font-medium text-gray-900">{String(category)}</span>
+                            <div className="text-right">
+                              <span className="text-sm font-semibold text-gray-900">{formatCurrency(data.expenses)}</span>
+                              <p className="text-xs text-gray-500">{data.count} transactions</p>
+                            </div>
                           </div>
-                          <span className="text-sm font-semibold text-gray-900">{formatCurrency(data.expenses)}</span>
-                        </div>
-                      ))
+                        );
+                      })
                   }
                 </div>
               </div>

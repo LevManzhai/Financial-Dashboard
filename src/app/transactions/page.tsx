@@ -172,7 +172,7 @@ function TransactionsContent() {
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
         <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
+        <div className="w-full px-2 xs:px-3 sm:px-4 lg:px-6">
           <div className="flex items-center justify-between h-[47px] xs:h-[55px] sm:h-[63px]">
             <div className="flex items-center space-x-2 xs:space-x-3 sm:space-x-4">
               {/* Mobile Menu Button */}

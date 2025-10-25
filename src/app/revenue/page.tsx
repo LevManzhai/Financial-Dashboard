@@ -324,7 +324,7 @@ function RevenueContent() {
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
         <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
+        <div className="w-full px-2 xs:px-3 sm:px-4 lg:px-6">
           <div className="flex items-center justify-between h-[47px] xs:h-[55px] sm:h-[63px]">
             <div className="flex items-center space-x-1 xs:space-x-2 min-w-0 flex-1">
               {/* Mobile Menu Button */}
@@ -856,19 +856,19 @@ function RevenueContent() {
 
         {/* Main Content Area */}
         <div className="flex-1 overflow-y-auto overflow-x-hidden">
-          <div className="px-2 xs:px-3 sm:px-4 lg:px-6 xl:px-8 py-4 xs:py-6 sm:py-8 min-w-0">
+          <div className="px-2 xs:px-3 sm:px-4 lg:px-4 xl:px-6 py-4 xs:py-6 sm:py-8 min-w-0">
         {/* Key Metrics */}
         <>
   {isLoading ? (
-    <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-3 xs:gap-4 sm:gap-6 xl:gap-8 mb-4 xs:mb-6 sm:mb-8 min-w-0">
+    <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-2 grid-4-wide gap-3 xs:gap-4 sm:gap-6 xl:gap-8 mb-4 xs:mb-6 sm:mb-8 min-w-0">
       <SkeletonBox />
       <SkeletonBox />
       <SkeletonBox />
       <SkeletonBox />
     </div>
   ) : (
-    <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-3 xs:gap-4 sm:gap-6 xl:gap-8 mb-4 xs:mb-6 sm:mb-8 min-w-0">
-      <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
+    <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-2 grid-4-wide gap-3 xs:gap-4 sm:gap-6 xl:gap-8 mb-4 xs:mb-6 sm:mb-8 min-w-0">
+      <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200 min-w-[272px]">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Total Revenue</p>
@@ -888,7 +888,7 @@ function RevenueContent() {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
+          <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200 min-w-[272px]">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Total Expenses</p>
@@ -909,7 +909,7 @@ function RevenueContent() {
           </div>
 
           <Suspense fallback={<SkeletonBox />}>
-            <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
+            <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200 min-w-[272px]">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs xs:text-sm font-medium text-gray-600">Net Profit</p>
@@ -929,7 +929,7 @@ function RevenueContent() {
             </div>
           </Suspense>
 
-          <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
+          <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200 min-w-[272px]">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs xs:text-sm font-medium text-gray-600">Transactions</p>
@@ -952,9 +952,9 @@ function RevenueContent() {
   )}
 </>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-6 lg:gap-8 xl:gap-12">
+        <div className="grid grid-cols-1 gap-6 lg:gap-8 xl:gap-12">
           {/* Main Chart */}
-          <div className="lg:col-span-2">
+          <div className="col-span-1">
             <div className="bg-white rounded-xl p-6 xl:p-8 shadow-sm border border-gray-200">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-semibold text-gray-900">Revenue & Expenses Trend</h3>
@@ -964,9 +964,8 @@ function RevenueContent() {
                 </div>
               </div>
 
-              <div className="h-80 flex justify-center">
-                <div className="h-80 w-full max-w-md min-h-0 min-w-0">
-                  <ResponsiveContainer width="100%" height="100%" aspect={1.5}>
+              <div className="h-80 sm:h-96 md:h-[28rem] lg:h-[32rem] xl:h-[36rem] max-h-[50vh] w-full">
+                <ResponsiveContainer width="100%" height="100%">
                     {chartType === 'line' ? (
                       <RechartsLineChart data={chartData.length > 0 ? chartData : [{ period: 'No Data', income: 0, expenses: 0, balance: 0, net: 0 }]} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke={isClient ? chartColors.grid : '#f0f0f0'} />
@@ -1144,13 +1143,12 @@ function RevenueContent() {
           </div>
 
           {/* Sidebar */}
-          <div className="lg:col-span-1">
+          <div className="col-span-1">
             {/* Category Breakdown */}
             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 mb-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Category Breakdown</h3>
-              <div className="h-64 flex justify-center">
-                <div className="h-64 w-56 min-h-0 min-w-0">
-                  <ResponsiveContainer width="100%" height="100%" aspect={1.5}>
+              <div className="h-64 sm:h-80 md:h-96 max-h-[40vh] w-full max-w-md mx-auto">
+                <ResponsiveContainer width="100%" height="100%">
                     <RechartsPieChart>
                       <Pie
                         data={pieData.length > 0 ? pieData : [{ name: 'No Data', value: 0, color: '#E5E7EB' }]}
@@ -1180,69 +1178,50 @@ function RevenueContent() {
                 </div>
               </div>
               
-              <div className="mt-4 space-y-2">
-                {pieData.slice(0, 5).map((item, index) => (
-                  <div key={item.name} className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <div 
-                        className="w-3 h-3 rounded-full"
-                        style={{ backgroundColor: COLORS[index % COLORS.length] }}
-                      ></div>
-                      <span className="text-sm font-medium text-gray-900">{item.name}</span>
-                    </div>
-                    <span className="text-sm font-semibold text-gray-900">
-                      {isClient ? formatCurrency(item.value) : '$0'}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Top Categories */}
-            <div className="bg-white rounded-xl p-6 xl:p-8 shadow-sm border border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Categories</h3>
-              <div className="space-y-3">
-                {Object.entries(categoryStats)
-                  .sort(([_, a], [__, b]) => (b.income + b.expenses) - (a.income + a.expenses))
-                  .slice(0, 6)
-                  .map(([category, data], index) => {
-                    const IconComponent = getCategoryIcon(category);
-                    const colorClasses = getCategoryColor(category);
-                    
-                    return (
-                    <div key={category} className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${colorClasses}`}>
-                          <IconComponent className="w-4 h-4" />
+              {/* Top Categories */}
+              <div className="bg-white rounded-xl p-6 xl:p-8 shadow-sm border border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Categories</h3>
+                <div className="space-y-3">
+                  {Object.entries(categoryStats)
+                    .sort(([_, a], [__, b]) => (b.income + b.expenses) - (a.income + a.expenses))
+                    .slice(0, 6)
+                    .map(([category, data], index) => {
+                      const IconComponent = getCategoryIcon(category);
+                      const colorClasses = getCategoryColor(category);
+                      
+                      return (
+                      <div key={category} className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${colorClasses}`}>
+                            <IconComponent className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-gray-900">{category}</p>
+                            <p className="text-xs text-gray-500">
+                              {data.count} transactions
+                            </p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="text-sm font-medium text-gray-900">{category}</p>
-                          <p className="text-xs text-gray-500">
-                            {data.count} transactions
+                        <div className="text-right">
+                          <p className="text-sm font-semibold text-gray-900">
+                            {isClient ? formatCurrency(Math.abs(data.income - data.expenses)) : '$0'}
                           </p>
+                          <div className="flex items-center space-x-2 text-xs">
+                            {data.income > 0 && (
+                              <span className="text-green-600">+{isClient ? formatCurrency(data.income) : '$0'}</span>
+                            )}
+                            {data.expenses > 0 && (
+                              <span className="text-red-600">-{isClient ? formatCurrency(data.expenses) : '$0'}</span>
+                            )}
+                          </div>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <p className="text-sm font-semibold text-gray-900">
-                          {isClient ? formatCurrency(Math.abs(data.income - data.expenses)) : '$0'}
-                        </p>
-                        <div className="flex items-center space-x-2 text-xs">
-                          {data.income > 0 && (
-                            <span className="text-green-600">+{isClient ? formatCurrency(data.income) : '$0'}</span>
-                          )}
-                          {data.expenses > 0 && (
-                            <span className="text-red-600">-{isClient ? formatCurrency(data.expenses) : '$0'}</span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    );
-                  })}
+                      );
+                    })}
+                </div>
               </div>
             </div>
           </div>
-          </div>
-        </div>
         </div>
       </div>
     </div>

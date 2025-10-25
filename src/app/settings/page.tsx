@@ -189,7 +189,7 @@ function SettingsContent() {
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
         <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 lg:px-6">
+        <div className="w-full px-2 xs:px-3 sm:px-4 lg:px-6">
           <div className="flex items-center justify-between h-[47px] xs:h-[55px] sm:h-[63px]">
             <div className="flex items-center space-x-1 xs:space-x-2 min-w-0 flex-1">
               {/* Mobile Menu Button */}
@@ -230,7 +230,7 @@ function SettingsContent() {
             <div className="flex items-center space-x-1 xs:space-x-2 flex-shrink-0">
               <button
                 onClick={handleResetSettings}
-                className="flex items-center px-2 xs:px-3 py-1.5 xs:py-2 lg:px-3 lg:py-2 text-white rounded-lg transition-colors text-xs xs:text-sm lg:text-sm hover:opacity-80"
+                className="flex items-center px-2 xs:px-3 py-1.5 xs:py-2 lg:px-3 lg:py-2 text-white rounded-lg transition-colors text-xs xs:text-sm lg:text-sm bg-primary hover:opacity-80"
               >
                 <RotateCcw className="w-3 h-3 xs:w-4 xs:h-4 lg:w-5 lg:h-5" />
                 <span className="hidden xs:inline">Reset</span>

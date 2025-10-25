@@ -276,7 +276,8 @@ export default function MonthlyEarningsWidget() {
   };
 
   return (
-    <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200">
+    <>
+      <div className="bg-white rounded-xl p-4 xs:p-6 shadow-sm border border-gray-200">
       <div className="flex flex-col xs:flex-row xs:items-center justify-between mb-3 xs:mb-4 space-y-2 xs:space-y-0">
         <h3 className="text-base xs:text-lg font-semibold text-gray-900">
           <span className="block xs:inline">Financial Chart</span>
@@ -407,13 +408,12 @@ export default function MonthlyEarningsWidget() {
         </div>
 
       {/* Binance-style Chart */}
-      <div className="h-64 mb-4 flex justify-center">
-        <div className="h-64 w-full max-w-sm md:max-w-lg lg:max-w-xl xl:max-w-2xl min-h-0 min-w-0">
-          <ResponsiveContainer width="100%" height="100%" aspect={1.5}>
-          <LineChart 
-            data={isClient ? safeCurrentData : []} 
-            margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
-          >
+      <div className="h-64 sm:h-80 md:h-96 lg:h-[32rem] xl:h-[40rem] mb-4 max-w-4xl mx-auto">
+        <ResponsiveContainer width="100%" height="100%">
+            <LineChart 
+              data={isClient ? safeCurrentData : []} 
+              margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+            >
             <defs>
               <linearGradient id="incomeGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#10B981" stopOpacity={0.3}/>
@@ -535,45 +535,41 @@ export default function MonthlyEarningsWidget() {
             <ReferenceLine y={0} stroke={isClient ? chartColors.text : '#6B7280'} strokeDasharray="1 1" strokeOpacity={0.5} />
           </LineChart>
         </ResponsiveContainer>
-        </div>
       </div>
-
-      {/* Additional Stats */}
-      <div className="grid grid-cols-2 gap-4 pt-3 border-t border-gray-200">
-        <div className="text-center">
-          <div className="flex items-center justify-center space-x-1 text-green-600 mb-1">
+      
+      {/* Statistics under main container */}
+      <div className="flex flex-row justify-between items-center pt-3 border-t border-gray-200 w-full">
+          <div className="flex items-center space-x-1 text-green-600">
             <TrendingUp className="w-4 h-4" />
             <span className="text-sm font-medium">
               {isClient ? `Peak ${timeframe === 'day' ? 'day' : timeframe === 'week' ? 'period' : 'month'}` : 'Loading...'}
             </span>
+            <span className="text-sm text-gray-600 font-semibold ml-2">
+              {isClient && maxIncomePeriod ? (
+                timeframe === 'day' ? (maxIncomePeriod as DailyData).day : 
+                timeframe === 'week' ? (maxIncomePeriod as WeeklyData).week : 
+                (maxIncomePeriod as MonthlyData).month
+              ) : 'N/A'}
+            </span>
+            <span className="text-xs text-gray-500 ml-1">
+              {isClient && maxIncomePeriod ? formatCurrency(maxIncomePeriod.income) : ''}
+            </span>
           </div>
-          <p className="text-sm text-gray-600 font-semibold">
-            {isClient && maxIncomePeriod ? (
-              timeframe === 'day' ? (maxIncomePeriod as DailyData).day : 
-              timeframe === 'week' ? (maxIncomePeriod as WeeklyData).week : 
-              (maxIncomePeriod as MonthlyData).month
-            ) : 'N/A'}
-          </p>
-          <p className="text-xs text-gray-500">
-            {isClient && maxIncomePeriod ? formatCurrency(maxIncomePeriod.income) : ''}
-          </p>
-        </div>
 
-        <div className="text-center">
-          <div className="flex items-center justify-center space-x-1 text-blue-600 mb-1">
+          <div className="flex items-center space-x-1 text-blue-600">
             <Calendar className="w-4 h-4" />
             <span className="text-sm font-medium">
               {isClient ? (timeframe === 'day' ? 'Days' : timeframe === 'week' ? 'Weeks' : 'Months') : 'Loading...'}
             </span>
+            <span className="text-sm text-gray-600 font-semibold ml-2">
+              {isClient ? currentData.length : '-'}
+            </span>
+            <span className="text-xs text-gray-500 ml-1">
+              tracked
+            </span>
           </div>
-          <p className="text-sm text-gray-600 font-semibold">
-            {isClient ? currentData.length : '-'}
-          </p>
-          <p className="text-xs text-gray-500">
-            tracked
-          </p>
         </div>
       </div>
-    </div>
+    </>
   );
 }
