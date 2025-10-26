@@ -575,7 +575,7 @@ function WalletContent() {
         {activeTab === 'overview' && (
           <div className="space-y-6">
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-2 grid-4-wide gap-3 xs:gap-4 sm:gap-6 xl:gap-8">
+            <div className="grid grid-cols-1 xs:grid-cols-2 xl:grid-cols-3 gap-3 xs:gap-4 sm:gap-6 xl:gap-8">
               <div className="bg-white rounded-xl p-4 xs:p-6 xl:p-8 shadow-sm border border-gray-200 min-w-[272px]">
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col justify-center">
